@@ -30,67 +30,6 @@ simj-ia/
 └── README.md
 ```
 
----
-
-## ⚡ Deploy en GitHub Pages
-
-### Opción A — Desde la interfaz web (más fácil)
-
-1. **Crea el repositorio** en GitHub:
-   - Ve a [github.com/new](https://github.com/new)
-   - Nombre: `simj-ia`
-   - Visibilidad: Public *(necesario para GitHub Pages gratis)*
-   - Haz clic en **Create repository**
-
-2. **Sube los archivos**:
-   - En la página del repositorio vacío, haz clic en **uploading an existing file**
-   - Arrastra toda la carpeta `simj-ia/` (o sube los archivos uno a uno respetando la estructura)
-   - Commit: `"Initial commit — SiMJ IA Guide"`
-
-3. **Activa GitHub Pages**:
-   - Ve a **Settings → Pages**
-   - Source: `Deploy from a branch`
-   - Branch: `main` · Folder: `/ (root)`
-   - Haz clic en **Save**
-   - En 1-2 minutos estará disponible en `https://TU-USUARIO.github.io/simj-ia/`
-
-### Opción B — Con Git desde terminal
-
-```bash
-# Clonar repo vacío recién creado
-git clone https://github.com/TU-USUARIO/simj-ia.git
-cd simj-ia
-
-# Copiar archivos de la guía a esta carpeta
-# (copia index.html, css/, js/ aquí)
-
-# Subir
-git add .
-git commit -m "Initial commit — SiMJ IA Guide 2026"
-git push origin main
-```
-
-Luego activa Pages en Settings → Pages (igual que Opción A, paso 3).
-
----
-
-## 🛠️ Desarrollo local
-
-No necesita servidor. Abre directamente en el navegador:
-
-```bash
-# macOS
-open index.html
-
-# Windows
-start index.html
-
-# O con un servidor ligero (recomendado para evitar CORS)
-npx serve .
-# → http://localhost:3000
-```
-
----
 
 ## 📦 Dependencias externas (CDN)
 
