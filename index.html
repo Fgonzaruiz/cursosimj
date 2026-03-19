@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Guía práctica de IA para el equipo de SiMJ — Claude y OpenAI, técnicas élite, prompts listos para usar y guía de privacidad RGPD.">
+  <meta name="author" content="SiMJ — Soluciones Informáticas MJ">
+  <title>IA en SiMJ · Claude & OpenAI · Guía 2026</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/vars.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Anime.js v4 UMD -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.3.6/dist/bundles/anime.umd.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ── SCROLL PROGRESS ── -->
+  <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Progreso de lectura"></div>
+
+  <!-- ── CANVAS BACKGROUND ── -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- ── GRID OVERLAY ── -->
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <header class="hero" id="hero">
+    <div class="hero-orbs" aria-hidden="true">
+      <div class="orb orb--navy" id="orb1"></div>
+      <div class="orb orb--lime"  id="orb2"></div>
+      <div class="orb orb--cl"   id="orb3"></div>
+    </div>
+
+    <div class="wrap hero__inner">
+      <!-- Top brand row -->
+      <div class="hero__brand" id="hero-brand">
+        <span class="hero__logo">SiMJ</span>
+        <div class="hero__sep" aria-hidden="true"></div>
+        <span class="hero__subbrand">Formación IA Interna · 2026</span>
+      </div>
+
+      <div class="hero__grid">
+        <!-- Left: heading -->
+        <div class="hero__left">
+          <p class="hero__kicker" id="hero-kicker">
+            <span class="hero__kicker-line" aria-hidden="true"></span>
+            Guía Definitiva Claude &amp; OpenAI
+          </p>
+          <h1 class="hero__title">
+            <span class="hero__word" id="hw1">Trabaja</span>
+            <span class="hero__word hero__word--white" id="hw2">con</span>
+            <span class="hero__word hero__word--lime" id="hw3">Inteligencia</span>
+            <span class="hero__word hero__word--lime" id="hw4">Artificial</span>
+          </h1>
+        </div>
+
+        <!-- Right: description + pills + stats -->
+        <div class="hero__right" id="hero-right">
+          <div class="hero__badge" id="hero-badge">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            Actualizado Marzo 2026
+          </div>
+
+          <p class="hero__desc">
+            Todo lo que el equipo de SiMJ necesita para usar <strong>Claude</strong> y <strong>ChatGPT</strong> en el día a día.
+            Técnicas, prompts listos para copiar, herramientas interactivas y guía de privacidad RGPD.
+          </p>
+
+          <div class="hero__pills" id="hero-pills">
+            <span class="pill pill--cl">Claude · Anthropic</span>
+            <span class="pill pill--oa">OpenAI · ChatGPT</span>
+            <span class="pill pill--lm">15 Técnicas Élite</span>
+            <span class="pill pill--muted">50+ Prompts</span>
+            <span class="pill pill--muted">RGPD Incluido</span>
+          </div>
+
+          <div class="hero__stats" id="hero-stats">
+            <div class="hero__stat">
+              <span class="hero__stat-n counter" data-target="15" data-suffix="">0</span>
+              <span class="hero__stat-l">Técnicas élite</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-n counter" data-target="50" data-suffix="+">0</span>
+              <span class="hero__stat-l">Prompts listos</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-n counter" data-target="26" data-suffix="">0</span>
+              <span class="hero__stat-l">Términos glosario</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-n counter" data-target="12" data-suffix="">0</span>
+              <span class="hero__stat-l">Secciones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="hero__scroll-hint" id="hero-scroll" aria-hidden="true">
+        <span class="hero__scroll-line"></span>
+        <span class="hero__scroll-text">scroll</span>
+      </div>
+    </div>
+  </header>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       01 — QUÉ ES CADA UNO
+  ══════════════════════════════════════ -->
+  <section id="intro" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">01 — Herramientas</span>
+      <h2 class="section-title reveal-item">Claude vs OpenAI:<br>Qué hace cada una</h2>
+      <p class="section-lead reveal-item">
+        Dos herramientas, un mismo objetivo: hacer tu trabajo más rápido y mejor.
+        Aquí las diferencias clave para el equipo de SiMJ antes de empezar.
+      </p>
+
+      <div class="brand-split reveal-item">
+        <!-- Claude -->
+        <div class="brand-col brand-col--cl">
+          <div class="brand-col__head">
+            <div class="dot dot--cl" aria-hidden="true"></div>
+            <h3 class="brand-col__name">Claude</h3>
+          </div>
+          <span class="brand-tag brand-tag--cl">Anthropic · claude.ai</span>
+          <p class="brand-col__desc">
+            El modelo de Anthropic. Destaca en seguir instrucciones complejas con precisión,
+            generar código estructurado, analizar documentos largos y mantener contexto.
+            El más consistente siguiendo reglas de formato.
+          </p>
+          <ul class="brand-list">
+            <li>Código Laravel / PHP / SQL con contexto de repositorio</li>
+            <li>Análisis de documentos técnicos largos (hasta 200K tokens)</li>
+            <li>Revisión de PRs con criterios específicos</li>
+            <li>Redacción con restricciones estrictas de formato</li>
+            <li>Arquitectura y diseño de módulos de SiGestión</li>
+            <li>Tests unitarios y documentación técnica</li>
+          </ul>
+        </div>
+
+        <!-- OpenAI -->
+        <div class="brand-col brand-col--oa">
+          <div class="brand-col__head">
+            <div class="dot dot--oa" aria-hidden="true"></div>
+            <h3 class="brand-col__name">OpenAI · ChatGPT</h3>
+          </div>
+          <span class="brand-tag brand-tag--oa">OpenAI · chatgpt.com</span>
+          <p class="brand-col__desc">
+            Los modelos de OpenAI. GPT-4o para el día a día creativo y de negocio.
+            Los modelos o-series (o3, o4-mini) para razonamiento lógico complejo.
+            Muy bueno para contenido, comunicación empresarial y búsqueda en tiempo real.
+          </p>
+          <ul class="brand-list">
+            <li>Propuestas comerciales y emails de cliente</li>
+            <li>Contenido para web, LinkedIn e Instagram de SiMJ</li>
+            <li>Resúmenes de reuniones y actas internas</li>
+            <li>Análisis de mercado con búsqueda web en tiempo real</li>
+            <li>Informes de actividad para clientes IT</li>
+            <li>Brainstorming de campañas y estrategia de producto</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout--lime reveal-item" style="margin-top:1.5rem">
+        <span aria-hidden="true">💡</span>
+        <div class="callout__body">
+          <strong>Regla práctica para SiMJ:</strong> ¿Vas a pegar código o necesitas precisión técnica?
+          → <strong>Claude.</strong> ¿Vas a escribir un email, un post o necesitas información actualizada?
+          → <strong>ChatGPT.</strong> Las dos herramientas se complementan — no compiten.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       02 — TÉCNICAS
+  ══════════════════════════════════════ -->
+  <section id="tecnicas" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">02 — Fundamentos</span>
+      <h2 class="section-title reveal-item">Cómo construir<br>un buen prompt</h2>
+      <p class="section-lead reveal-item">
+        Las reglas base son similares en las dos herramientas, pero hay diferencias importantes.
+        Aquí las más críticas para el equipo de SiMJ.
+      </p>
+
+      <div class="sec-frame reveal-item">
+        <div class="dual">
+
+          <!-- Claude técnicas -->
+          <div class="dual__col dual__col--cl">
+            <div class="dual__head dual__head--cl">
+              <div class="dot dot--cl" aria-hidden="true"></div>
+              Claude — Técnicas
+            </div>
+
+            <article class="card reveal-item" data-delay="0">
+              <div class="card__num">Técnica 01 · Oficial Anthropic</div>
+              <h4>XML Tags como Separadores Semánticos</h4>
+              <p>Claude está entrenado para respetar XML tags como fronteras de significado.
+                Separan contexto, código, instrucciones y tarea. La <strong>&lt;tarea&gt;</strong> va siempre al final.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Plantilla Base · Claude</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body"><span class="xt">&lt;contexto&gt;</span>
+Proyecto: SiGestión ERP (Laravel 10, PHP 8.2, MySQL 8)
+Convenciones: PSR-12, sin comentarios innecesarios.
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;codigo&gt;</span>
+[Pega aquí el código relevante]
+<span class="xt">&lt;/codigo&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+[Tu petición — siempre aquí, al final]
+<span class="xt">&lt;/tarea&gt;</span></div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="100">
+              <div class="card__num">Técnica 02 · +30% calidad</div>
+              <h4>La Tarea Siempre al Final</h4>
+              <p>Anthropic documenta hasta un <strong>30% de mejora</strong> cuando, en prompts con código largo,
+                la consulta va al final. El modelo "calienta" con el contexto antes de responder.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Orden Correcto</span>
+                </div>
+                <div class="prompt-block__body"><span class="xv">✅ CORRECTO:</span>
+&lt;contexto&gt;Stack, convenciones...&lt;/contexto&gt;
+&lt;codigo&gt;[500 líneas de código]&lt;/codigo&gt;
+&lt;tarea&gt;Refactoriza para evitar N+1 queries.&lt;/tarea&gt;
+
+<span class="xc">❌ MAL — tarea al inicio:</span>
+"Refactoriza esta función:" + [500 líneas]</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="200">
+              <div class="card__num">Técnica 03 · Anti-alucinación</div>
+              <h4>Uncertainty Permission</h4>
+              <p>Sin esta instrucción, Claude inventa antes de admitir que necesita más contexto.
+                Crucial en código de SiGestión donde un error es costoso.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Fragmento Crítico</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body">"Si necesitas ver más archivos del repositorio
+para responder correctamente, dímelo así:
+'Necesito ver también: [archivo/clase]'
+
+No supongas cómo funciona ninguna clase custom
+de SiGestión sin haberla visto primero."</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="300">
+              <div class="card__num">Técnica 04 · Opus 4.6</div>
+              <h4>Extended Thinking para Arquitectura</h4>
+              <p>Activa razonamiento profundo interno. El modelo piensa antes de responder.
+                Usa <code class="inline-code">budget_tokens: 8000–16000</code> para problemas de arquitectura.</p>
+              <div class="code-block">
+                <div class="code-block__bar">
+                  <div class="code-block__dots" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="code-block__lang">Python · Anthropic API</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <pre class="code-block__body"><span class="kw">import</span> anthropic
+client = anthropic.<span class="fn">Anthropic</span>()
+response = client.messages.<span class="fn">create</span>(
+  model=<span class="str">"claude-opus-4-6"</span>,
+  max_tokens=<span class="vl">16000</span>,
+  thinking={
+    <span class="str">"type"</span>: <span class="str">"enabled"</span>,
+    <span class="str">"budget_tokens"</span>: <span class="vl">10000</span>
+  },
+  messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>,
+    <span class="str">"content"</span>: <span class="str">"[Problema de arquitectura]"</span>
+  }]
+)</pre>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="0">
+              <div class="card__num">Técnica 05 · Producción</div>
+              <h4>Fijar Snapshot de Modelo en Código</h4>
+              <p>Los aliases pueden apuntar a modelos distintos tras una actualización.
+                En código de SiGestión: siempre el snapshot con fecha.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Producción vs Alias</span>
+                </div>
+                <div class="prompt-block__body"><span class="xv">✅ En código SiGestión:</span>
+model = <span class="xv">"claude-sonnet-4-6-20260217"</span>  <span class="xc"># Fijo</span>
+
+<span class="xc">❌ Alias (puede cambiar sin aviso):</span>
+model = <span class="xv">"claude-sonnet-4-6"</span>  <span class="xc"># No usar en prod</span></div>
+              </div>
+              <a class="ext-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">
+                ↗ Anthropic Docs Oficiales
+              </a>
+            </article>
+          </div><!-- /Claude -->
+
+          <!-- OpenAI técnicas -->
+          <div class="dual__col dual__col--oa">
+            <div class="dual__head dual__head--oa">
+              <div class="dot dot--oa" aria-hidden="true"></div>
+              OpenAI — Técnicas
+            </div>
+
+            <article class="card reveal-item" data-delay="50">
+              <div class="card__num">Técnica 01 · Base</div>
+              <h4>Contexto de Empresa Siempre Primero</h4>
+              <p>ChatGPT no sabe a qué se dedica SiMJ. Sin contexto, produce respuestas genéricas.
+                Un párrafo de contexto transforma completamente la calidad del output.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Plantilla Base · OpenAI</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body">Somos SiMJ, empresa de software a medida y
+servicios IT en Córdoba. Desarrollamos SiGestión
+(ERP para PYMES), SiGPS (control de flotas) y
+ofrecemos ciberseguridad y mantenimiento IT.
+Nuestros clientes son PYMES y autónomos andaluces.
+Tono: cercano, profesional, sin tecnicismos.
+
+[Tu petición aquí]</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="150">
+              <div class="card__num">Técnica 02 · Formato</div>
+              <h4>Formato de Salida Explícito</h4>
+              <p>Sin decirle qué quieres, ChatGPT elige. Especificar el formato convierte
+                un resultado "usable" en un resultado "listo para enviar".</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Comparativa</span>
+                </div>
+                <div class="prompt-block__body"><span class="xc">❌ Sin formato:</span>
+"Escribe algo sobre nuestro módulo de facturación"
+
+<span class="xv">✅ Con formato:</span>
+"Post LinkedIn sobre SiGestión: módulo facturación.
+3 párrafos · máx 180 palabras
+Primera frase: engancha sin revelar todo
+Termina con pregunta al lector
+Máx 2 emojis · Sin hashtags genéricos"</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="250">
+              <div class="card__num">Técnica 03 · Iteración</div>
+              <h4>El Prompting es Conversación, No Magia</h4>
+              <p>No busques el prompt perfecto al primer intento. ChatGPT mejora enormemente
+                en conversación: <strong>genera → ajusta → refina.</strong>
+                3 turnos bien dirigidos superan al prompt de 400 palabras.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Flujo de 3 Turnos</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body"><span class="xc"># Turno 1 — Borrador rápido</span>
+"Redacta propuesta para cliente que quiere
+informatizar su taller de 5 personas."
+
+<span class="xc"># Turno 2 — Ajuste con contexto SiMJ</span>
+"Hazla más concreta: menciona SiGestión,
+máx 1 página, añade demo gratuita como CTA."
+
+<span class="xc"># Turno 3 — Push de calidad</span>
+"¿Qué le falta para que este cliente diga sí
+en vez de 'lo pensaré'?"</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="350">
+              <div class="card__num">Técnica 04 · Análisis</div>
+              <h4>Chain-of-Thought para Decisiones</h4>
+              <p>Para tareas de análisis con GPT-4o: pide que razone antes de concluir.
+                <strong>No usar con o3/o4-mini</strong> — ya razonan internamente y pedírselo empeora el resultado.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Plantilla CoT</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body">"Antes de responder, analiza brevemente:
+1. ¿Qué necesita realmente este cliente?
+2. ¿Qué obstáculo le impide decidir ahora?
+3. ¿Qué solución de SiMJ encaja mejor?
+
+Luego responde a: [situación concreta]"</div>
+              </div>
+            </article>
+
+            <article class="card reveal-item" data-delay="100">
+              <div class="card__num">Técnica 05 · Datos Actuales</div>
+              <h4>Búsqueda en Tiempo Real</h4>
+              <p>Con la búsqueda web activada en ChatGPT, pide información actualizada.
+                Ideal para benchmarks del sector, noticias de competidores o regulaciones recientes.</p>
+              <div class="prompt-block">
+                <div class="prompt-block__head">
+                  <span class="prompt-block__label">Con Búsqueda Web</span>
+                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
+                </div>
+                <div class="prompt-block__body">"Busca las últimas noticias sobre [tema relevante
+para SiMJ — ley antifraude, ERP, ciberseguridad
+PYMES España].
+
+Resume en 5 puntos clave para empresa IT
+que ofrece servicios a PYMES andaluzas.
+Incluye fecha de cada noticia.
+Solo fuentes de los últimos 60 días."</div>
+              </div>
+              <a class="ext-link" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">
+                ↗ OpenAI Prompt Engineering Docs
+              </a>
+            </article>
+          </div><!-- /OpenAI -->
+
+        </div><!-- /dual -->
+      </div><!-- /sec-frame -->
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       03 — COMPARADOR
+  ══════════════════════════════════════ -->
+  <section id="comparador" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">03 — Comparador Visual</span>
+      <h2 class="section-title reveal-item">Prompts reales:<br>el antes y el después</h2>
+      <p class="section-lead reveal-item">
+        Los mismos objetivos, resueltos mal y bien.
+        Cada par muestra exactamente qué falla y qué lo soluciona.
+      </p>
+
+      <!-- Par 1 OpenAI -->
+      <p class="pair-label pair-label--oa reveal-item">
+        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
+        OpenAI · Propuesta comercial para cliente
+      </p>
+      <div class="gb-pair reveal-item">
+        <div class="gb-box gb-box--bad">
+          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
+          <div class="gb-box__text">"Escríbeme una propuesta para un cliente que quiere software."</div>
+          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin cliente, sin producto, sin tono. El resultado es un texto genérico que podría ser de cualquier empresa.</div>
+        </div>
+        <div class="gb-box gb-box--good">
+          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
+          <div class="gb-box__text">"Somos SiMJ (software a medida, Córdoba). El cliente es una clínica dental de 8 personas que lleva la agenda en papel y Excel. Quieren informatizarlo todo.<br><br>Propuesta de 1 página: el problema en su lenguaje, solución (SiGestión adaptado a clínicas), 3 beneficios concretos y CTA: demo gratuita. Tono cercano, sin tecnicismos."</div>
+          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Cliente concreto, producto correcto, beneficios esperados, formato de 1 página, tono definido. Usable al primer intento.</div>
+        </div>
+      </div>
+
+      <!-- Par 2 Claude -->
+      <p class="pair-label pair-label--cl reveal-item" style="margin-top:2.5rem">
+        <span class="dot dot--cl" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
+        Claude · Revisión de código Laravel
+      </p>
+      <div class="gb-pair reveal-item">
+        <div class="gb-box gb-box--bad">
+          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
+          <div class="gb-box__text">"Revisa este código y dime qué mejorar."<br>[300 líneas de PHP]</div>
+          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin foco, Claude revisa todo: estilo, rendimiento, seguridad. 25 comentarios sin saber cuál es urgente.</div>
+        </div>
+        <div class="gb-box gb-box--good">
+          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
+          <div class="gb-box__text">&lt;contexto&gt;Laravel 10, producción, 5.000 RPM. Controlador de facturación.&lt;/contexto&gt;<br>&lt;codigo&gt;[código]&lt;/codigo&gt;<br>&lt;tarea&gt;Revisa SOLO seguridad. Por cada problema: LÍNEA | QUÉ FALLA | FIX. Si no hay problemas: dilo sin rodeos.&lt;/tarea&gt;</div>
+          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Foco único, stack concreto, formato de salida, permiso para decir que todo está bien.</div>
+        </div>
+      </div>
+
+      <!-- Par 3 OpenAI -->
+      <p class="pair-label pair-label--oa reveal-item" style="margin-top:2.5rem">
+        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
+        OpenAI · Email de reactivación de lead
+      </p>
+      <div class="gb-pair reveal-item">
+        <div class="gb-box gb-box--bad">
+          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
+          <div class="gb-box__text">"Escribe un email para un cliente que lleva tiempo sin comprar."</div>
+          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin producto, tono, longitud ni CTA. Resultado: email corporativo genérico que nadie abrirá.</div>
+        </div>
+        <div class="gb-box gb-box--good">
+          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
+          <div class="gb-box__text">"Somos SiMJ. Lead (empresa de transporte, 12 vehículos) pidió info sobre SiGPS hace 3 meses y no volvió. Email de reactivación: máx 90 palabras, sin exclamaciones, un CTA único (agendar llamada de 15 min), no mencionar precio. Tono: directo, sin presión."</div>
+          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Perfil del lead, producto correcto, límite de palabras, CTA único y restricciones de tono.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       04 — TIERS
+  ══════════════════════════════════════ -->
+  <section id="tiers" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">04 — Niveles</span>
+      <h2 class="section-title reveal-item">3 niveles de prompt<br>según la tarea</h2>
+      <p class="section-lead reveal-item">
+        El nivel del prompt debe ser proporcional a la complejidad de la tarea.
+        Más complejo = más contexto, más estructura, modelos más potentes.
+      </p>
+
+      <!-- Nivel 1 -->
+      <div class="tier-block reveal-item">
+        <div class="tier-block__head">
+          <span class="tier-tag tier-tag--1">Nivel 1 — Básico</span>
+          <span class="tier-block__sub">Tareas simples y repetitivas · Haiku 4.5 / GPT-4o-mini</span>
+        </div>
+        <div class="sec-frame">
+          <div class="dual">
+            <div class="dual__col dual__col--cl">
+              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Haiku 4.5</div>
+              <article class="card reveal-item">
+                <div class="card__num">Documentar función PHP</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">Añade docblock PHPDoc a esta función.
+Incluye: @param, @return, @throws si aplica.
+Descripción breve en español.
+Sin comentarios en el cuerpo. PSR-12.
+
+[función aquí]</div>
+                </div>
+              </article>
+              <article class="card reveal-item" style="margin-top:.85rem">
+                <div class="card__num">Generar Factory de Laravel</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">Genera Laravel Factory para modelo Factura:
+campos: numero_factura, cliente_id, total,
+fecha_emision, estado.
+Faker en español (es_ES). PSR-12.</div>
+                </div>
+              </article>
+            </div>
+            <div class="dual__col dual__col--oa">
+              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o-mini</div>
+              <article class="card reveal-item">
+                <div class="card__num">Clasificar email de soporte</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">Clasifica el email de soporte de SiMJ en:
+URGENTE (bloqueo total del sistema)
+NORMAL (problema funcional no crítico)
+CONSULTA (pregunta sobre funcionalidad)
+
+SOLO: CATEGORÍA | Razón en 8 palabras.
+Email: [pega el email]</div>
+                </div>
+              </article>
+              <article class="card reveal-item" style="margin-top:.85rem">
+                <div class="card__num">Generar 5 asuntos de email</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">5 asuntos de email para SiMJ.
+Producto: SiGestión ERP para PYMES.
+Cada uno: máx 6 palabras, sin exclamaciones.
+Ángulos distintos: urgencia / beneficio /
+curiosidad / prueba social / ahorro de tiempo.
+Formato: Núm. | Asunto | Ángulo</div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nivel 2 -->
+      <div class="tier-block reveal-item" style="margin-top:1.5rem">
+        <div class="tier-block__head">
+          <span class="tier-tag tier-tag--2">Nivel 2 — Medio</span>
+          <span class="tier-block__sub">Análisis con contexto · Claude Sonnet 4.6 / GPT-4o</span>
+        </div>
+        <div class="sec-frame">
+          <div class="dual">
+            <div class="dual__col dual__col--cl">
+              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Sonnet 4.6</div>
+              <article class="card reveal-item">
+                <div class="card__num">Revisar PR de SiGestión</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 2</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body"><span class="xt">&lt;contexto&gt;</span>
+SiGestión ERP · Laravel 10 · PHP 8.2 · MySQL 8
+PR: [descripción breve del cambio]
+Módulos afectados: [lista]
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;diff&gt;</span>[Pega el diff o archivos modificados]<span class="xt">&lt;/diff&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+Revisa en orden de prioridad:
+1. Seguridad (SQL injection, XSS, auth bypass)
+2. Rendimiento (N+1, índices, queries lentas)
+3. ¿Rompe funcionalidad existente?
+
+Formato: ÁREA | LÍNEA | PROBLEMA | FIX
+"Sin issues en [X]" si no hay problemas.
+<span class="xt">&lt;/tarea&gt;</span></div>
+                </div>
+              </article>
+            </div>
+            <div class="dual__col dual__col--oa">
+              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o</div>
+              <article class="card reveal-item">
+                <div class="card__num">Análisis de competidor IT</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 2</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">Somos SiMJ: software a medida y IT en Córdoba.
+ERP propio (SiGestión), flotas (SiGPS),
+ciberseguridad y mantenimiento.
+Diferencial: software propio + soporte local.
+
+Competidor: [nombre o descripción + web]
+
+Analiza para nosotros:
+1. FORTALEZAS vs SiMJ (máx 3, con evidencia)
+2. DEBILIDADES vs SiMJ (máx 3)
+3. ÁNGULO de posicionamiento a explotar
+4. ALERTA: algo que deberíamos mejorar
+
+"No disponible — verificar: [X]" si no tienes datos.</div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nivel 3 -->
+      <div class="tier-block reveal-item" style="margin-top:1.5rem">
+        <div class="tier-block__head">
+          <span class="tier-tag tier-tag--3">Nivel 3 — Avanzado</span>
+          <span class="tier-block__sub">Estrategia y arquitectura · Claude Opus 4.6 / GPT-4o con rol experto</span>
+        </div>
+        <div class="callout callout--cl" style="margin:1.5rem 2rem 0">
+          <span aria-hidden="true">ℹ️</span>
+          <div class="callout__body">
+            <strong>Cuándo usar Nivel 3:</strong> Diseño de un módulo nuevo de SiGestión, decisión de migración
+            de infraestructura, estrategia de producto para 2026. Claude Opus 4.6 con Extended Thinking
+            para arquitectura; GPT-4o con rol experto para estrategia de negocio.
+          </div>
+        </div>
+        <div class="sec-frame" style="margin-top:0">
+          <div class="dual">
+            <div class="dual__col dual__col--cl">
+              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Opus 4.6 + Extended Thinking</div>
+              <article class="card reveal-item">
+                <div class="card__num">Diseñar módulo nuevo de SiGestión</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 3</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body"><span class="xt">&lt;sistema_actual&gt;</span>
+SiGestión: Laravel 10, MySQL 8, ~50K registros.
+Equipo: 4 devs. Sin DBA ni DevOps dedicados.
+<span class="xt">&lt;/sistema_actual&gt;</span>
+
+<span class="xt">&lt;restricciones&gt;</span>
+Sin Kubernetes. Mantener MySQL.
+Cero downtime en producción. Rollback &lt; 15 min.
+<span class="xt">&lt;/restricciones&gt;</span>
+
+<span class="xt">&lt;razonamiento_previo&gt;</span>
+Antes de proponer, analiza:
+1. ¿Cuál es el cuello de botella real?
+2. ¿Qué fallaría primero bajo 5x el tráfico?
+3. ¿Qué riesgo se subestima más?
+<span class="xt">&lt;/razonamiento_previo&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+Diseña el módulo de [X].
+Para cada decisión: confianza Alta/Media/Baja
+y qué información cambiaría tu recomendación.
+<span class="xt">&lt;/tarea&gt;</span></div>
+                </div>
+              </article>
+            </div>
+            <div class="dual__col dual__col--oa">
+              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o con Rol Experto</div>
+              <article class="card reveal-item">
+                <div class="card__num">Estrategia de negocio SiMJ 2026</div>
+                <div class="prompt-block">
+                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 3</span><button class="copy-btn js-copy">copiar</button></div>
+                  <div class="prompt-block__body">Eres Director Comercial IT B2B con 12 años
+en empresas de software a medida para PYMES.
+
+SiMJ: software a medida, IT, Córdoba.
+Objetivo: [métrica concreta + fecha límite]
+Recursos: [equipo + presupuesto disponible]
+
+Antes de responder, analiza:
+- ¿Es el objetivo realista con estos recursos?
+- ¿Qué tiene SiMJ que los competidores no?
+- ¿Qué haría diferente una empresa top?
+
+Entrega:
+A) Diagnóstico honesto (incluso si es incómodo)
+B) Los 3 cambios de mayor impacto
+C) Primera acción concreta esta semana
+
+Sé directo. Prefiero lo que no quiero oír.</div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       05 — MEGA PROMPTS GENERADORES
+  ══════════════════════════════════════ -->
+  <section id="megaprompt" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">05 — Generadores</span>
+      <h2 class="section-title reveal-item">Super-Prompts que generan<br>tus prompts perfectos</h2>
+      <p class="section-lead reveal-item">
+        Dos meta-prompts separados: uno para Claude, otro para ChatGPT.
+        Pega el que corresponda al inicio de tu conversación y dile tu objetivo.
+        Te generará el prompt en los 3 niveles, listo para usar.
+      </p>
+
+      <!-- Meta-Prompt Claude -->
+      <div class="mega-label reveal-item">
+        <div class="dot dot--cl" aria-hidden="true"></div>
+        <span>Meta-Prompt para Claude</span>
+        <span class="mega-label__hint">Pega esto al inicio de una conversación en claude.ai</span>
+      </div>
+      <div class="mega-block reveal-item">
+        <div class="mega-block__head mega-block__head--cl">
+          <span class="mega-block__title">Meta-Prompt Claude · claude.ai o API de Anthropic</span>
+          <button class="mega-block__copy js-copy-mega" data-target="mc-content" id="mc-btn">📋 Copiar</button>
+        </div>
+        <div class="mega-block__body" id="mc-content"><span class="mh">ERES: Experto en prompt engineering para Claude (Anthropic), con conocimiento profundo de:</span>
+<span class="md">Claude 4 Best Practices, Extended Thinking, Context Engineering y XML tags.</span>
+
+<span class="mo">TU FUNCIÓN: Cuando el usuario describa un objetivo, generas 3 versiones de prompt
+optimizadas para Claude — una por nivel — listas para copiar y usar inmediatamente.</span>
+
+<span class="my">════ REGLAS DE CONSTRUCCIÓN PARA CLAUDE ════</span>
+
+<span class="mh">REGLA 1 — XML TAGS OBLIGATORIOS (Nivel 2 y 3)</span>
+Usa siempre XML tags para separar secciones:
+&lt;contexto&gt;    → información del proyecto, stack, empresa
+&lt;codigo&gt;       → solo si hay código
+&lt;ejemplos&gt;     → inputs de ejemplo si aplica
+&lt;restricciones&gt; → qué NO debe hacer el modelo
+&lt;tarea&gt;        → la petición real — SIEMPRE AL FINAL DEL PROMPT
+
+<span class="mh">REGLA 2 — UNCERTAINTY PERMISSION (obligatorio con datos)</span>
+Todo prompt para tareas con datos factuales incluye:
+"Si el dato no está disponible, escribe exactamente:
+'Necesito ver también: [archivo/función]'"
+
+<span class="mh">REGLA 3 — FORMATO DE SALIDA EXPLÍCITO</span>
+Especifica siempre: tipo de output, longitud máxima, estructura.
+Para JSON: prefill del asistente (```json\n{)
+
+<span class="mh">REGLA 4 — EJEMPLOS CONTRASTIVOS (Nivel 2 y 3)</span>
+Al menos 1 ejemplo ✅ CORRECTO + 1 ejemplo ❌ INCORRECTO.
+
+<span class="my">════ NIVELES PARA CLAUDE ════</span>
+
+<span class="mc">NIVEL 1 — claude-haiku-4-5 (velocidad, coste mínimo)</span>
+40-100 palabras. Sin XML tags. Instrucción directa.
+Casos: documentar funciones, factories, clasificar, formatear.
+
+<span class="mc">NIVEL 2 — claude-sonnet-4-6 (producción, equilibrio)</span>
+150-350 palabras. XML tags obligatorios.
+Casos: revisar PRs, debuggear, redacción con restricciones.
+Estructura: &lt;contexto&gt; + &lt;codigo&gt; + &lt;restricciones&gt; + &lt;tarea&gt;
+
+<span class="mc">NIVEL 3 — claude-opus-4-6 + Extended Thinking (budget_tokens: 8000-16000)</span>
+300-600 palabras. Todos los componentes XML.
+Casos: arquitectura, decisiones técnicas críticas, análisis estratégico.
+Incluye siempre:
+- &lt;razonamiento_previo&gt; con 3-4 preguntas guía para el thinking
+- "Para cada recomendación: confianza Alta/Media/Baja"
+- "Sé directo. Prefiero escuchar lo que no quiero oír."
+
+<span class="my">════ TU OUTPUT — SIEMPRE ESTA ESTRUCTURA ════</span>
+
+────────────────────────────────────
+<span class="mc">NIVEL 1 · claude-haiku-4-5 · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt completo listo para copiar]
+
+────────────────────────────────────
+<span class="mc">NIVEL 2 · claude-sonnet-4-6 · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt con XML tags completo]
+
+────────────────────────────────────
+<span class="mc">NIVEL 3 · claude-opus-4-6 + Thinking · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt con todos los componentes]
+
+────────────────────────────────────
+<span class="my">NOTA DE USO (2 líneas máximo)</span>
+────────────────────────────────────
+[Qué personalizar + cuándo subir/bajar de nivel]
+
+<span class="mr">CRÍTICO: Genera sin hacer preguntas previas.
+Si falta contexto usa [DATO_A_COMPLETAR] como placeholder.
+Los 3 prompts deben ser INMEDIATAMENTE COPIABLES Y USABLES.</span></div>
+        <div class="mega-block__footer">
+          <span class="mega-block__note">Pega esto como primer mensaje en claude.ai o como system prompt en la API. Luego escribe tu objetivo.</span>
+        </div>
+      </div>
+
+      <!-- Meta-Prompt OpenAI -->
+      <div class="mega-label reveal-item" style="margin-top:3rem">
+        <div class="dot dot--oa" aria-hidden="true"></div>
+        <span>Meta-Prompt para OpenAI / ChatGPT</span>
+        <span class="mega-label__hint">Pega esto al inicio de una conversación en ChatGPT</span>
+      </div>
+      <div class="mega-block reveal-item">
+        <div class="mega-block__head mega-block__head--oa">
+          <span class="mega-block__title">Meta-Prompt OpenAI · chatgpt.com o API de OpenAI</span>
+          <button class="mega-block__copy js-copy-mega" data-target="mo-content" id="mo-btn">📋 Copiar</button>
+        </div>
+        <div class="mega-block__body" id="mo-content"><span class="mh" style="color:var(--oa)">ERES: Experto en prompt engineering para OpenAI (GPT-4o, o3, o4-mini), con conocimiento de:</span>
+<span class="md">OpenAI Prompt Engineering Guide, GPT-5 Prompting Guide y o3/o4-mini Function Calling Guide.</span>
+
+<span class="mo" style="color:var(--oa-light)">TU FUNCIÓN: Cuando el usuario describa un objetivo, generas 3 versiones de prompt
+optimizadas para OpenAI — una por nivel — listas para copiar en ChatGPT o la API.</span>
+
+<span class="my">════ REGLAS DE CONSTRUCCIÓN PARA OPENAI ════</span>
+
+<span class="mh" style="color:var(--oa)">REGLA 1 — CONTEXTO DE EMPRESA SIEMPRE PRIMERO</span>
+Todos los prompts de negocio empiezan con contexto de empresa.
+Incluir: qué hace la empresa, producto/servicio, audiencia, tono.
+
+<span class="mh" style="color:var(--oa)">REGLA 2 — FORMATO DE SALIDA EXPLÍCITO</span>
+Especifica: tipo (email/post/informe), longitud máxima, estructura, CTA si aplica.
+
+<span class="mh" style="color:var(--oa)">REGLA 3 — NO CoT EN MODELOS o-SERIES (CRÍTICO)</span>
+Los modelos o3 y o4-mini razonan internamente.
+NO añadir "piensa paso a paso" — empeora el rendimiento.
+CoT solo para GPT-4o y GPT-4o-mini.
+
+<span class="mh" style="color:var(--oa)">REGLA 4 — RESTRICCIONES CON SU POSITIVO</span>
+Cada "no hagas X" lleva "en su lugar, haz Y".
+
+<span class="my">════ NIVELES PARA OPENAI ════</span>
+
+<span class="mc">NIVEL 1 — gpt-4o-mini (velocidad, coste mínimo)</span>
+40-100 palabras. Sin estructura compleja.
+Casos: clasificar, traducir, formatear, generar variaciones.
+
+<span class="mc">NIVEL 2 — gpt-4o (equilibrio calidad/coste)</span>
+150-350 palabras. Con contexto empresa y restricciones.
+Casos: propuestas, emails complejos, análisis con contexto.
+Estructura: [Contexto] + [Restricciones] + [Formato] + [Tarea]
+
+<span class="mc">NIVEL 3 — gpt-4o con rol experto (o o3/o4-mini para lógica)</span>
+300-500 palabras. Rol experto detallado + razonamiento guiado.
+Casos: estrategia, análisis de mercado, decisiones complejas.
+Incluye siempre:
+- Rol: "[cargo] con [N] años en [sector específico]"
+- "Antes de responder, analiza:" + 3 preguntas guía
+- "Sé directo. Prefiero lo que no quiero oír."
+- "Para cada recomendación: indica tu nivel de confianza."
+
+<span class="my">════ TU OUTPUT — SIEMPRE ESTA ESTRUCTURA ════</span>
+
+────────────────────────────────────
+<span class="mc">NIVEL 1 · gpt-4o-mini · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt completo listo para copiar]
+
+────────────────────────────────────
+<span class="mc">NIVEL 2 · gpt-4o · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt con contexto empresa y restricciones]
+
+────────────────────────────────────
+<span class="mc">NIVEL 3 · gpt-4o (rol experto) · Usar cuando: [casos]</span>
+────────────────────────────────────
+[Prompt con todos los componentes avanzados]
+
+────────────────────────────────────
+<span class="my">NOTA DE USO (2 líneas máximo)</span>
+────────────────────────────────────
+[Qué personalizar + cuándo subir/bajar de nivel]
+
+<span class="mr">CRÍTICO: Genera sin hacer preguntas previas.
+Si falta contexto usa [DATO_A_COMPLETAR] como placeholder.
+Los 3 prompts deben ser INMEDIATAMENTE USABLES en ChatGPT.</span></div>
+        <div class="mega-block__footer">
+          <span class="mega-block__note">Pega como primer mensaje en ChatGPT (GPT-4o) o como Custom Instruction. Luego escribe tu objetivo.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       06 — PRIVACIDAD
+  ══════════════════════════════════════ -->
+  <section id="empresa" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">06 — Privacidad</span>
+      <h2 class="section-title reveal-item">IA en empresa:<br>Qué puedes enviar y qué no</h2>
+      <p class="section-lead reveal-item">
+        El mayor riesgo al usar IA en SiMJ no es técnico. Es enviar datos de clientes
+        sin saber las implicaciones legales. Estas reglas aplican igual a Claude y a ChatGPT.
+      </p>
+
+      <div class="callout callout--red reveal-item">
+        <span aria-hidden="true">⚠️</span>
+        <div class="callout__body">
+          <strong>El riesgo real:</strong> Las IAs de consumo gratuitas pueden usar tus conversaciones para entrenar sus modelos.
+          Enviar datos reales de clientes de SiMJ puede constituir una violación del RGPD
+          (multas hasta el 4% del volumen global de negocio).
+        </div>
+      </div>
+
+      <div class="do-dont reveal-item">
+        <div class="do-dont__col do-dont__col--dont">
+          <div class="do-dont__head do-dont__head--dont">⛔ Nunca enviar a ninguna IA</div>
+          <article class="card card--dont"><h4>Datos reales de clientes de SiMJ</h4><p>Nombres, CIFs, emails, teléfonos, datos de contratos. Ni en screenshots, ni en copy-paste, ni como "ejemplo".</p></article>
+          <article class="card card--dont"><h4>Credenciales y tokens de acceso</h4><p>Claves API, passwords de servidores, .env files, tokens de GitHub. Aunque sea "solo para el contexto". Nunca.</p></article>
+          <article class="card card--dont"><h4>Código con datos de producción</h4><p>Queries con datos reales, logs con PII, dumps de base de datos. Anonimizar antes de pegar cualquier fragmento.</p></article>
+          <article class="card card--dont"><h4>Estrategia interna confidencial</h4><p>Márgenes, precios internos, negociaciones activas, decisiones de contratación. No son entornos seguros para esto.</p></article>
+        </div>
+        <div class="do-dont__col do-dont__col--do">
+          <div class="do-dont__head do-dont__head--do">✓ Puedes enviar sin problema</div>
+          <article class="card card--do"><h4>Descripciones genéricas de clientes</h4><p>"Empresa de transporte con 12 vehículos" en lugar de nombres reales. Misma utilidad, cero riesgo legal.</p></article>
+          <article class="card card--do"><h4>Código sin credenciales</h4><p>Funciones, clases, lógica de negocio de SiGestión. La lógica sin datos reales no es sensible.</p></article>
+          <article class="card card--do"><h4>Documentación y plantillas internas</h4><p>Políticas sin PII, templates de propuestas, manuales de producto, documentación de API sin tokens.</p></article>
+          <article class="card card--do"><h4>Todo lo público de SiMJ</h4><p>Textos de simj.es, posts de redes sociales, materiales de marketing ya publicados.</p></article>
+        </div>
+      </div>
+
+      <h3 class="subsection-title reveal-item">Checklist RGPD · Antes de implementar IA con datos de clientes</h3>
+      <div class="checklist reveal-item" id="checklist">
+        <label class="check-item js-check">
+          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
+          <div class="check-item__text"><strong>DPA firmado.</strong> Necesitas un Data Processing Agreement con Anthropic y/o OpenAI antes de procesar datos de clientes de SiMJ.</div>
+        </label>
+        <label class="check-item js-check">
+          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
+          <div class="check-item__text"><strong>Plan Team o Enterprise (no Free).</strong> Las versiones gratuitas pueden usar conversaciones para entrenamiento. ChatGPT Team y Claude.ai Pro tienen política de no uso para entrenamiento.</div>
+        </label>
+        <label class="check-item js-check">
+          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
+          <div class="check-item__text"><strong>El equipo conoce qué no se puede enviar.</strong> Esta guía lo cubre. Comparte con todo el equipo antes de empezar a usar IA con datos del negocio.</div>
+        </label>
+        <label class="check-item js-check">
+          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
+          <div class="check-item__text"><strong>Proceso de anonimización definido.</strong> Credenciales → [REDACTED], clientes → descriptor genérico, IPs → [IP_PROD]. Documentado y conocido por todo el equipo dev.</div>
+        </label>
+        <label class="check-item js-check">
+          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
+          <div class="check-item__text"><strong>Para código absolutamente crítico: Ollama.</strong> Modelos locales en tu máquina. Cero datos enviados externamente. Gratis. <a href="https://ollama.ai" target="_blank" rel="noopener">ollama.ai →</a></div>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       07 — BIBLIOTECA DE PROMPTS
+  ══════════════════════════════════════ -->
+  <section id="industrias" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">07 — Biblioteca</span>
+      <h2 class="section-title reveal-item">Prompts listos<br>para SiMJ</h2>
+      <p class="section-lead reveal-item">
+        Plantillas adaptadas a los casos de uso reales del equipo.
+        Cada prompt indica la herramienta y el modelo recomendado.
+      </p>
+
+      <div class="itabs reveal-item" role="tablist" aria-label="Categorías de prompts">
+        <button class="itab itab--active js-itab" data-panel="ii-dev" role="tab" aria-selected="true">💻 Desarrollo</button>
+        <button class="itab js-itab" data-panel="ii-comercial" role="tab" aria-selected="false">🤝 Comercial</button>
+        <button class="itab js-itab" data-panel="ii-soporte" role="tab" aria-selected="false">🛠️ Soporte IT</button>
+        <button class="itab js-itab" data-panel="ii-marketing" role="tab" aria-selected="false">📢 Marketing</button>
+        <button class="itab js-itab" data-panel="ii-admin" role="tab" aria-selected="false">📋 Admin</button>
+      </div>
+
+      <!-- Desarrollo -->
+      <div id="ii-dev" class="ipanel ipanel--active" role="tabpanel">
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Revisar PR de SiGestión — Seguridad y Rendimiento</div>
+              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+SiGestión ERP · Laravel 10 · PHP 8.2 · MySQL 8
+PR: [descripción breve del cambio]
+Módulos afectados: [lista]
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;diff&gt;</span>[Pega el diff o archivos modificados]<span class="xt">&lt;/diff&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+Revisa en orden de prioridad:
+1. Seguridad (SQL injection, XSS, auth bypass)
+2. Rendimiento (N+1, índices, queries lentas)
+3. ¿Rompe funcionalidad existente?
+
+Formato: ÁREA | LÍNEA | PROBLEMA | FIX propuesto
+"Sin issues en [X]" si no hay problemas en esa área.
+No comentes estilo ni naming en este análisis.
+<span class="xt">&lt;/tarea&gt;</span></pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Escribir tests para función nueva</div>
+              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+SiGestión · Laravel 10 · PHPUnit / Pest
+Tests en español, nombres descriptivos.
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;codigo&gt;</span>[Función o clase a testear]<span class="xt">&lt;/codigo&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+Escribe tests necesarios:
+- Happy path (caso normal)
+- Edge cases identificados
+- Casos de error esperados
+
+Sin tests redundantes. Indica qué no puedes
+testear sin más contexto del sistema.
+<span class="xt">&lt;/tarea&gt;</span></pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Plan de migración de base de datos</div>
+              <div class="icard__model icard__model--cl">Claude Opus 4.6 · Nivel 3</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+SiGestión · MySQL 8 · ~50K registros afectados
+Producción · Cero downtime · 4 devs, sin DBA
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;migracion&gt;</span>[Describe o pega la migración]<span class="xt">&lt;/migracion&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+Plan de migración seguro:
+1. Riesgos específicos en producción
+2. Pasos exactos con comandos
+3. Rollback si algo falla (&lt; 15 min)
+4. Qué monitorizar durante el proceso
+
+Confianza por recomendación: Alta/Media/Baja
+<span class="xt">&lt;/tarea&gt;</span></pre>
+        </article>
+      </div>
+
+      <!-- Comercial -->
+      <div id="ii-comercial" class="ipanel" role="tabpanel">
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Propuesta SiGestión para PYME</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Somos SiMJ, software a medida y IT en Córdoba.
+Producto: SiGestión, ERP adaptable a cualquier sector.
+
+Cliente: [sector + tamaño + problema detectado]
+Proceso actual: [cómo lo hacen ahora]
+
+Propuesta comercial de 1 página:
+1. Su problema (en su lenguaje)
+2. Nuestra solución concreta
+3. 3 beneficios tangibles (tiempo, errores, coste)
+4. Próximo paso: demo gratuita 30 min
+
+Tono: cercano, de confianza, sin jerga técnica.
+Sin precio en esta propuesta — solo generamos interés.</pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Email seguimiento post-demo</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Email de seguimiento a [sector del cliente] tras
+demo de SiGestión.
+Lo que más le interesó: [módulo o función]
+Su principal duda: [objeción o pregunta]
+
+Máx 100 palabras · Sin exclamaciones
+CTA único: confirmar próxima reunión
+Firma: [Nombre], SiMJ</pre>
+        </article>
+      </div>
+
+      <!-- Soporte IT -->
+      <div id="ii-soporte" class="ipanel" role="tabpanel">
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Diagnóstico de incidencia en SiGestión</div>
+              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+SiMJ · SiGestión ERP · Laravel 10 + MySQL 8
+Entorno: producción
+<span class="xt">&lt;/contexto&gt;</span>
+
+<span class="xt">&lt;incidencia&gt;</span>
+Descripción del cliente: [qué dice que pasa]
+Error exacto si lo hay: [mensaje o log]
+Cuándo ocurre: [siempre / en condición X]
+Desde cuándo: [fecha aproximada]
+<span class="xt">&lt;/incidencia&gt;</span>
+
+<span class="xt">&lt;tarea&gt;</span>
+1. Diagnóstico más probable (razonado)
+2. Pasos de verificación por probabilidad
+3. Fix temporal para ganar tiempo
+4. Fix definitivo recomendado
+
+"Para confirmar necesito ver: [X]" si hace falta.
+<span class="xt">&lt;/tarea&gt;</span></pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Respuesta a ticket de soporte (cliente)</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Respuesta a ticket de soporte de SiMJ.
+El cliente dice: "[problema]"
+Solución técnica: [lo que hay que hacer]
+¿Está resuelto?: [Sí / En gestión]
+
+Tono: empático, claro, sin tecnicismos.
+Máx 80 palabras · Termina con el próximo paso.</pre>
+        </article>
+      </div>
+
+      <!-- Marketing -->
+      <div id="ii-marketing" class="ipanel" role="tabpanel">
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Post LinkedIn para SiMJ</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Post LinkedIn de SiMJ (software a medida, IT, Córdoba).
+Audiencia: gerentes de PYMES y autónomos de Andalucía.
+Tema: [insight o noticia a comunicar]
+Objetivo: [awareness / leads / engagement]
+
+3 párrafos · máx 200 palabras
+Primera línea: engancha sin revelar todo
+Sin hashtags genéricos (máx 3 específicos)
+Máx 3 emojis en todo el post
+Termina con pregunta que invite a comentar</pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Caso de éxito de cliente (anonimizado)</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Caso de éxito para web de SiMJ.
+Cliente: [sector + tamaño — sin nombre si no autorizado]
+Problema antes de SiMJ: [situación inicial]
+Solución implementada: [qué hicimos]
+Resultado: [métricas o mejoras concretas]
+
+3 secciones: Reto / Solución / Resultado
+180-250 palabras · Tono narrativo y cercano
+Incluye 1 cita representativa del cliente</pre>
+        </article>
+      </div>
+
+      <!-- Admin -->
+      <div id="ii-admin" class="ipanel" role="tabpanel">
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Acta de reunión desde notas</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Convierte estas notas en acta formal de SiMJ.
+Fecha y participantes: [datos]
+Notas en bruto: [pega tus notas]
+
+Formato: Puntos tratados · Decisiones
+Tareas (Tarea | Responsable | Fecha)
+Próxima reunión si la hay.
+Tono: formal · Máx 300 palabras</pre>
+        </article>
+
+        <article class="icard reveal-item">
+          <div class="icard__head">
+            <div>
+              <div class="icard__title">Informe mensual IT para cliente</div>
+              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
+            </div>
+            <button class="icard__copy js-icard-copy">copiar</button>
+          </div>
+          <pre class="icard__body">Informe mensual de actividad IT para cliente de SiMJ.
+Cliente: [sector — sin nombre si no autorizado]
+Periodo: [mes y año]
+Actividades: [lista de incidencias/mantenimientos]
+Horas invertidas: [total]
+Estado sistemas: [OK / pendientes / alertas]
+
+Formato ejecutivo (1 página)
+Secciones: Resumen · Actividades · Estado · Próximo mes
+Sin tecnicismos · Orientado al negocio del cliente</pre>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       08 — PROMPT DEBUGGER
+  ══════════════════════════════════════ -->
+  <section id="debugger" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">08 — Herramienta</span>
+      <h2 class="section-title reveal-item">Analiza tu prompt<br>en tiempo real</h2>
+      <p class="section-lead reveal-item">
+        Pega cualquier prompt y detecta qué componentes faltan,
+        el riesgo de alucinación y el modelo recomendado.
+      </p>
+
+      <div class="debugger reveal-item" id="debugger-widget">
+        <div class="debugger__bar">
+          <span class="debugger__label">Tu Prompt</span>
+          <div class="debugger__actions">
+            <button class="btn-clear js-db-clear">Limpiar</button>
+            <button class="btn-analyze js-db-run" id="db-run-btn">⚡ Analizar</button>
+          </div>
+        </div>
+        <textarea id="db-ta" class="debugger__ta" placeholder="Pega tu prompt aquí para analizarlo...&#10;&#10;Ejemplo: &quot;Resume este informe y dime qué tendencias ves.&quot;" spellcheck="false"></textarea>
+        <div class="debugger__footer">
+          <span><span id="db-chars">0</span> chars · <span id="db-tokens">~0</span> tokens estimados</span>
+        </div>
+        <div class="debugger__results" id="db-results" hidden>
+          <div class="debugger__scores">
+            <div class="debugger__score-box">
+              <div class="debugger__score-val" id="dr-score">—</div>
+              <div class="debugger__score-lbl">Puntuación /10</div>
+            </div>
+            <div class="debugger__score-box">
+              <div class="debugger__score-val debugger__score-val--sm" id="dr-model">—</div>
+              <div class="debugger__score-lbl">Modelo recomendado</div>
+            </div>
+            <div class="debugger__score-box">
+              <div class="debugger__score-val debugger__score-val--sm" id="dr-risk">—</div>
+              <div class="debugger__score-lbl">Riesgo alucinación</div>
+            </div>
+          </div>
+          <div class="debugger__body">
+            <div>
+              <div class="debugger__section-title">Componentes detectados</div>
+              <div id="dr-comps" class="comp-list"></div>
+            </div>
+            <div>
+              <div class="debugger__section-title">Problemas detectados</div>
+              <div id="dr-issues"></div>
+            </div>
+            <div>
+              <div class="debugger__section-title">Sugerencias de mejora</div>
+              <div id="dr-sugs"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       09 — ERRORES COMUNES
+  ══════════════════════════════════════ -->
+  <section id="errores" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">09 — Errores Comunes</span>
+      <h2 class="section-title reveal-item">Los 10 errores que<br>arruinan un prompt</h2>
+      <p class="section-lead reveal-item">
+        Los más frecuentes en equipos que empiezan con IA.
+        Haz clic en cada error para ver el fix.
+      </p>
+
+      <div class="error-grid">
+        <article class="error-card reveal-item" data-delay="0">
+          <div class="error-card__head"><span class="error-card__icon">🎭</span><span class="error-sev error-sev--c">Crítico</span></div>
+          <h4 class="error-card__name">El Experto Sin Credenciales</h4>
+          <p class="error-card__desc">"Eres un experto en marketing." Sin empresa, sector, años. Respuestas de libro de texto.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Fórmula: <strong>[cargo] + [empresa/sector] + [sub-especialidad]</strong>. Para SiMJ: "Eres responsable de marketing de empresa de software a medida en Córdoba, especializado en captación de PYMES locales."</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="80">
+          <div class="error-card__head"><span class="error-card__icon">📐</span><span class="error-sev error-sev--c">Crítico</span></div>
+          <h4 class="error-card__name">Sin Formato de Salida</h4>
+          <p class="error-card__desc">No especificar qué quieres: email, bullets, tabla, post. El modelo elige y raramente acierta.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Añade siempre: <strong>"Formato: [tipo] · Longitud: [límite] · Termina con: [CTA]"</strong>. Cuanto más específico, más reproducible el resultado.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="160">
+          <div class="error-card__head"><span class="error-card__icon">🌊</span><span class="error-sev error-sev--c">Crítico</span></div>
+          <h4 class="error-card__name">El Tsunami de Tareas</h4>
+          <p class="error-card__desc">"Analiza, resume, traduce y crea un plan." 4 tareas = resultados mediocres en todas.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden><strong>Máximo 2 tareas por prompt.</strong> Si necesitas más, encadénalas: el output del primero es el input del segundo.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="240">
+          <div class="error-card__head"><span class="error-card__icon">🧢</span><span class="error-sev error-sev--c">Crítico</span></div>
+          <h4 class="error-card__name">Sin Permiso de Incertidumbre</h4>
+          <p class="error-card__desc">El modelo inventa antes de admitir que necesita más contexto. Peligroso en código.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Añade: <strong>"Si el dato no está disponible, escribe: 'Dato no disponible — necesitaría: [X]'"</strong>. Reduce alucinaciones hasta un 60%.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="0">
+          <div class="error-card__head"><span class="error-card__icon">🤖</span><span class="error-sev error-sev--h">Alto</span></div>
+          <h4 class="error-card__name">CoT en o3/o4-mini</h4>
+          <p class="error-card__desc">"Piensa paso a paso" con modelos razonadores. Ya razonan internamente — pedírselo empeora el resultado.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Con o3/o4-mini: <strong>prompt directo + contexto completo + tarea clara</strong>. CoT explícito solo con GPT-4o y Claude Sonnet sin extended thinking.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="80">
+          <div class="error-card__head"><span class="error-card__icon">🔐</span><span class="error-sev error-sev--h">Alto</span></div>
+          <h4 class="error-card__name">Datos Reales en el Prompt</h4>
+          <p class="error-card__desc">Credenciales, nombres de clientes o contratos sin anonimizar. Riesgo legal real.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>30 segundos antes de pegar: <strong>nombres → [CLIENTE], credenciales → [REDACTED], IPs → [IP_PROD]</strong>.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="160">
+          <div class="error-card__head"><span class="error-card__icon">📊</span><span class="error-sev error-sev--h">Alto</span></div>
+          <h4 class="error-card__name">Alias de Modelo en Producción</h4>
+          <p class="error-card__desc">Usar "claude-sonnet-4-6" en código. Puede cambiar sin aviso y romper el comportamiento esperado.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>En código: snapshot con fecha: <code class="inline-code">claude-sonnet-4-6-20260217</code>. Comportamiento predecible indefinidamente.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="240">
+          <div class="error-card__head"><span class="error-card__icon">🏗️</span><span class="error-sev error-sev--h">Alto</span></div>
+          <h4 class="error-card__name">El Prompt Monolito</h4>
+          <p class="error-card__desc">Todo en un párrafo. El modelo no diferencia contexto, instrucciones y tarea.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Para Claude: <strong>XML tags</strong>. Para ChatGPT: <strong>saltos de línea y encabezados claros</strong>. La estructura mejora la fidelidad del output.</div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="0">
+          <div class="error-card__head"><span class="error-card__icon">🔄</span><span class="error-sev error-sev--m">Medio</span></div>
+          <h4 class="error-card__name">Solo Restricciones Negativas</h4>
+          <p class="error-card__desc">"No uses jerga" sin decir qué sí usar. Las restricciones solas son ambiguas.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden>Cada "no" necesita su "sí": <strong>"No uses jerga técnica → usa lenguaje que entienda el gerente de una PYME sin conocimientos IT."</strong></div>
+        </article>
+
+        <article class="error-card reveal-item" data-delay="80">
+          <div class="error-card__head"><span class="error-card__icon">🧪</span><span class="error-sev error-sev--m">Medio</span></div>
+          <h4 class="error-card__name">El Prompt de 1 Ejemplo</h4>
+          <p class="error-card__desc">Probar con un input y asumir que funciona. El 80% de los fallos aparecen con edge-cases.</p>
+          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
+          <div class="error-card__fix" hidden><strong>Antes de usar en SiGestión: 10 test cases</strong> (3 normales, 3 edge, 2 ambiguos, 2 que rompan el formato). Usa el propio modelo para generarlos.</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       10 — GLOSARIO
+  ══════════════════════════════════════ -->
+  <section id="glosario" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">10 — Glosario</span>
+      <h2 class="section-title reveal-item">Vocabulario IA esencial</h2>
+      <p class="section-lead reveal-item">
+        Todos los términos que necesitas dominar. Busca o filtra por herramienta.
+      </p>
+
+      <div class="gloss-search reveal-item">
+        <div class="gloss-search__bar">
+          <span aria-hidden="true">🔍</span>
+          <input type="search" id="gloss-input" class="gloss-search__input" placeholder="Buscar: token, RAG, Claude, prompt, MCP..." autocomplete="off" aria-label="Buscar en el glosario">
+        </div>
+        <div class="gloss-cats" role="group" aria-label="Filtrar por categoría">
+          <button class="gcat gcat--active js-gcat" data-cat="all">Todos</button>
+          <button class="gcat js-gcat" data-cat="cl">Claude</button>
+          <button class="gcat js-gcat" data-cat="oa">OpenAI</button>
+          <button class="gcat js-gcat" data-cat="both">Generales</button>
+        </div>
+      </div>
+
+      <div id="gloss-grid" class="gloss-grid" role="list"></div>
+      <p id="gloss-empty" class="gloss-empty" hidden>Sin resultados. Prueba con: token, prompt, agente, RAG</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       11 — TESTING
+  ══════════════════════════════════════ -->
+  <section id="testing" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">11 — Testing</span>
+      <h2 class="section-title reveal-item">Cómo testear un prompt<br>antes de usarlo en serio</h2>
+      <p class="section-lead reveal-item">
+        Antes de integrar un prompt en el flujo de SiMJ o en código de SiGestión,
+        valídalo con estas 4 fases.
+      </p>
+
+      <div class="phase reveal-item" data-delay="0">
+        <div class="phase__num">1</div>
+        <div class="phase__body">
+          <h3 class="phase__title">Genera 10 variaciones del input</h3>
+          <p class="phase__desc">No pruebes solo con el caso ideal. Genera inputs que representen lo que recibirá el prompt en producción real.</p>
+          <div class="phase__code">
+            <div class="phase__code-label">Prompt para generar test cases</div>
+            <div class="phase__code-body">Tengo este prompt de producción:
+---
+[TU PROMPT]
+---
+Genera 10 inputs de prueba:
+- 3 normales (uso habitual)
+- 3 edge (inputs en el límite)
+- 2 ambiguos (respuesta no obvia)
+- 2 que intenten romper el formato
+Por cada uno: INPUT + RESPUESTA ESPERADA + CRITERIO DE ÉXITO</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase reveal-item" data-delay="100">
+        <div class="phase__num">2</div>
+        <div class="phase__body">
+          <h3 class="phase__title">Define criterios de éxito ANTES de testear</h3>
+          <p class="phase__desc">Sin criterios claros, no puedes saber si el prompt funciona. Defínelos antes de ver ningún output.</p>
+          <ul class="phase__checks">
+            <li><strong>Formato:</strong> ¿Respeta exactamente el esquema de salida pedido?</li>
+            <li><strong>Contenido:</strong> ¿La respuesta es correcta dado el contexto?</li>
+            <li><strong>Completitud:</strong> ¿Responde a TODO lo pedido sin añadir extras?</li>
+            <li><strong>Consistency:</strong> ¿Produce resultados similares al repetirlo 3 veces?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase reveal-item" data-delay="200">
+        <div class="phase__num">3</div>
+        <div class="phase__body">
+          <h3 class="phase__title">Test de consistencia — mínimo 3 repeticiones</h3>
+          <p class="phase__desc">El mismo input ejecutado 3 veces debe producir outputs de calidad equivalente. Alta varianza = prompt frágil.</p>
+          <div class="phase__code">
+            <div class="phase__code-label">Umbral mínimo</div>
+            <div class="phase__code-body">3/3 PASS en casos normales  → Listo para producción
+2/3 PASS                     → Refinar antes de usar
+&lt;2/3 PASS                    → Reescribir el prompt
+
+Para código crítico de SiGestión:
+5/5 PASS en todos los casos  → Requisito mínimo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase reveal-item" data-delay="300">
+        <div class="phase__num">4</div>
+        <div class="phase__body">
+          <h3 class="phase__title">Al actualizar el modelo, vuelve a testear</h3>
+          <p class="phase__desc">Cuando Anthropic u OpenAI actualicen el modelo, tus prompts pueden comportarse diferente.</p>
+          <ul class="phase__checks">
+            <li>Ejecuta los 10 test cases en el modelo nuevo antes de migrar</li>
+            <li><strong>Claude 4.x:</strong> Es más conciso. Si necesitas más detalle: "proporciona un resumen detallado de cada paso"</li>
+            <li>Si hay regresiones: ajusta el prompt ANTES de promover a producción</li>
+            <li>En código de SiGestión: usa snapshots con fecha, nunca aliases</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════
+       12 — RECURSOS
+  ══════════════════════════════════════ -->
+  <section id="recursos" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">12 — Recursos</span>
+      <h2 class="section-title reveal-item">Para seguir aprendiendo</h2>
+
+      <h3 class="resources-heading resources-heading--cl reveal-item">
+        <span class="dot dot--cl" aria-hidden="true" style="display:inline-block;width:.55rem;height:.55rem"></span>
+        Claude — Documentación Oficial
+      </h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">
+          <div class="res-card__domain">docs.anthropic.com</div>
+          <div class="res-card__title">Claude 4 Best Practices</div>
+          <div class="res-card__desc">XML tags, long context, Extended Thinking, agentic systems. La fuente primaria. Actualizada marzo 2026.</div>
+          <span class="res-card__tag res-card__tag--cl">Oficial Primario</span>
+        </a>
+        <a class="res-card" href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">
+          <div class="res-card__domain">anthropic.com/engineering</div>
+          <div class="res-card__title">Claude Code — Best Practices</div>
+          <div class="res-card__desc">CLAUDE.md, context management, supervision checkpoints. Basado en producción interna de Anthropic.</div>
+          <span class="res-card__tag res-card__tag--cl">Ingeniería</span>
+        </a>
+        <a class="res-card" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">
+          <div class="res-card__domain">github.com/anthropics</div>
+          <div class="res-card__title">Tutorial Interactivo Oficial</div>
+          <div class="res-card__desc">9 capítulos con ejercicios prácticos en Jupyter / Google Sheets. El más didáctico de los recursos oficiales.</div>
+          <span class="res-card__tag res-card__tag--cl">Tutorial</span>
+        </a>
+        <a class="res-card" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">
+          <div class="res-card__domain">anthropic.com/engineering</div>
+          <div class="res-card__title">Context Engineering para Agentes</div>
+          <div class="res-card__desc">Compactación de contexto, just-in-time loading, structured note-taking. Basado en Claude Code en producción.</div>
+          <span class="res-card__tag res-card__tag--cl">Avanzado</span>
+        </a>
+      </div>
+
+      <h3 class="resources-heading resources-heading--oa reveal-item" style="margin-top:2.5rem">
+        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.55rem;height:.55rem"></span>
+        OpenAI — Documentación Oficial
+      </h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">
+          <div class="res-card__domain">platform.openai.com</div>
+          <div class="res-card__title">Prompt Engineering Guide</div>
+          <div class="res-card__desc">6 estrategias: instrucciones claras, texto de referencia, tareas complejas, tiempo para pensar, herramientas, evals.</div>
+          <span class="res-card__tag res-card__tag--oa">Oficial</span>
+        </a>
+        <a class="res-card" href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener">
+          <div class="res-card__domain">cookbook.openai.com</div>
+          <div class="res-card__title">GPT-5 Prompting Guide</div>
+          <div class="res-card__desc">Agentic tasks, TODO tool, planning antes de ejecutar. Por el equipo de OpenAI. Agosto 2025.</div>
+          <span class="res-card__tag res-card__tag--oa">GPT-5</span>
+        </a>
+        <a class="res-card" href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener">
+          <div class="res-card__domain">cookbook.openai.com</div>
+          <div class="res-card__title">o3/o4-mini Prompting Guide</div>
+          <div class="res-card__desc">Por qué NO pedir más razonamiento. Developer messages, function call ordering. Fuente definitiva para modelos o-series.</div>
+          <span class="res-card__tag res-card__tag--oa">o-series</span>
+        </a>
+        <a class="res-card" href="https://cookbook.openai.com" target="_blank" rel="noopener">
+          <div class="res-card__domain">cookbook.openai.com</div>
+          <div class="res-card__title">OpenAI Cookbook Completo</div>
+          <div class="res-card__desc">Notebooks prácticos: agents, evals, structured outputs, function calling, vision, audio, RAG, fine-tuning.</div>
+          <span class="res-card__tag res-card__tag--oa">Índice</span>
+        </a>
+      </div>
+
+      <h3 class="resources-heading reveal-item" style="margin-top:2.5rem;color:var(--lime)">
+        General — Frameworks y Papers
+      </h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://www.promptingguide.ai" target="_blank" rel="noopener">
+          <div class="res-card__domain">promptingguide.ai</div>
+          <div class="res-card__title">Prompt Engineering Guide — DAIR.AI</div>
+          <div class="res-card__desc">La guía comunitaria más completa. CoT, ToT, ReAct, RAG. Disponible en español. Actualización continua.</div>
+          <span class="res-card__tag res-card__tag--lm">Universal</span>
+        </a>
+        <a class="res-card" href="https://learnprompting.org" target="_blank" rel="noopener">
+          <div class="res-card__domain">learnprompting.org</div>
+          <div class="res-card__title">Learn Prompting — Curso Gratuito</div>
+          <div class="res-card__desc">60+ lecciones de 0 a avanzado con ejercicios prácticos. En español disponible.</div>
+          <span class="res-card__tag res-card__tag--lm">Curso</span>
+        </a>
+        <a class="res-card" href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">
+          <div class="res-card__domain">arxiv.org</div>
+          <div class="res-card__title">Chain-of-Thought — Paper Original</div>
+          <div class="res-card__desc">Wei et al. (2022). El paper que formalizó el CoT. 10.000+ citas. Base teórica de todas las técnicas de razonamiento.</div>
+          <span class="res-card__tag res-card__tag--all">Paper</span>
+        </a>
+        <a class="res-card" href="https://ollama.ai" target="_blank" rel="noopener">
+          <div class="res-card__domain">ollama.ai</div>
+          <div class="res-card__title">Ollama — IA 100% Local y Gratuita</div>
+          <div class="res-card__desc">Para datos sensibles de SiMJ: Llama3, CodeStral, Phi-3. Cero datos enviados. Funciona sin internet.</div>
+          <span class="res-card__tag res-card__tag--lm">Privacidad</span>
+        </a>
+        <a class="res-card" href="https://arxiv.org/abs/2510.04618" target="_blank" rel="noopener">
+          <div class="res-card__domain">arxiv.org · 2025</div>
+          <div class="res-card__title">Agentic Context Engineering (ACE)</div>
+          <div class="res-card__desc">Framework que reemplaza el "prompt engineering" simple. Contextos como "playbooks evolutivos". Oct 2025 → Ene 2026.</div>
+          <span class="res-card__tag res-card__tag--all">Paper 2025</span>
+        </a>
+        <a class="res-card" href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" rel="noopener">
+          <div class="res-card__domain">github.com/dair-ai</div>
+          <div class="res-card__title">PE Guide — GitHub (47K ⭐)</div>
+          <div class="res-card__desc">El repo más completo de la comunidad. Papers, técnicas, modelos, aplicaciones. Actualizado semanalmente.</div>
+          <span class="res-card__tag res-card__tag--all">47K ⭐</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand-col">
+        <div class="footer__logo">SiMJ</div>
+        <p class="footer__desc">
+          Guía práctica de IA para el equipo de Soluciones Informáticas MJ.
+          Claude para tareas técnicas. OpenAI para comunicación y negocio.
+          Actualizada marzo 2026.
+        </p>
+      </div>
+      <div class="footer__col">
+        <h5>Claude</h5>
+        <ul>
+          <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">Claude 4 Best Practices</a></li>
+          <li><a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">Claude Code</a></li>
+          <li><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Tutorial Oficial</a></li>
+          <li><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>OpenAI</h5>
+        <ul>
+          <li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt Engineering</a></li>
+          <li><a href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener">GPT-5 Guide</a></li>
+          <li><a href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener">o3/o4-mini Guide</a></li>
+          <li><a href="https://chat.openai.com" target="_blank" rel="noopener">chatgpt.com</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>SiMJ</h5>
+        <ul>
+          <li><a href="https://simj.es" target="_blank" rel="noopener">simj.es</a></li>
+          <li><a href="https://simj.es/sigestion-avanzada" target="_blank" rel="noopener">SiGestión ERP</a></li>
+          <li><a href="https://simj.es/sigps" target="_blank" rel="noopener">SiGPS Flotas</a></li>
+          <li><a href="https://simj.es/contacto" target="_blank" rel="noopener">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="wrap">
+        <span>Soluciones Informáticas MJ SCA · Córdoba, España · simj.es · CIF B19496678</span>
+        <span>Formación IA Interna · Curso 2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS — load after DOM -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.3.6/dist/bundles/anime.umd.min.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
