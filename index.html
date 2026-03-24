@@ -3,58 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Guía práctica de IA para el equipo de SiMJ — Claude y OpenAI, técnicas élite, prompts listos para usar y guía de privacidad RGPD.">
+  <meta name="description" content="Guía práctica de IA para el equipo de SiMJ — Claude, OpenAI y Gemini, técnicas élite, biblioteca de prompts y guía de privacidad RGPD.">
   <meta name="author" content="SiMJ — Soluciones Informáticas MJ">
-  <title>IA en SiMJ · Claude & OpenAI · Guía 2026</title>
+  <title>IA en SiMJ · Claude & OpenAI & Gemini · Guía 2026</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="css/vars.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
 
-  <!-- Anime.js v4 UMD -->
-  <script src="https://cdn.jsdelivr.net/npm/animejs@4.3.6/dist/bundles/anime.umd.min.js" defer></script>
+  <style>
+    /* ── HOVER BLACK SQUARE FIX ─────────────────── */
+    .card::before,.card::after,
+    .error-card::before,.error-card::after,
+    .icard::before,.icard::after,
+    .res-card::before,.res-card::after,
+    .mega-block::before,.mega-block::after,
+    article::before,article::after{
+      content:none!important;
+      display:none!important;
+      background:transparent!important;
+    }
+    .card:hover,.error-card:hover,.icard:hover,.res-card:hover{
+      background-color:inherit;
+    }
+    /* Prevent anime.js opacity-0 flash creating black rects */
+    .reveal-item{
+      opacity:1;
+      transform:translateY(0);
+      will-change:auto;
+    }
+
+    /* ── MEGA-PROMPT SELECTOR ───────────────────── */
+    .mp-selector-wrap{margin:2rem 0 0;display:flex;flex-direction:column;gap:1rem}
+    .mp-tool-row,.mp-level-row{display:flex;gap:.5rem;flex-wrap:wrap}
+    .mp-tool-btn,.mp-level-btn{
+      padding:.45rem 1.1rem;border-radius:6px;border:1.5px solid transparent;
+      font-size:.82rem;font-weight:600;cursor:pointer;transition:all .18s;
+      background:rgba(255,255,255,.04);color:var(--muted,#8a9ab5);
+    }
+    .mp-tool-btn[data-tool="claude"].active,.mp-tool-btn[data-tool="claude"]:hover{background:rgba(204,138,255,.12);border-color:rgba(204,138,255,.5);color:#cc8aff}
+    .mp-tool-btn[data-tool="openai"].active,.mp-tool-btn[data-tool="openai"]:hover{background:rgba(16,163,127,.12);border-color:rgba(16,163,127,.5);color:#10a37f}
+    .mp-tool-btn[data-tool="gemini"].active,.mp-tool-btn[data-tool="gemini"]:hover{background:rgba(66,133,244,.12);border-color:rgba(66,133,244,.5);color:#4285f4}
+    .mp-level-btn.active,.mp-level-btn:hover{background:rgba(163,230,80,.1);border-color:rgba(163,230,80,.4);color:#a3e650}
+    .mp-panel-area{margin-top:1.5rem}
+    .mp-panel{display:none}
+    .mp-panel.visible{display:block}
+    .mp-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+    .mp-badge{padding:.25rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.04em}
+    .mp-badge--cl{background:rgba(204,138,255,.15);color:#cc8aff}
+    .mp-badge--oa{background:rgba(16,163,127,.15);color:#10a37f}
+    .mp-badge--ge{background:rgba(66,133,244,.15);color:#4285f4}
+    .mp-badge--n1{background:rgba(100,200,100,.1);color:#6dc46d}
+    .mp-badge--n2{background:rgba(240,180,60,.1);color:#f0b43c}
+    .mp-badge--n3{background:rgba(255,100,80,.1);color:#ff6450}
+    .mp-when{font-size:.78rem;color:var(--muted,#7a8b9e);font-style:italic}
+
+    /* ── GIANT LIBRARY ──────────────────────────── */
+    .lib-search-bar{display:flex;gap:.75rem;align-items:center;margin:1.5rem 0 1rem;background:rgba(255,255,255,.03);border:1.5px solid rgba(163,230,80,.2);border-radius:10px;padding:.6rem 1rem}
+    .lib-search-bar input{flex:1;background:transparent;border:none;outline:none;color:inherit;font-size:.92rem;font-family:inherit}
+    .lib-search-bar input::placeholder{color:rgba(255,255,255,.25)}
+    .lib-cats{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    .lib-cat{padding:.3rem .75rem;border-radius:20px;border:1px solid rgba(255,255,255,.1);font-size:.75rem;font-weight:500;cursor:pointer;background:transparent;color:rgba(255,255,255,.45);transition:all .15s}
+    .lib-cat.active,.lib-cat:hover{background:rgba(163,230,80,.12);border-color:rgba(163,230,80,.4);color:#a3e650}
+    .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+    .lib-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.1rem 1.2rem;transition:border-color .2s}
+    .lib-card:hover{border-color:rgba(163,230,80,.3)}
+    .lib-card__head{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.6rem}
+    .lib-card__title{font-size:.85rem;font-weight:600;line-height:1.35;flex:1}
+    .lib-card__tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.7rem}
+    .lib-card__tag{padding:.15rem .5rem;border-radius:4px;font-size:.68rem;font-weight:600}
+    .lib-card__tag--cl{background:rgba(204,138,255,.15);color:#cc8aff}
+    .lib-card__tag--oa{background:rgba(16,163,127,.15);color:#10a37f}
+    .lib-card__tag--ge{background:rgba(66,133,244,.15);color:#4285f4}
+    .lib-card__tag--any{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+    .lib-card__tag--n1{background:rgba(100,200,100,.1);color:#6dc46d}
+    .lib-card__tag--n2{background:rgba(240,180,60,.1);color:#f0b43c}
+    .lib-card__tag--n3{background:rgba(255,100,80,.1);color:#ff6450}
+    .lib-card__body{font-size:.76rem;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;line-height:1.5;max-height:120px;overflow:hidden;transition:max-height .3s;white-space:pre-wrap;word-break:break-word}
+    .lib-card__body.expanded{max-height:600px}
+    .lib-card__footer{display:flex;gap:.5rem;margin-top:.75rem;align-items:center;justify-content:space-between}
+    .lib-card__expand{font-size:.72rem;color:rgba(163,230,80,.7);cursor:pointer;background:none;border:none;padding:0;font-family:inherit}
+    .lib-card__copy{font-size:.72rem;padding:.25rem .65rem;border-radius:5px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s}
+    .lib-card__copy:hover{background:rgba(163,230,80,.1);border-color:rgba(163,230,80,.3);color:#a3e650}
+    .lib-count{font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:.5rem}
+
+    /* ── IA EN CIFRAS ───────────────────────────── */
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:1.5rem 0}
+    .news-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1rem 1.1rem;transition:border-color .2s;cursor:default}
+    .news-card:hover{border-color:rgba(163,230,80,.25)}
+    .news-card__badge{display:inline-block;padding:.2rem .55rem;border-radius:4px;font-size:.68rem;font-weight:700;margin-bottom:.6rem}
+    .news-card__badge--hot{background:rgba(255,100,80,.15);color:#ff6450}
+    .news-card__badge--data{background:rgba(66,133,244,.15);color:#4285f4}
+    .news-card__badge--tool{background:rgba(163,230,80,.12);color:#a3e650}
+    .news-card__badge--trend{background:rgba(240,180,60,.12);color:#f0b43c}
+    .news-card__title{font-size:.85rem;font-weight:600;line-height:1.4;margin-bottom:.4rem}
+    .news-card__desc{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.5}
+    .news-card__source{font-size:.7rem;color:rgba(255,255,255,.25);margin-top:.5rem}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin:1.5rem 0}
+    .stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1rem;text-align:center}
+    .stat-box__n{font-size:2rem;font-weight:800;line-height:1;color:#a3e650}
+    .stat-box__l{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.3rem}
+    .chart-wrap{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1.25rem;margin:1rem 0}
+    .chart-title{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.6);margin-bottom:1rem}
+    .chart-source{font-size:.68rem;color:rgba(255,255,255,.2);margin-top:.5rem;text-align:right}
+  </style>
 </head>
 <body>
 
-  <!-- ── SCROLL PROGRESS ── -->
   <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Progreso de lectura"></div>
-
-  <!-- ── CANVAS BACKGROUND ── -->
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
-
-  <!-- ── GRID OVERLAY ── -->
   <div class="grid-overlay" aria-hidden="true"></div>
 
-  <!-- ══════════════════════════════════════
-       HERO
-  ══════════════════════════════════════ -->
+  <!-- ══ HERO ══ -->
   <header class="hero" id="hero">
     <div class="hero-orbs" aria-hidden="true">
       <div class="orb orb--navy" id="orb1"></div>
       <div class="orb orb--lime"  id="orb2"></div>
       <div class="orb orb--cl"   id="orb3"></div>
     </div>
-
     <div class="wrap hero__inner">
-      <!-- Top brand row -->
       <div class="hero__brand" id="hero-brand">
         <span class="hero__logo">SiMJ</span>
         <div class="hero__sep" aria-hidden="true"></div>
         <span class="hero__subbrand">Formación IA Interna · 2026</span>
       </div>
-
       <div class="hero__grid">
-        <!-- Left: heading -->
         <div class="hero__left">
           <p class="hero__kicker" id="hero-kicker">
             <span class="hero__kicker-line" aria-hidden="true"></span>
-            Guía Definitiva Claude &amp; OpenAI
+            Guía Definitiva Claude, OpenAI &amp; Gemini
           </p>
           <h1 class="hero__title">
             <span class="hero__word" id="hw1">Trabaja</span>
@@ -63,49 +144,43 @@
             <span class="hero__word hero__word--lime" id="hw4">Artificial</span>
           </h1>
         </div>
-
-        <!-- Right: description + pills + stats -->
         <div class="hero__right" id="hero-right">
           <div class="hero__badge" id="hero-badge">
             <span class="hero__badge-dot" aria-hidden="true"></span>
             Actualizado Marzo 2026
           </div>
-
           <p class="hero__desc">
-            Todo lo que el equipo de SiMJ necesita para usar <strong>Claude</strong> y <strong>ChatGPT</strong> en el día a día.
-            Técnicas, prompts listos para copiar, herramientas interactivas y guía de privacidad RGPD.
+            Todo lo que el equipo de SiMJ necesita para usar <strong>Claude</strong>, <strong>ChatGPT</strong> y <strong>Gemini</strong> en el día a día.
+            Técnicas, biblioteca de 80+ prompts, datos reales de adopción IA y guía de privacidad RGPD.
           </p>
-
           <div class="hero__pills" id="hero-pills">
             <span class="pill pill--cl">Claude · Anthropic</span>
             <span class="pill pill--oa">OpenAI · ChatGPT</span>
+            <span class="pill" style="background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.3);color:#4285f4">Gemini · Google</span>
             <span class="pill pill--lm">15 Técnicas Élite</span>
-            <span class="pill pill--muted">50+ Prompts</span>
+            <span class="pill pill--muted">80+ Prompts</span>
             <span class="pill pill--muted">RGPD Incluido</span>
           </div>
-
           <div class="hero__stats" id="hero-stats">
             <div class="hero__stat">
               <span class="hero__stat-n counter" data-target="15" data-suffix="">0</span>
               <span class="hero__stat-l">Técnicas élite</span>
             </div>
             <div class="hero__stat">
-              <span class="hero__stat-n counter" data-target="50" data-suffix="+">0</span>
+              <span class="hero__stat-n counter" data-target="80" data-suffix="+">0</span>
               <span class="hero__stat-l">Prompts listos</span>
             </div>
             <div class="hero__stat">
-              <span class="hero__stat-n counter" data-target="26" data-suffix="">0</span>
-              <span class="hero__stat-l">Términos glosario</span>
+              <span class="hero__stat-n counter" data-target="3" data-suffix="">0</span>
+              <span class="hero__stat-l">Herramientas IA</span>
             </div>
             <div class="hero__stat">
-              <span class="hero__stat-n counter" data-target="12" data-suffix="">0</span>
+              <span class="hero__stat-n counter" data-target="11" data-suffix="">0</span>
               <span class="hero__stat-l">Secciones</span>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Scroll hint -->
       <div class="hero__scroll-hint" id="hero-scroll" aria-hidden="true">
         <span class="hero__scroll-line"></span>
         <span class="hero__scroll-text">scroll</span>
@@ -115,31 +190,17 @@
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       01 — QUÉ ES CADA UNO
-  ══════════════════════════════════════ -->
+  <!-- ══ 01 QUÉ ES CADA UNO ══ -->
   <section id="intro" class="section">
     <div class="wrap">
       <span class="section-label reveal-item">01 — Herramientas</span>
-      <h2 class="section-title reveal-item">Claude vs OpenAI:<br>Qué hace cada una</h2>
-      <p class="section-lead reveal-item">
-        Dos herramientas, un mismo objetivo: hacer tu trabajo más rápido y mejor.
-        Aquí las diferencias clave para el equipo de SiMJ antes de empezar.
-      </p>
-
+      <h2 class="section-title reveal-item">Claude, OpenAI y Gemini:<br>Qué hace cada una</h2>
+      <p class="section-lead reveal-item">Tres herramientas, un mismo objetivo: hacer tu trabajo más rápido y mejor. Aquí las diferencias clave para el equipo de SiMJ antes de empezar.</p>
       <div class="brand-split reveal-item">
-        <!-- Claude -->
         <div class="brand-col brand-col--cl">
-          <div class="brand-col__head">
-            <div class="dot dot--cl" aria-hidden="true"></div>
-            <h3 class="brand-col__name">Claude</h3>
-          </div>
+          <div class="brand-col__head"><div class="dot dot--cl" aria-hidden="true"></div><h3 class="brand-col__name">Claude</h3></div>
           <span class="brand-tag brand-tag--cl">Anthropic · claude.ai</span>
-          <p class="brand-col__desc">
-            El modelo de Anthropic. Destaca en seguir instrucciones complejas con precisión,
-            generar código estructurado, analizar documentos largos y mantener contexto.
-            El más consistente siguiendo reglas de formato.
-          </p>
+          <p class="brand-col__desc">El modelo de Anthropic. Destaca en seguir instrucciones complejas con precisión, generar código estructurado, analizar documentos largos y mantener contexto. El más consistente siguiendo reglas de formato.</p>
           <ul class="brand-list">
             <li>Código Laravel / PHP / SQL con contexto de repositorio</li>
             <li>Análisis de documentos técnicos largos (hasta 200K tokens)</li>
@@ -149,19 +210,10 @@
             <li>Tests unitarios y documentación técnica</li>
           </ul>
         </div>
-
-        <!-- OpenAI -->
         <div class="brand-col brand-col--oa">
-          <div class="brand-col__head">
-            <div class="dot dot--oa" aria-hidden="true"></div>
-            <h3 class="brand-col__name">OpenAI · ChatGPT</h3>
-          </div>
+          <div class="brand-col__head"><div class="dot dot--oa" aria-hidden="true"></div><h3 class="brand-col__name">OpenAI · ChatGPT</h3></div>
           <span class="brand-tag brand-tag--oa">OpenAI · chatgpt.com</span>
-          <p class="brand-col__desc">
-            Los modelos de OpenAI. GPT-4o para el día a día creativo y de negocio.
-            Los modelos o-series (o3, o4-mini) para razonamiento lógico complejo.
-            Muy bueno para contenido, comunicación empresarial y búsqueda en tiempo real.
-          </p>
+          <p class="brand-col__desc">Los modelos de OpenAI. GPT-4o para el día a día creativo y de negocio. Los modelos o-series (o3, o4-mini) para razonamiento lógico complejo. Muy bueno para contenido, comunicación empresarial y búsqueda en tiempo real.</p>
           <ul class="brand-list">
             <li>Propuestas comerciales y emails de cliente</li>
             <li>Contenido para web, LinkedIn e Instagram de SiMJ</li>
@@ -171,14 +223,24 @@
             <li>Brainstorming de campañas y estrategia de producto</li>
           </ul>
         </div>
+        <div class="brand-col" style="border-color:rgba(66,133,244,.3)">
+          <div class="brand-col__head"><div class="dot" style="background:#4285f4" aria-hidden="true"></div><h3 class="brand-col__name" style="color:#4285f4">Gemini · Google</h3></div>
+          <span class="brand-tag" style="background:rgba(66,133,244,.1);color:#4285f4;border-color:rgba(66,133,244,.2)">Google DeepMind · gemini.google.com</span>
+          <p class="brand-col__desc">Los modelos de Google. Gemini 1.5 Pro/Flash para tareas multimodales (texto + imágenes + vídeo). Gemini 2.0 Pro para razonamiento avanzado. Nativo en Google Workspace (Docs, Sheets, Gmail) — muy útil para el equipo de admin de SiMJ.</p>
+          <ul class="brand-list">
+            <li>Análisis de imágenes, capturas y documentos escaneados</li>
+            <li>Integración directa con Google Docs y Sheets</li>
+            <li>Búsqueda con grounding en tiempo real (Google Search)</li>
+            <li>Resúmenes de vídeos de formación (YouTube)</li>
+            <li>Procesamiento de PDFs e informes de clientes</li>
+            <li>Generación de código con contexto visual</li>
+          </ul>
+        </div>
       </div>
-
       <div class="callout callout--lime reveal-item" style="margin-top:1.5rem">
         <span aria-hidden="true">💡</span>
         <div class="callout__body">
-          <strong>Regla práctica para SiMJ:</strong> ¿Vas a pegar código o necesitas precisión técnica?
-          → <strong>Claude.</strong> ¿Vas a escribir un email, un post o necesitas información actualizada?
-          → <strong>ChatGPT.</strong> Las dos herramientas se complementan — no compiten.
+          <strong>Regla práctica para SiMJ:</strong> ¿Código o análisis técnico profundo? → <strong>Claude.</strong> ¿Email, post o info actualizada? → <strong>ChatGPT.</strong> ¿Imagen, PDF escaneado o Google Workspace? → <strong>Gemini.</strong> Las tres se complementan.
         </div>
       </div>
     </div>
@@ -186,38 +248,22 @@
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       02 — TÉCNICAS
-  ══════════════════════════════════════ -->
+  <!-- ══ 02 TÉCNICAS ══ -->
   <section id="tecnicas" class="section section--alt">
     <div class="wrap">
       <span class="section-label reveal-item">02 — Fundamentos</span>
       <h2 class="section-title reveal-item">Cómo construir<br>un buen prompt</h2>
-      <p class="section-lead reveal-item">
-        Las reglas base son similares en las dos herramientas, pero hay diferencias importantes.
-        Aquí las más críticas para el equipo de SiMJ.
-      </p>
-
+      <p class="section-lead reveal-item">Las reglas base son similares en las tres herramientas, pero hay diferencias importantes. Aquí las más críticas para el equipo de SiMJ.</p>
       <div class="sec-frame reveal-item">
         <div class="dual">
-
-          <!-- Claude técnicas -->
           <div class="dual__col dual__col--cl">
-            <div class="dual__head dual__head--cl">
-              <div class="dot dot--cl" aria-hidden="true"></div>
-              Claude — Técnicas
-            </div>
-
+            <div class="dual__head dual__head--cl"><div class="dot dot--cl" aria-hidden="true"></div>Claude — Técnicas</div>
             <article class="card reveal-item" data-delay="0">
               <div class="card__num">Técnica 01 · Oficial Anthropic</div>
               <h4>XML Tags como Separadores Semánticos</h4>
-              <p>Claude está entrenado para respetar XML tags como fronteras de significado.
-                Separan contexto, código, instrucciones y tarea. La <strong>&lt;tarea&gt;</strong> va siempre al final.</p>
+              <p>Claude está entrenado para respetar XML tags como fronteras de significado. Separan contexto, código, instrucciones y tarea. La <strong>&lt;tarea&gt;</strong> va siempre al final.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Plantilla Base · Claude</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Plantilla Base · Claude</span><button class="copy-btn js-copy" aria-label="Copiar">copiar</button></div>
                 <div class="prompt-block__body"><span class="xt">&lt;contexto&gt;</span>
 Proyecto: SiGestión ERP (Laravel 10, PHP 8.2, MySQL 8)
 Convenciones: PSR-12, sin comentarios innecesarios.
@@ -232,16 +278,12 @@ Convenciones: PSR-12, sin comentarios innecesarios.
 <span class="xt">&lt;/tarea&gt;</span></div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="100">
               <div class="card__num">Técnica 02 · +30% calidad</div>
               <h4>La Tarea Siempre al Final</h4>
-              <p>Anthropic documenta hasta un <strong>30% de mejora</strong> cuando, en prompts con código largo,
-                la consulta va al final. El modelo "calienta" con el contexto antes de responder.</p>
+              <p>Anthropic documenta hasta un <strong>30% de mejora</strong> cuando, en prompts con código largo, la consulta va al final. El modelo "calienta" con el contexto antes de responder.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Orden Correcto</span>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Orden Correcto</span></div>
                 <div class="prompt-block__body"><span class="xv">✅ CORRECTO:</span>
 &lt;contexto&gt;Stack, convenciones...&lt;/contexto&gt;
 &lt;codigo&gt;[500 líneas de código]&lt;/codigo&gt;
@@ -251,17 +293,12 @@ Convenciones: PSR-12, sin comentarios innecesarios.
 "Refactoriza esta función:" + [500 líneas]</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="200">
               <div class="card__num">Técnica 03 · Anti-alucinación</div>
               <h4>Uncertainty Permission</h4>
-              <p>Sin esta instrucción, Claude inventa antes de admitir que necesita más contexto.
-                Crucial en código de SiGestión donde un error es costoso.</p>
+              <p>Sin esta instrucción, Claude inventa antes de admitir que necesita más contexto. Crucial en código de SiGestión donde un error es costoso.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Fragmento Crítico</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Fragmento Crítico</span><button class="copy-btn js-copy">copiar</button></div>
                 <div class="prompt-block__body">"Si necesitas ver más archivos del repositorio
 para responder correctamente, dímelo así:
 'Necesito ver también: [archivo/clase]'
@@ -270,20 +307,12 @@ No supongas cómo funciona ninguna clase custom
 de SiGestión sin haberla visto primero."</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="300">
               <div class="card__num">Técnica 04 · Opus 4.6</div>
               <h4>Extended Thinking para Arquitectura</h4>
-              <p>Activa razonamiento profundo interno. El modelo piensa antes de responder.
-                Usa <code class="inline-code">budget_tokens: 8000–16000</code> para problemas de arquitectura.</p>
+              <p>Activa razonamiento profundo interno. El modelo piensa antes de responder. Usa <code class="inline-code">budget_tokens: 8000–16000</code> para problemas de arquitectura.</p>
               <div class="code-block">
-                <div class="code-block__bar">
-                  <div class="code-block__dots" aria-hidden="true">
-                    <span></span><span></span><span></span>
-                  </div>
-                  <span class="code-block__lang">Python · Anthropic API</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="code-block__bar"><div class="code-block__dots" aria-hidden="true"><span></span><span></span><span></span></div><span class="code-block__lang">Python · Anthropic API</span><button class="copy-btn js-copy">copiar</button></div>
                 <pre class="code-block__body"><span class="kw">import</span> anthropic
 client = anthropic.<span class="fn">Anthropic</span>()
 response = client.messages.<span class="fn">create</span>(
@@ -299,45 +328,29 @@ response = client.messages.<span class="fn">create</span>(
 )</pre>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="0">
               <div class="card__num">Técnica 05 · Producción</div>
               <h4>Fijar Snapshot de Modelo en Código</h4>
-              <p>Los aliases pueden apuntar a modelos distintos tras una actualización.
-                En código de SiGestión: siempre el snapshot con fecha.</p>
+              <p>Los aliases pueden apuntar a modelos distintos tras una actualización. En código de SiGestión: siempre el snapshot con fecha.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Producción vs Alias</span>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Producción vs Alias</span></div>
                 <div class="prompt-block__body"><span class="xv">✅ En código SiGestión:</span>
-model = <span class="xv">"claude-sonnet-4-6-20260217"</span>  <span class="xc"># Fijo</span>
+model = <span class="xv">"claude-sonnet-4-6-20260217"</span>
 
 <span class="xc">❌ Alias (puede cambiar sin aviso):</span>
-model = <span class="xv">"claude-sonnet-4-6"</span>  <span class="xc"># No usar en prod</span></div>
+model = <span class="xv">"claude-sonnet-4-6"</span></div>
               </div>
-              <a class="ext-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">
-                ↗ Anthropic Docs Oficiales
-              </a>
+              <a class="ext-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">↗ Anthropic Docs Oficiales</a>
             </article>
-          </div><!-- /Claude -->
-
-          <!-- OpenAI técnicas -->
+          </div>
           <div class="dual__col dual__col--oa">
-            <div class="dual__head dual__head--oa">
-              <div class="dot dot--oa" aria-hidden="true"></div>
-              OpenAI — Técnicas
-            </div>
-
+            <div class="dual__head dual__head--oa"><div class="dot dot--oa" aria-hidden="true"></div>OpenAI — Técnicas</div>
             <article class="card reveal-item" data-delay="50">
               <div class="card__num">Técnica 01 · Base</div>
               <h4>Contexto de Empresa Siempre Primero</h4>
-              <p>ChatGPT no sabe a qué se dedica SiMJ. Sin contexto, produce respuestas genéricas.
-                Un párrafo de contexto transforma completamente la calidad del output.</p>
+              <p>ChatGPT no sabe a qué se dedica SiMJ. Sin contexto, produce respuestas genéricas. Un párrafo de contexto transforma completamente la calidad del output.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Plantilla Base · OpenAI</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Plantilla Base · OpenAI</span><button class="copy-btn js-copy">copiar</button></div>
                 <div class="prompt-block__body">Somos SiMJ, empresa de software a medida y
 servicios IT en Córdoba. Desarrollamos SiGestión
 (ERP para PYMES), SiGPS (control de flotas) y
@@ -348,16 +361,12 @@ Tono: cercano, profesional, sin tecnicismos.
 [Tu petición aquí]</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="150">
               <div class="card__num">Técnica 02 · Formato</div>
               <h4>Formato de Salida Explícito</h4>
-              <p>Sin decirle qué quieres, ChatGPT elige. Especificar el formato convierte
-                un resultado "usable" en un resultado "listo para enviar".</p>
+              <p>Sin decirle qué quieres, ChatGPT elige. Especificar el formato convierte un resultado "usable" en un resultado "listo para enviar".</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Comparativa</span>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Comparativa</span></div>
                 <div class="prompt-block__body"><span class="xc">❌ Sin formato:</span>
 "Escribe algo sobre nuestro módulo de facturación"
 
@@ -369,18 +378,12 @@ Termina con pregunta al lector
 Máx 2 emojis · Sin hashtags genéricos"</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="250">
               <div class="card__num">Técnica 03 · Iteración</div>
               <h4>El Prompting es Conversación, No Magia</h4>
-              <p>No busques el prompt perfecto al primer intento. ChatGPT mejora enormemente
-                en conversación: <strong>genera → ajusta → refina.</strong>
-                3 turnos bien dirigidos superan al prompt de 400 palabras.</p>
+              <p>No busques el prompt perfecto al primer intento. ChatGPT mejora enormemente en conversación: <strong>genera → ajusta → refina.</strong></p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Flujo de 3 Turnos</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Flujo de 3 Turnos</span><button class="copy-btn js-copy">copiar</button></div>
                 <div class="prompt-block__body"><span class="xc"># Turno 1 — Borrador rápido</span>
 "Redacta propuesta para cliente que quiere
 informatizar su taller de 5 personas."
@@ -394,17 +397,12 @@ máx 1 página, añade demo gratuita como CTA."
 en vez de 'lo pensaré'?"</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="350">
               <div class="card__num">Técnica 04 · Análisis</div>
               <h4>Chain-of-Thought para Decisiones</h4>
-              <p>Para tareas de análisis con GPT-4o: pide que razone antes de concluir.
-                <strong>No usar con o3/o4-mini</strong> — ya razonan internamente y pedírselo empeora el resultado.</p>
+              <p>Para tareas de análisis con GPT-4o: pide que razone antes de concluir. <strong>No usar con o3/o4-mini</strong> — ya razonan internamente.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Plantilla CoT</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Plantilla CoT</span><button class="copy-btn js-copy">copiar</button></div>
                 <div class="prompt-block__body">"Antes de responder, analiza brevemente:
 1. ¿Qué necesita realmente este cliente?
 2. ¿Qué obstáculo le impide decidir ahora?
@@ -413,17 +411,12 @@ en vez de 'lo pensaré'?"</div>
 Luego responde a: [situación concreta]"</div>
               </div>
             </article>
-
             <article class="card reveal-item" data-delay="100">
               <div class="card__num">Técnica 05 · Datos Actuales</div>
               <h4>Búsqueda en Tiempo Real</h4>
-              <p>Con la búsqueda web activada en ChatGPT, pide información actualizada.
-                Ideal para benchmarks del sector, noticias de competidores o regulaciones recientes.</p>
+              <p>Con la búsqueda web activada en ChatGPT, pide información actualizada. Ideal para benchmarks del sector, noticias de competidores o regulaciones recientes.</p>
               <div class="prompt-block">
-                <div class="prompt-block__head">
-                  <span class="prompt-block__label">Con Búsqueda Web</span>
-                  <button class="copy-btn js-copy" aria-label="Copiar código">copiar</button>
-                </div>
+                <div class="prompt-block__head"><span class="prompt-block__label">Con Búsqueda Web</span><button class="copy-btn js-copy">copiar</button></div>
                 <div class="prompt-block__body">"Busca las últimas noticias sobre [tema relevante
 para SiMJ — ley antifraude, ERP, ciberseguridad
 PYMES España].
@@ -433,520 +426,343 @@ que ofrece servicios a PYMES andaluzas.
 Incluye fecha de cada noticia.
 Solo fuentes de los últimos 60 días."</div>
               </div>
-              <a class="ext-link" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">
-                ↗ OpenAI Prompt Engineering Docs
-              </a>
+              <a class="ext-link" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">↗ OpenAI Prompt Engineering Docs</a>
             </article>
-          </div><!-- /OpenAI -->
-
-        </div><!-- /dual -->
-      </div><!-- /sec-frame -->
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       03 — COMPARADOR
-  ══════════════════════════════════════ -->
+  <!-- ══ 03 COMPARADOR ══ -->
   <section id="comparador" class="section">
     <div class="wrap">
       <span class="section-label reveal-item">03 — Comparador Visual</span>
       <h2 class="section-title reveal-item">Prompts reales:<br>el antes y el después</h2>
-      <p class="section-lead reveal-item">
-        Los mismos objetivos, resueltos mal y bien.
-        Cada par muestra exactamente qué falla y qué lo soluciona.
-      </p>
-
-      <!-- Par 1 OpenAI -->
-      <p class="pair-label pair-label--oa reveal-item">
-        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
-        OpenAI · Propuesta comercial para cliente
-      </p>
+      <p class="section-lead reveal-item">Los mismos objetivos, resueltos mal y bien. Cada par muestra exactamente qué falla y qué lo soluciona.</p>
+      <p class="pair-label pair-label--oa reveal-item"><span class="dot dot--oa" style="display:inline-block;width:.5rem;height:.5rem"></span> OpenAI · Propuesta comercial para cliente</p>
       <div class="gb-pair reveal-item">
-        <div class="gb-box gb-box--bad">
-          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
-          <div class="gb-box__text">"Escríbeme una propuesta para un cliente que quiere software."</div>
-          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin cliente, sin producto, sin tono. El resultado es un texto genérico que podría ser de cualquier empresa.</div>
-        </div>
-        <div class="gb-box gb-box--good">
-          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
-          <div class="gb-box__text">"Somos SiMJ (software a medida, Córdoba). El cliente es una clínica dental de 8 personas que lleva la agenda en papel y Excel. Quieren informatizarlo todo.<br><br>Propuesta de 1 página: el problema en su lenguaje, solución (SiGestión adaptado a clínicas), 3 beneficios concretos y CTA: demo gratuita. Tono cercano, sin tecnicismos."</div>
-          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Cliente concreto, producto correcto, beneficios esperados, formato de 1 página, tono definido. Usable al primer intento.</div>
-        </div>
+        <div class="gb-box gb-box--bad"><div class="gb-box__label gb-box__label--bad">✗ Así no</div><div class="gb-box__text">"Escríbeme una propuesta para un cliente que quiere software."</div><div class="gb-box__note"><strong>Por qué falla:</strong> Sin cliente, sin producto, sin tono. El resultado es un texto genérico que podría ser de cualquier empresa.</div></div>
+        <div class="gb-box gb-box--good"><div class="gb-box__label gb-box__label--good">✓ Así sí</div><div class="gb-box__text">"Somos SiMJ (software a medida, Córdoba). El cliente es una clínica dental de 8 personas que lleva la agenda en papel y Excel. Quieren informatizarlo todo.<br><br>Propuesta de 1 página: el problema en su lenguaje, solución (SiGestión adaptado a clínicas), 3 beneficios concretos y CTA: demo gratuita. Tono cercano, sin tecnicismos."</div><div class="gb-box__note"><strong>Qué lo mejora:</strong> Cliente concreto, producto correcto, beneficios esperados, formato de 1 página, tono definido. Usable al primer intento.</div></div>
       </div>
-
-      <!-- Par 2 Claude -->
-      <p class="pair-label pair-label--cl reveal-item" style="margin-top:2.5rem">
-        <span class="dot dot--cl" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
-        Claude · Revisión de código Laravel
-      </p>
+      <p class="pair-label pair-label--cl reveal-item" style="margin-top:2.5rem"><span class="dot dot--cl" style="display:inline-block;width:.5rem;height:.5rem"></span> Claude · Revisión de código Laravel</p>
       <div class="gb-pair reveal-item">
-        <div class="gb-box gb-box--bad">
-          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
-          <div class="gb-box__text">"Revisa este código y dime qué mejorar."<br>[300 líneas de PHP]</div>
-          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin foco, Claude revisa todo: estilo, rendimiento, seguridad. 25 comentarios sin saber cuál es urgente.</div>
-        </div>
-        <div class="gb-box gb-box--good">
-          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
-          <div class="gb-box__text">&lt;contexto&gt;Laravel 10, producción, 5.000 RPM. Controlador de facturación.&lt;/contexto&gt;<br>&lt;codigo&gt;[código]&lt;/codigo&gt;<br>&lt;tarea&gt;Revisa SOLO seguridad. Por cada problema: LÍNEA | QUÉ FALLA | FIX. Si no hay problemas: dilo sin rodeos.&lt;/tarea&gt;</div>
-          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Foco único, stack concreto, formato de salida, permiso para decir que todo está bien.</div>
-        </div>
-      </div>
-
-      <!-- Par 3 OpenAI -->
-      <p class="pair-label pair-label--oa reveal-item" style="margin-top:2.5rem">
-        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.5rem;height:.5rem;"></span>
-        OpenAI · Email de reactivación de lead
-      </p>
-      <div class="gb-pair reveal-item">
-        <div class="gb-box gb-box--bad">
-          <div class="gb-box__label gb-box__label--bad">✗ Así no</div>
-          <div class="gb-box__text">"Escribe un email para un cliente que lleva tiempo sin comprar."</div>
-          <div class="gb-box__note"><strong>Por qué falla:</strong> Sin producto, tono, longitud ni CTA. Resultado: email corporativo genérico que nadie abrirá.</div>
-        </div>
-        <div class="gb-box gb-box--good">
-          <div class="gb-box__label gb-box__label--good">✓ Así sí</div>
-          <div class="gb-box__text">"Somos SiMJ. Lead (empresa de transporte, 12 vehículos) pidió info sobre SiGPS hace 3 meses y no volvió. Email de reactivación: máx 90 palabras, sin exclamaciones, un CTA único (agendar llamada de 15 min), no mencionar precio. Tono: directo, sin presión."</div>
-          <div class="gb-box__note"><strong>Qué lo mejora:</strong> Perfil del lead, producto correcto, límite de palabras, CTA único y restricciones de tono.</div>
-        </div>
+        <div class="gb-box gb-box--bad"><div class="gb-box__label gb-box__label--bad">✗ Así no</div><div class="gb-box__text">"Revisa este código y dime qué mejorar."<br>[300 líneas de PHP]</div><div class="gb-box__note"><strong>Por qué falla:</strong> Sin foco, Claude revisa todo: estilo, rendimiento, seguridad. 25 comentarios sin saber cuál es urgente.</div></div>
+        <div class="gb-box gb-box--good"><div class="gb-box__label gb-box__label--good">✓ Así sí</div><div class="gb-box__text">&lt;contexto&gt;Laravel 10, producción, 5.000 RPM. Controlador de facturación.&lt;/contexto&gt;<br>&lt;codigo&gt;[código]&lt;/codigo&gt;<br>&lt;tarea&gt;Revisa SOLO seguridad. Por cada problema: LÍNEA | QUÉ FALLA | FIX. Si no hay problemas: dilo sin rodeos.&lt;/tarea&gt;</div><div class="gb-box__note"><strong>Qué lo mejora:</strong> Foco único, stack concreto, formato de salida, permiso para decir que todo está bien.</div></div>
       </div>
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       04 — TIERS
-  ══════════════════════════════════════ -->
+  <!-- ══ 04 TIERS ══ -->
   <section id="tiers" class="section section--alt">
     <div class="wrap">
       <span class="section-label reveal-item">04 — Niveles</span>
       <h2 class="section-title reveal-item">3 niveles de prompt<br>según la tarea</h2>
-      <p class="section-lead reveal-item">
-        El nivel del prompt debe ser proporcional a la complejidad de la tarea.
-        Más complejo = más contexto, más estructura, modelos más potentes.
-      </p>
-
-      <!-- Nivel 1 -->
+      <p class="section-lead reveal-item">El nivel del prompt debe ser proporcional a la complejidad de la tarea. Más complejo = más contexto, más estructura, modelos más potentes.</p>
       <div class="tier-block reveal-item">
-        <div class="tier-block__head">
-          <span class="tier-tag tier-tag--1">Nivel 1 — Básico</span>
-          <span class="tier-block__sub">Tareas simples y repetitivas · Haiku 4.5 / GPT-4o-mini</span>
-        </div>
-        <div class="sec-frame">
-          <div class="dual">
-            <div class="dual__col dual__col--cl">
-              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Haiku 4.5</div>
-              <article class="card reveal-item">
-                <div class="card__num">Documentar función PHP</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">Añade docblock PHPDoc a esta función.
-Incluye: @param, @return, @throws si aplica.
-Descripción breve en español.
-Sin comentarios en el cuerpo. PSR-12.
+        <div class="tier-block__head"><span class="tier-tag tier-tag--1">Nivel 1 — Básico</span><span class="tier-block__sub">Tareas simples · Haiku 4.5 / GPT-4o-mini / Gemini Flash</span></div>
+        <div class="callout callout--lime" style="margin:1rem 2rem .5rem"><span>💡</span><div class="callout__body">Prompts de 40-100 palabras, instrucción directa, sin estructura compleja. Ideal para tareas repetitivas del día a día.</div></div>
+      </div>
+      <div class="tier-block reveal-item" style="margin-top:1.5rem">
+        <div class="tier-block__head"><span class="tier-tag tier-tag--2">Nivel 2 — Medio</span><span class="tier-block__sub">Análisis con contexto · Sonnet 4.6 / GPT-4o / Gemini 1.5 Pro</span></div>
+        <div class="callout callout--lime" style="margin:1rem 2rem .5rem"><span>💡</span><div class="callout__body">150-350 palabras. Claude: XML tags obligatorios. OpenAI: contexto empresa + restricciones + formato. Gemini: markdown con secciones claras.</div></div>
+      </div>
+      <div class="tier-block reveal-item" style="margin-top:1.5rem">
+        <div class="tier-block__head"><span class="tier-tag tier-tag--3">Nivel 3 — Avanzado</span><span class="tier-block__sub">Estrategia y arquitectura · Opus 4.6 / GPT-4o rol experto / Gemini 2.0 Pro</span></div>
+        <div class="callout callout--cl" style="margin:1rem 2rem .5rem"><span>ℹ️</span><div class="callout__body">300-600 palabras. Diseño de módulos nuevos de SiGestión, decisiones de migración de infraestructura, estrategia de producto 2026. Claude con Extended Thinking; GPT-4o con rol experto; Gemini con grounding y razonamiento multi-paso.</div></div>
+      </div>
+    </div>
+  </section>
 
-[función aquí]</div>
-                </div>
-              </article>
-              <article class="card reveal-item" style="margin-top:.85rem">
-                <div class="card__num">Generar Factory de Laravel</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">Genera Laravel Factory para modelo Factura:
-campos: numero_factura, cliente_id, total,
-fecha_emision, estado.
-Faker en español (es_ES). PSR-12.</div>
-                </div>
-              </article>
-            </div>
-            <div class="dual__col dual__col--oa">
-              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o-mini</div>
-              <article class="card reveal-item">
-                <div class="card__num">Clasificar email de soporte</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">Clasifica el email de soporte de SiMJ en:
+  <hr class="divider" />
+
+  <!-- ══ 05 GENERADORES MEGA-PROMPT ══ -->
+  <section id="megaprompt" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">05 — Generadores</span>
+      <h2 class="section-title reveal-item">Construye tu prompt perfecto:<br>elige herramienta y nivel</h2>
+      <p class="section-lead reveal-item">Selecciona la IA y el nivel que necesitas. Obtendrás exactamente ese template, listo para copiar y usar. Sin ruido, sin todo a la vez.</p>
+
+      <div class="mp-selector-wrap reveal-item">
+        <div class="mp-tool-row">
+          <button class="mp-tool-btn active" data-tool="claude" onclick="selectMPTool('claude')">Claude (Anthropic)</button>
+          <button class="mp-tool-btn" data-tool="openai" onclick="selectMPTool('openai')">OpenAI / ChatGPT</button>
+          <button class="mp-tool-btn" data-tool="gemini" onclick="selectMPTool('gemini')">Gemini (Google)</button>
+        </div>
+        <div class="mp-level-row">
+          <button class="mp-level-btn active" data-level="1" onclick="selectMPLevel('1')">Nivel 1 · Básico</button>
+          <button class="mp-level-btn" data-level="2" onclick="selectMPLevel('2')">Nivel 2 · Medio</button>
+          <button class="mp-level-btn" data-level="3" onclick="selectMPLevel('3')">Nivel 3 · Avanzado</button>
+        </div>
+      </div>
+
+      <div class="mp-panel-area" id="mp-panel-area">
+
+        <!-- CLAUDE 1 -->
+        <div class="mp-panel visible" id="mp-claude-1">
+          <div class="mp-meta"><span class="mp-badge mp-badge--cl">Claude</span><span class="mp-badge mp-badge--n1">Nivel 1 · Haiku 4.5</span><span class="mp-when">Documentar, formatear, generar snippets, clasificar</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--cl"><span class="mega-block__title">Claude Haiku 4.5 · Prompt directo sin XML</span><button class="mega-block__copy js-copy-mega" data-target="mp-cl1-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-cl1-body">Añade docblock PHPDoc a esta función de SiGestión (Laravel 10, PHP 8.2).
+Incluye: @param, @return, @throws si aplica.
+Descripción breve en español. Sin comentarios en el cuerpo. PSR-12.
+
+[FUNCIÓN AQUÍ]</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Cambia la tarea por la tuya. Para Nivel 1 no necesitas XML tags — instrucción directa es suficiente.</span></div>
+          </div>
+        </div>
+
+        <!-- CLAUDE 2 -->
+        <div class="mp-panel" id="mp-claude-2">
+          <div class="mp-meta"><span class="mp-badge mp-badge--cl">Claude</span><span class="mp-badge mp-badge--n2">Nivel 2 · Sonnet 4.6</span><span class="mp-when">PRs, debug, análisis de código, redacción técnica</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--cl"><span class="mega-block__title">Claude Sonnet 4.6 · XML tags obligatorios</span><button class="mega-block__copy js-copy-mega" data-target="mp-cl2-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-cl2-body">&lt;contexto&gt;
+SiGestión ERP · Laravel 10 · PHP 8.2 · MySQL 8
+[Descripción breve del contexto o módulo afectado]
+Convenciones: PSR-12, sin comentarios innecesarios.
+&lt;/contexto&gt;
+
+&lt;codigo&gt;
+[PEGA EL CÓDIGO O DIFF AQUÍ]
+&lt;/codigo&gt;
+
+&lt;restricciones&gt;
+- Si necesitas ver más archivos, escribe: "Necesito ver también: [archivo]"
+- No supongas cómo funciona ninguna clase custom sin haberla visto
+- No revises [ÁREA QUE NO TE INTERESA] en este análisis
+&lt;/restricciones&gt;
+
+&lt;tarea&gt;
+[TU PETICIÓN AQUÍ — siempre al final]
+Formato de salida: [ÁREA] | [LÍNEA] | [PROBLEMA] | [FIX]
+"Sin issues en [X]" si no hay problemas en esa área.
+&lt;/tarea&gt;</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Sustituye los [] con tu contexto real. La &lt;tarea&gt; debe ir siempre al final del prompt.</span></div>
+          </div>
+        </div>
+
+        <!-- CLAUDE 3 -->
+        <div class="mp-panel" id="mp-claude-3">
+          <div class="mp-meta"><span class="mp-badge mp-badge--cl">Claude</span><span class="mp-badge mp-badge--n3">Nivel 3 · Opus 4.6 + Extended Thinking</span><span class="mp-when">Arquitectura, decisiones técnicas críticas, diseño de módulos</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--cl"><span class="mega-block__title">Claude Opus 4.6 + Extended Thinking · Arquitectura SiGestión</span><button class="mega-block__copy js-copy-mega" data-target="mp-cl3-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-cl3-body">&lt;sistema_actual&gt;
+SiGestión: Laravel 10, MySQL 8, ~50K registros.
+Equipo: 4 devs. Sin DBA ni DevOps dedicados.
+Módulos en producción: [LISTA MÓDULOS RELEVANTES]
+&lt;/sistema_actual&gt;
+
+&lt;restricciones&gt;
+Sin Kubernetes. Mantener MySQL.
+Cero downtime en producción. Rollback &lt; 15 min.
+[AÑADE TUS RESTRICCIONES ESPECÍFICAS]
+&lt;/restricciones&gt;
+
+&lt;razonamiento_previo&gt;
+Antes de proponer cualquier solución, analiza:
+1. ¿Cuál es el cuello de botella real del sistema actual?
+2. ¿Qué fallaría primero bajo 5x el tráfico actual?
+3. ¿Qué riesgo se subestima más en este tipo de migración?
+4. ¿Qué haría diferente un equipo de 20 devs con este problema?
+&lt;/razonamiento_previo&gt;
+
+&lt;tarea&gt;
+[DESCRIBE AQUÍ EL PROBLEMA DE ARQUITECTURA O DECISIÓN TÉCNICA]
+
+Para cada decisión de diseño:
+- Confianza: Alta / Media / Baja
+- Qué información cambiaría tu recomendación
+- Alternativa descartada y por qué
+
+Sé directo. Prefiero escuchar lo que no quiero oír.
+&lt;/tarea&gt;</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Activa Extended Thinking en la API: budget_tokens: 8000–16000. En claude.ai usa Claude Opus 4.6 y el modo "Extended".</span></div>
+          </div>
+        </div>
+
+        <!-- OPENAI 1 -->
+        <div class="mp-panel" id="mp-openai-1">
+          <div class="mp-meta"><span class="mp-badge mp-badge--oa">OpenAI</span><span class="mp-badge mp-badge--n1">Nivel 1 · GPT-4o-mini</span><span class="mp-when">Clasificar, formatear, variaciones, traducciones rápidas</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--oa"><span class="mega-block__title">GPT-4o-mini · Instrucción directa</span><button class="mega-block__copy js-copy-mega" data-target="mp-oa1-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-oa1-body">Clasifica el email de soporte de SiMJ en:
 URGENTE (bloqueo total del sistema)
 NORMAL (problema funcional no crítico)
 CONSULTA (pregunta sobre funcionalidad)
 
-SOLO: CATEGORÍA | Razón en 8 palabras.
-Email: [pega el email]</div>
-                </div>
-              </article>
-              <article class="card reveal-item" style="margin-top:.85rem">
-                <div class="card__num">Generar 5 asuntos de email</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">5 asuntos de email para SiMJ.
-Producto: SiGestión ERP para PYMES.
-Cada uno: máx 6 palabras, sin exclamaciones.
-Ángulos distintos: urgencia / beneficio /
-curiosidad / prueba social / ahorro de tiempo.
-Formato: Núm. | Asunto | Ángulo</div>
-                </div>
-              </article>
-            </div>
+Responde SOLO: CATEGORÍA | Razón en 8 palabras máximo.
+
+Email:
+[PEGA EL EMAIL AQUÍ]</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Para Nivel 1 con OpenAI: sin contexto de empresa, instrucción directa. Ideal para tareas de clasificación o transformación de texto.</span></div>
           </div>
         </div>
-      </div>
 
-      <!-- Nivel 2 -->
-      <div class="tier-block reveal-item" style="margin-top:1.5rem">
-        <div class="tier-block__head">
-          <span class="tier-tag tier-tag--2">Nivel 2 — Medio</span>
-          <span class="tier-block__sub">Análisis con contexto · Claude Sonnet 4.6 / GPT-4o</span>
-        </div>
-        <div class="sec-frame">
-          <div class="dual">
-            <div class="dual__col dual__col--cl">
-              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Sonnet 4.6</div>
-              <article class="card reveal-item">
-                <div class="card__num">Revisar PR de SiGestión</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 2</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body"><span class="xt">&lt;contexto&gt;</span>
-SiGestión ERP · Laravel 10 · PHP 8.2 · MySQL 8
-PR: [descripción breve del cambio]
-Módulos afectados: [lista]
-<span class="xt">&lt;/contexto&gt;</span>
+        <!-- OPENAI 2 -->
+        <div class="mp-panel" id="mp-openai-2">
+          <div class="mp-meta"><span class="mp-badge mp-badge--oa">OpenAI</span><span class="mp-badge mp-badge--n2">Nivel 2 · GPT-4o</span><span class="mp-when">Propuestas, emails complejos, análisis con contexto de empresa</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--oa"><span class="mega-block__title">GPT-4o · Contexto empresa + restricciones + formato</span><button class="mega-block__copy js-copy-mega" data-target="mp-oa2-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-oa2-body">CONTEXTO DE EMPRESA:
+Somos SiMJ, empresa de software a medida y servicios IT en Córdoba.
+Productos: SiGestión (ERP para PYMES), SiGPS (flotas), ciberseguridad y mantenimiento.
+Clientes: PYMES y autónomos andaluces. Tono: cercano, profesional, sin tecnicismos.
 
-<span class="xt">&lt;diff&gt;</span>[Pega el diff o archivos modificados]<span class="xt">&lt;/diff&gt;</span>
+RESTRICCIONES:
+- No uses jerga técnica → usa lenguaje que entienda el gerente de una PYME
+- No incluyas precio en esta comunicación → solo genera interés
+- Máximo [N] palabras
+- [AÑADE TUS RESTRICCIONES]
 
-<span class="xt">&lt;tarea&gt;</span>
-Revisa en orden de prioridad:
-1. Seguridad (SQL injection, XSS, auth bypass)
-2. Rendimiento (N+1, índices, queries lentas)
-3. ¿Rompe funcionalidad existente?
+FORMATO DE SALIDA:
+- Tipo: [email / propuesta / post / informe]
+- Estructura: [Asunto → Párrafo 1 → Párrafo 2 → CTA]
+- CTA único: [DEFINE EL CTA]
+- Tono: [cercano / formal / urgente]
 
-Formato: ÁREA | LÍNEA | PROBLEMA | FIX
-"Sin issues en [X]" si no hay problemas.
-<span class="xt">&lt;/tarea&gt;</span></div>
-                </div>
-              </article>
-            </div>
-            <div class="dual__col dual__col--oa">
-              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o</div>
-              <article class="card reveal-item">
-                <div class="card__num">Análisis de competidor IT</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 2</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">Somos SiMJ: software a medida y IT en Córdoba.
-ERP propio (SiGestión), flotas (SiGPS),
-ciberseguridad y mantenimiento.
-Diferencial: software propio + soporte local.
-
-Competidor: [nombre o descripción + web]
-
-Analiza para nosotros:
-1. FORTALEZAS vs SiMJ (máx 3, con evidencia)
-2. DEBILIDADES vs SiMJ (máx 3)
-3. ÁNGULO de posicionamiento a explotar
-4. ALERTA: algo que deberíamos mejorar
-
-"No disponible — verificar: [X]" si no tienes datos.</div>
-                </div>
-              </article>
-            </div>
+TAREA:
+[TU PETICIÓN AQUÍ]</div>
+            <div class="mega-block__footer"><span class="mega-block__note">El bloque CONTEXTO DE EMPRESA puedes guardarlo como Custom Instruction en ChatGPT para no repetirlo.</span></div>
           </div>
         </div>
-      </div>
 
-      <!-- Nivel 3 -->
-      <div class="tier-block reveal-item" style="margin-top:1.5rem">
-        <div class="tier-block__head">
-          <span class="tier-tag tier-tag--3">Nivel 3 — Avanzado</span>
-          <span class="tier-block__sub">Estrategia y arquitectura · Claude Opus 4.6 / GPT-4o con rol experto</span>
-        </div>
-        <div class="callout callout--cl" style="margin:1.5rem 2rem 0">
-          <span aria-hidden="true">ℹ️</span>
-          <div class="callout__body">
-            <strong>Cuándo usar Nivel 3:</strong> Diseño de un módulo nuevo de SiGestión, decisión de migración
-            de infraestructura, estrategia de producto para 2026. Claude Opus 4.6 con Extended Thinking
-            para arquitectura; GPT-4o con rol experto para estrategia de negocio.
-          </div>
-        </div>
-        <div class="sec-frame" style="margin-top:0">
-          <div class="dual">
-            <div class="dual__col dual__col--cl">
-              <div class="dual__head dual__head--cl"><div class="dot dot--cl"></div>Claude Opus 4.6 + Extended Thinking</div>
-              <article class="card reveal-item">
-                <div class="card__num">Diseñar módulo nuevo de SiGestión</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 3</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body"><span class="xt">&lt;sistema_actual&gt;</span>
-SiGestión: Laravel 10, MySQL 8, ~50K registros.
-Equipo: 4 devs. Sin DBA ni DevOps dedicados.
-<span class="xt">&lt;/sistema_actual&gt;</span>
+        <!-- OPENAI 3 -->
+        <div class="mp-panel" id="mp-openai-3">
+          <div class="mp-meta"><span class="mp-badge mp-badge--oa">OpenAI</span><span class="mp-badge mp-badge--n3">Nivel 3 · GPT-4o con rol experto</span><span class="mp-when">Estrategia de negocio, análisis de mercado, decisiones complejas</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head mega-block__head--oa"><span class="mega-block__title">GPT-4o · Rol experto + razonamiento guiado</span><button class="mega-block__copy js-copy-mega" data-target="mp-oa3-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-oa3-body">Eres [CARGO ESPECÍFICO] con [N] años en [SECTOR CONCRETO].
+Conoces a fondo: [SUB-ESPECIALIDAD RELEVANTE].
+Has trabajado con empresas similares a SiMJ: software a medida para PYMES.
 
-<span class="xt">&lt;restricciones&gt;</span>
-Sin Kubernetes. Mantener MySQL.
-Cero downtime en producción. Rollback &lt; 15 min.
-<span class="xt">&lt;/restricciones&gt;</span>
+EMPRESA:
+SiMJ (Córdoba): software a medida, IT. ERP propio (SiGestión), flotas (SiGPS).
+Diferencial: software propio + soporte local presencial.
+Situación actual: [DESCRIBE EL CONTEXTO ESPECÍFICO]
+Recursos disponibles: [EQUIPO + PRESUPUESTO]
 
-<span class="xt">&lt;razonamiento_previo&gt;</span>
-Antes de proponer, analiza:
-1. ¿Cuál es el cuello de botella real?
-2. ¿Qué fallaría primero bajo 5x el tráfico?
-3. ¿Qué riesgo se subestima más?
-<span class="xt">&lt;/razonamiento_previo&gt;</span>
+ANTES DE RESPONDER, ANALIZA:
+1. ¿Es el objetivo realista con los recursos disponibles?
+2. ¿Qué tiene SiMJ que los competidores no pueden replicar fácilmente?
+3. ¿Qué haría diferente una empresa top del sector en esta situación?
 
-<span class="xt">&lt;tarea&gt;</span>
-Diseña el módulo de [X].
-Para cada decisión: confianza Alta/Media/Baja
-y qué información cambiaría tu recomendación.
-<span class="xt">&lt;/tarea&gt;</span></div>
-                </div>
-              </article>
-            </div>
-            <div class="dual__col dual__col--oa">
-              <div class="dual__head dual__head--oa"><div class="dot dot--oa"></div>GPT-4o con Rol Experto</div>
-              <article class="card reveal-item">
-                <div class="card__num">Estrategia de negocio SiMJ 2026</div>
-                <div class="prompt-block">
-                  <div class="prompt-block__head"><span class="prompt-block__label">Prompt Nivel 3</span><button class="copy-btn js-copy">copiar</button></div>
-                  <div class="prompt-block__body">Eres Director Comercial IT B2B con 12 años
-en empresas de software a medida para PYMES.
-
-SiMJ: software a medida, IT, Córdoba.
-Objetivo: [métrica concreta + fecha límite]
-Recursos: [equipo + presupuesto disponible]
-
-Antes de responder, analiza:
-- ¿Es el objetivo realista con estos recursos?
-- ¿Qué tiene SiMJ que los competidores no?
-- ¿Qué haría diferente una empresa top?
-
-Entrega:
-A) Diagnóstico honesto (incluso si es incómodo)
-B) Los 3 cambios de mayor impacto
+ENTREGA:
+A) Diagnóstico honesto (aunque sea incómodo)
+B) Los 3 cambios de mayor impacto inmediato
 C) Primera acción concreta esta semana
 
-Sé directo. Prefiero lo que no quiero oír.</div>
-                </div>
-              </article>
-            </div>
+Sé directo. Prefiero lo que no quiero oír.
+Para cada recomendación: nivel de confianza Alto / Medio / Bajo.</div>
+            <div class="mega-block__footer"><span class="mega-block__note">No uses "piensa paso a paso" con o3/o4-mini — ya razonan internamente. Este template es para GPT-4o.</span></div>
           </div>
         </div>
-      </div>
 
+        <!-- GEMINI 1 -->
+        <div class="mp-panel" id="mp-gemini-1">
+          <div class="mp-meta"><span class="mp-badge mp-badge--ge">Gemini</span><span class="mp-badge mp-badge--n1">Nivel 1 · Gemini 1.5 Flash</span><span class="mp-when">Resúmenes rápidos, transformaciones, preguntas directas</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head" style="background:rgba(66,133,244,.08);border-color:rgba(66,133,244,.2)"><span class="mega-block__title">Gemini 1.5 Flash · Tarea directa</span><button class="mega-block__copy js-copy-mega" data-target="mp-ge1-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-ge1-body">SiMJ es una empresa de software a medida en Córdoba. Producto: SiGestión (ERP para PYMES).
+
+[TU TAREA DIRECTA AQUÍ]
+
+Formato de respuesta:
+- [ESPECIFICA EL FORMATO — bullet list, párrafo, tabla...]
+- Máximo [N] palabras
+- Idioma: español</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Gemini 1.5 Flash funciona mejor con contexto breve y tarea directa. Ideal para tareas en Google Workspace.</span></div>
+          </div>
+        </div>
+
+        <!-- GEMINI 2 -->
+        <div class="mp-panel" id="mp-gemini-2">
+          <div class="mp-meta"><span class="mp-badge mp-badge--ge">Gemini</span><span class="mp-badge mp-badge--n2">Nivel 2 · Gemini 1.5 Pro</span><span class="mp-when">Análisis de documentos, emails con contexto, informes con imágenes/PDFs</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head" style="background:rgba(66,133,244,.08);border-color:rgba(66,133,244,.2)"><span class="mega-block__title">Gemini 1.5 Pro · Estructura markdown + grounding</span><button class="mega-block__copy js-copy-mega" data-target="mp-ge2-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-ge2-body">## Contexto de empresa
+SiMJ — Software a medida y servicios IT en Córdoba.
+Productos: SiGestión (ERP), SiGPS (flotas), ciberseguridad y mantenimiento IT.
+Clientes objetivo: PYMES y autónomos andaluces.
+Tono: [profesional / cercano / técnico]
+
+## Documento o material de referencia
+[ADJUNTA EL PDF / IMAGEN / HOJA DE CÁLCULO O PEGA EL TEXTO AQUÍ]
+
+## Restricciones
+- [Lo que NO debe incluir la respuesta]
+- En su lugar: [qué sí incluir]
+- [Si necesitas grounding: "Verifica con Google Search actual"]
+
+## Tarea
+[DESCRIPCIÓN CLARA DE LO QUE NECESITAS]
+
+## Formato de salida
+- Tipo: [email / informe / resumen / análisis]
+- Longitud máxima: [N palabras]
+- Secciones: [lista de secciones si aplica]
+- CTA si aplica: [DEFINE EL CTA]</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Gemini 1.5 Pro puede analizar PDFs, imágenes y hojas de cálculo directamente. Adjunta el archivo en la conversación.</span></div>
+          </div>
+        </div>
+
+        <!-- GEMINI 3 -->
+        <div class="mp-panel" id="mp-gemini-3">
+          <div class="mp-meta"><span class="mp-badge mp-badge--ge">Gemini</span><span class="mp-badge mp-badge--n3">Nivel 3 · Gemini 2.0 Pro</span><span class="mp-when">Razonamiento complejo, análisis multimodal avanzado, estrategia con datos actuales</span></div>
+          <div class="mega-block">
+            <div class="mega-block__head" style="background:rgba(66,133,244,.08);border-color:rgba(66,133,244,.2)"><span class="mega-block__title">Gemini 2.0 Pro · Razonamiento avanzado + grounding Google</span><button class="mega-block__copy js-copy-mega" data-target="mp-ge3-body">📋 Copiar</button></div>
+            <div class="mega-block__body" id="mp-ge3-body"># Rol y perspectiva
+Eres [CARGO] con experiencia en [SECTOR].
+Aplica razonamiento estructurado y busca información actualizada con Google Search cuando sea relevante.
+
+# Empresa
+SiMJ: software a medida, IT, Córdoba.
+Contexto específico: [DESCRIBE LA SITUACIÓN ACTUAL]
+Objetivo: [MÉTRICA CONCRETA + FECHA LÍMITE]
+
+# Material de referencia
+[ADJUNTA ARCHIVOS, IMÁGENES O PEGA DATOS AQUÍ]
+O: "Busca en Google los últimos datos sobre [TEMA ESPECÍFICO]"
+
+# Proceso de razonamiento requerido
+1. Resume los hechos clave del material/contexto
+2. Identifica los 2-3 factores más críticos para la decisión
+3. Evalúa alternativas con pros/contras concretos
+4. Considera el riesgo de cada opción para SiMJ
+
+# Entrega estructurada
+## Situación actual (qué es real hoy)
+## Opciones evaluadas (máx 3, con evidencia)
+## Recomendación principal (con justificación)
+## Riesgos a vigilar
+## Próximos pasos esta semana
+
+Para cada punto: indica fuente o base del razonamiento.
+Sé directo — prefiero realismo sobre optimismo.</div>
+            <div class="mega-block__footer"><span class="mega-block__note">Gemini 2.0 Pro combina razonamiento profundo con búsqueda en tiempo real. Activa "Google Search" en la configuración de Gemini Advanced.</span></div>
+          </div>
+        </div>
+
+      </div><!-- /mp-panel-area -->
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       05 — MEGA PROMPTS GENERADORES
-  ══════════════════════════════════════ -->
-  <section id="megaprompt" class="section">
-    <div class="wrap">
-      <span class="section-label reveal-item">05 — Generadores</span>
-      <h2 class="section-title reveal-item">Super-Prompts que generan<br>tus prompts perfectos</h2>
-      <p class="section-lead reveal-item">
-        Dos meta-prompts separados: uno para Claude, otro para ChatGPT.
-        Pega el que corresponda al inicio de tu conversación y dile tu objetivo.
-        Te generará el prompt en los 3 niveles, listo para usar.
-      </p>
-
-      <!-- Meta-Prompt Claude -->
-      <div class="mega-label reveal-item">
-        <div class="dot dot--cl" aria-hidden="true"></div>
-        <span>Meta-Prompt para Claude</span>
-        <span class="mega-label__hint">Pega esto al inicio de una conversación en claude.ai</span>
-      </div>
-      <div class="mega-block reveal-item">
-        <div class="mega-block__head mega-block__head--cl">
-          <span class="mega-block__title">Meta-Prompt Claude · claude.ai o API de Anthropic</span>
-          <button class="mega-block__copy js-copy-mega" data-target="mc-content" id="mc-btn">📋 Copiar</button>
-        </div>
-        <div class="mega-block__body" id="mc-content"><span class="mh">ERES: Experto en prompt engineering para Claude (Anthropic), con conocimiento profundo de:</span>
-<span class="md">Claude 4 Best Practices, Extended Thinking, Context Engineering y XML tags.</span>
-
-<span class="mo">TU FUNCIÓN: Cuando el usuario describa un objetivo, generas 3 versiones de prompt
-optimizadas para Claude — una por nivel — listas para copiar y usar inmediatamente.</span>
-
-<span class="my">════ REGLAS DE CONSTRUCCIÓN PARA CLAUDE ════</span>
-
-<span class="mh">REGLA 1 — XML TAGS OBLIGATORIOS (Nivel 2 y 3)</span>
-Usa siempre XML tags para separar secciones:
-&lt;contexto&gt;    → información del proyecto, stack, empresa
-&lt;codigo&gt;       → solo si hay código
-&lt;ejemplos&gt;     → inputs de ejemplo si aplica
-&lt;restricciones&gt; → qué NO debe hacer el modelo
-&lt;tarea&gt;        → la petición real — SIEMPRE AL FINAL DEL PROMPT
-
-<span class="mh">REGLA 2 — UNCERTAINTY PERMISSION (obligatorio con datos)</span>
-Todo prompt para tareas con datos factuales incluye:
-"Si el dato no está disponible, escribe exactamente:
-'Necesito ver también: [archivo/función]'"
-
-<span class="mh">REGLA 3 — FORMATO DE SALIDA EXPLÍCITO</span>
-Especifica siempre: tipo de output, longitud máxima, estructura.
-Para JSON: prefill del asistente (```json\n{)
-
-<span class="mh">REGLA 4 — EJEMPLOS CONTRASTIVOS (Nivel 2 y 3)</span>
-Al menos 1 ejemplo ✅ CORRECTO + 1 ejemplo ❌ INCORRECTO.
-
-<span class="my">════ NIVELES PARA CLAUDE ════</span>
-
-<span class="mc">NIVEL 1 — claude-haiku-4-5 (velocidad, coste mínimo)</span>
-40-100 palabras. Sin XML tags. Instrucción directa.
-Casos: documentar funciones, factories, clasificar, formatear.
-
-<span class="mc">NIVEL 2 — claude-sonnet-4-6 (producción, equilibrio)</span>
-150-350 palabras. XML tags obligatorios.
-Casos: revisar PRs, debuggear, redacción con restricciones.
-Estructura: &lt;contexto&gt; + &lt;codigo&gt; + &lt;restricciones&gt; + &lt;tarea&gt;
-
-<span class="mc">NIVEL 3 — claude-opus-4-6 + Extended Thinking (budget_tokens: 8000-16000)</span>
-300-600 palabras. Todos los componentes XML.
-Casos: arquitectura, decisiones técnicas críticas, análisis estratégico.
-Incluye siempre:
-- &lt;razonamiento_previo&gt; con 3-4 preguntas guía para el thinking
-- "Para cada recomendación: confianza Alta/Media/Baja"
-- "Sé directo. Prefiero escuchar lo que no quiero oír."
-
-<span class="my">════ TU OUTPUT — SIEMPRE ESTA ESTRUCTURA ════</span>
-
-────────────────────────────────────
-<span class="mc">NIVEL 1 · claude-haiku-4-5 · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt completo listo para copiar]
-
-────────────────────────────────────
-<span class="mc">NIVEL 2 · claude-sonnet-4-6 · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt con XML tags completo]
-
-────────────────────────────────────
-<span class="mc">NIVEL 3 · claude-opus-4-6 + Thinking · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt con todos los componentes]
-
-────────────────────────────────────
-<span class="my">NOTA DE USO (2 líneas máximo)</span>
-────────────────────────────────────
-[Qué personalizar + cuándo subir/bajar de nivel]
-
-<span class="mr">CRÍTICO: Genera sin hacer preguntas previas.
-Si falta contexto usa [DATO_A_COMPLETAR] como placeholder.
-Los 3 prompts deben ser INMEDIATAMENTE COPIABLES Y USABLES.</span></div>
-        <div class="mega-block__footer">
-          <span class="mega-block__note">Pega esto como primer mensaje en claude.ai o como system prompt en la API. Luego escribe tu objetivo.</span>
-        </div>
-      </div>
-
-      <!-- Meta-Prompt OpenAI -->
-      <div class="mega-label reveal-item" style="margin-top:3rem">
-        <div class="dot dot--oa" aria-hidden="true"></div>
-        <span>Meta-Prompt para OpenAI / ChatGPT</span>
-        <span class="mega-label__hint">Pega esto al inicio de una conversación en ChatGPT</span>
-      </div>
-      <div class="mega-block reveal-item">
-        <div class="mega-block__head mega-block__head--oa">
-          <span class="mega-block__title">Meta-Prompt OpenAI · chatgpt.com o API de OpenAI</span>
-          <button class="mega-block__copy js-copy-mega" data-target="mo-content" id="mo-btn">📋 Copiar</button>
-        </div>
-        <div class="mega-block__body" id="mo-content"><span class="mh" style="color:var(--oa)">ERES: Experto en prompt engineering para OpenAI (GPT-4o, o3, o4-mini), con conocimiento de:</span>
-<span class="md">OpenAI Prompt Engineering Guide, GPT-5 Prompting Guide y o3/o4-mini Function Calling Guide.</span>
-
-<span class="mo" style="color:var(--oa-light)">TU FUNCIÓN: Cuando el usuario describa un objetivo, generas 3 versiones de prompt
-optimizadas para OpenAI — una por nivel — listas para copiar en ChatGPT o la API.</span>
-
-<span class="my">════ REGLAS DE CONSTRUCCIÓN PARA OPENAI ════</span>
-
-<span class="mh" style="color:var(--oa)">REGLA 1 — CONTEXTO DE EMPRESA SIEMPRE PRIMERO</span>
-Todos los prompts de negocio empiezan con contexto de empresa.
-Incluir: qué hace la empresa, producto/servicio, audiencia, tono.
-
-<span class="mh" style="color:var(--oa)">REGLA 2 — FORMATO DE SALIDA EXPLÍCITO</span>
-Especifica: tipo (email/post/informe), longitud máxima, estructura, CTA si aplica.
-
-<span class="mh" style="color:var(--oa)">REGLA 3 — NO CoT EN MODELOS o-SERIES (CRÍTICO)</span>
-Los modelos o3 y o4-mini razonan internamente.
-NO añadir "piensa paso a paso" — empeora el rendimiento.
-CoT solo para GPT-4o y GPT-4o-mini.
-
-<span class="mh" style="color:var(--oa)">REGLA 4 — RESTRICCIONES CON SU POSITIVO</span>
-Cada "no hagas X" lleva "en su lugar, haz Y".
-
-<span class="my">════ NIVELES PARA OPENAI ════</span>
-
-<span class="mc">NIVEL 1 — gpt-4o-mini (velocidad, coste mínimo)</span>
-40-100 palabras. Sin estructura compleja.
-Casos: clasificar, traducir, formatear, generar variaciones.
-
-<span class="mc">NIVEL 2 — gpt-4o (equilibrio calidad/coste)</span>
-150-350 palabras. Con contexto empresa y restricciones.
-Casos: propuestas, emails complejos, análisis con contexto.
-Estructura: [Contexto] + [Restricciones] + [Formato] + [Tarea]
-
-<span class="mc">NIVEL 3 — gpt-4o con rol experto (o o3/o4-mini para lógica)</span>
-300-500 palabras. Rol experto detallado + razonamiento guiado.
-Casos: estrategia, análisis de mercado, decisiones complejas.
-Incluye siempre:
-- Rol: "[cargo] con [N] años en [sector específico]"
-- "Antes de responder, analiza:" + 3 preguntas guía
-- "Sé directo. Prefiero lo que no quiero oír."
-- "Para cada recomendación: indica tu nivel de confianza."
-
-<span class="my">════ TU OUTPUT — SIEMPRE ESTA ESTRUCTURA ════</span>
-
-────────────────────────────────────
-<span class="mc">NIVEL 1 · gpt-4o-mini · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt completo listo para copiar]
-
-────────────────────────────────────
-<span class="mc">NIVEL 2 · gpt-4o · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt con contexto empresa y restricciones]
-
-────────────────────────────────────
-<span class="mc">NIVEL 3 · gpt-4o (rol experto) · Usar cuando: [casos]</span>
-────────────────────────────────────
-[Prompt con todos los componentes avanzados]
-
-────────────────────────────────────
-<span class="my">NOTA DE USO (2 líneas máximo)</span>
-────────────────────────────────────
-[Qué personalizar + cuándo subir/bajar de nivel]
-
-<span class="mr">CRÍTICO: Genera sin hacer preguntas previas.
-Si falta contexto usa [DATO_A_COMPLETAR] como placeholder.
-Los 3 prompts deben ser INMEDIATAMENTE USABLES en ChatGPT.</span></div>
-        <div class="mega-block__footer">
-          <span class="mega-block__note">Pega como primer mensaje en ChatGPT (GPT-4o) o como Custom Instruction. Luego escribe tu objetivo.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- ══════════════════════════════════════
-       06 — PRIVACIDAD
-  ══════════════════════════════════════ -->
+  <!-- ══ 06 PRIVACIDAD ══ -->
   <section id="empresa" class="section section--alt">
     <div class="wrap">
       <span class="section-label reveal-item">06 — Privacidad</span>
       <h2 class="section-title reveal-item">IA en empresa:<br>Qué puedes enviar y qué no</h2>
-      <p class="section-lead reveal-item">
-        El mayor riesgo al usar IA en SiMJ no es técnico. Es enviar datos de clientes
-        sin saber las implicaciones legales. Estas reglas aplican igual a Claude y a ChatGPT.
-      </p>
-
+      <p class="section-lead reveal-item">El mayor riesgo al usar IA en SiMJ no es técnico. Es enviar datos de clientes sin saber las implicaciones legales. Estas reglas aplican por igual a Claude, ChatGPT y Gemini.</p>
       <div class="callout callout--red reveal-item">
         <span aria-hidden="true">⚠️</span>
-        <div class="callout__body">
-          <strong>El riesgo real:</strong> Las IAs de consumo gratuitas pueden usar tus conversaciones para entrenar sus modelos.
-          Enviar datos reales de clientes de SiMJ puede constituir una violación del RGPD
-          (multas hasta el 4% del volumen global de negocio).
-        </div>
+        <div class="callout__body"><strong>El riesgo real:</strong> Las IAs de consumo gratuitas pueden usar tus conversaciones para entrenar sus modelos. Enviar datos reales de clientes de SiMJ puede constituir una violación del RGPD (multas hasta el 4% del volumen global de negocio).</div>
       </div>
-
       <div class="do-dont reveal-item">
         <div class="do-dont__col do-dont__col--dont">
           <div class="do-dont__head do-dont__head--dont">⛔ Nunca enviar a ninguna IA</div>
@@ -963,149 +779,371 @@ Los 3 prompts deben ser INMEDIATAMENTE USABLES en ChatGPT.</span></div>
           <article class="card card--do"><h4>Todo lo público de SiMJ</h4><p>Textos de simj.es, posts de redes sociales, materiales de marketing ya publicados.</p></article>
         </div>
       </div>
-
       <h3 class="subsection-title reveal-item">Checklist RGPD · Antes de implementar IA con datos de clientes</h3>
       <div class="checklist reveal-item" id="checklist">
-        <label class="check-item js-check">
-          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
-          <div class="check-item__text"><strong>DPA firmado.</strong> Necesitas un Data Processing Agreement con Anthropic y/o OpenAI antes de procesar datos de clientes de SiMJ.</div>
-        </label>
-        <label class="check-item js-check">
-          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
-          <div class="check-item__text"><strong>Plan Team o Enterprise (no Free).</strong> Las versiones gratuitas pueden usar conversaciones para entrenamiento. ChatGPT Team y Claude.ai Pro tienen política de no uso para entrenamiento.</div>
-        </label>
-        <label class="check-item js-check">
-          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
-          <div class="check-item__text"><strong>El equipo conoce qué no se puede enviar.</strong> Esta guía lo cubre. Comparte con todo el equipo antes de empezar a usar IA con datos del negocio.</div>
-        </label>
-        <label class="check-item js-check">
-          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
-          <div class="check-item__text"><strong>Proceso de anonimización definido.</strong> Credenciales → [REDACTED], clientes → descriptor genérico, IPs → [IP_PROD]. Documentado y conocido por todo el equipo dev.</div>
-        </label>
-        <label class="check-item js-check">
-          <div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div>
-          <div class="check-item__text"><strong>Para código absolutamente crítico: Ollama.</strong> Modelos locales en tu máquina. Cero datos enviados externamente. Gratis. <a href="https://ollama.ai" target="_blank" rel="noopener">ollama.ai →</a></div>
-        </label>
+        <label class="check-item js-check"><div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div><div class="check-item__text"><strong>DPA firmado.</strong> Necesitas un Data Processing Agreement con Anthropic, OpenAI y/o Google antes de procesar datos de clientes de SiMJ.</div></label>
+        <label class="check-item js-check"><div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div><div class="check-item__text"><strong>Plan Team o Enterprise (no Free).</strong> Las versiones gratuitas pueden usar conversaciones para entrenamiento. Claude Pro, ChatGPT Team y Gemini Advanced tienen política de no uso para entrenamiento.</div></label>
+        <label class="check-item js-check"><div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div><div class="check-item__text"><strong>El equipo conoce qué no se puede enviar.</strong> Esta guía lo cubre. Comparte con todo el equipo antes de empezar a usar IA con datos del negocio.</div></label>
+        <label class="check-item js-check"><div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div><div class="check-item__text"><strong>Proceso de anonimización definido.</strong> Credenciales → [REDACTED], clientes → descriptor genérico, IPs → [IP_PROD]. Documentado y conocido por todo el equipo dev.</div></label>
+        <label class="check-item js-check"><div class="check-item__box" aria-hidden="true"><span class="check-item__tick">✓</span></div><div class="check-item__text"><strong>Para código absolutamente crítico: Ollama.</strong> Modelos locales en tu máquina. Cero datos enviados externamente. Gratis. <a href="https://ollama.ai" target="_blank" rel="noopener">ollama.ai →</a></div></label>
       </div>
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- ══════════════════════════════════════
-       07 — BIBLIOTECA DE PROMPTS
-  ══════════════════════════════════════ -->
+  <!-- ══ 07 BIBLIOTECA GIGANTE ══ -->
   <section id="industrias" class="section">
     <div class="wrap">
       <span class="section-label reveal-item">07 — Biblioteca</span>
-      <h2 class="section-title reveal-item">Prompts listos<br>para SiMJ</h2>
-      <p class="section-lead reveal-item">
-        Plantillas adaptadas a los casos de uso reales del equipo.
-        Cada prompt indica la herramienta y el modelo recomendado.
-      </p>
+      <h2 class="section-title reveal-item">Biblioteca de prompts:<br>80+ templates listos</h2>
+      <p class="section-lead reveal-item">Prompts probados de producción, organizados por área. Inspirados en <a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" rel="noopener" class="ext-link" style="display:inline">awesome-chatgpt-prompts</a>, <a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener" class="ext-link" style="display:inline">Anthropic Prompt Library</a> y casos reales de SiMJ. Busca, filtra por categoría y copia en un clic.</p>
 
-      <div class="itabs reveal-item" role="tablist" aria-label="Categorías de prompts">
-        <button class="itab itab--active js-itab" data-panel="ii-dev" role="tab" aria-selected="true">💻 Desarrollo</button>
-        <button class="itab js-itab" data-panel="ii-comercial" role="tab" aria-selected="false">🤝 Comercial</button>
-        <button class="itab js-itab" data-panel="ii-soporte" role="tab" aria-selected="false">🛠️ Soporte IT</button>
-        <button class="itab js-itab" data-panel="ii-marketing" role="tab" aria-selected="false">📢 Marketing</button>
-        <button class="itab js-itab" data-panel="ii-admin" role="tab" aria-selected="false">📋 Admin</button>
+      <div class="lib-search-bar reveal-item">
+        <span style="color:rgba(255,255,255,.3);font-size:.9rem">🔍</span>
+        <input type="search" id="lib-search" placeholder="Busca por tema: factura, email, Laravel, LinkedIn, DAFO..." autocomplete="off">
       </div>
 
-      <!-- Desarrollo -->
-      <div id="ii-dev" class="ipanel ipanel--active" role="tabpanel">
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Revisar PR de SiGestión — Seguridad y Rendimiento</div>
-              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
-SiGestión ERP · Laravel 10 · PHP 8.2 · MySQL 8
+      <div class="lib-cats reveal-item" id="lib-cats">
+        <button class="lib-cat active" data-cat="all">Todos</button>
+        <button class="lib-cat" data-cat="dev">💻 Dev</button>
+        <button class="lib-cat" data-cat="comercial">🤝 Comercial</button>
+        <button class="lib-cat" data-cat="marketing">📢 Marketing</button>
+        <button class="lib-cat" data-cat="soporte">🛠️ Soporte</button>
+        <button class="lib-cat" data-cat="datos">📊 Datos</button>
+        <button class="lib-cat" data-cat="estrategia">🎯 Estrategia</button>
+        <button class="lib-cat" data-cat="email">✉️ Email Mkt</button>
+        <button class="lib-cat" data-cat="seo">🔍 SEO/Web</button>
+        <button class="lib-cat" data-cat="admin">📋 Admin</button>
+        <button class="lib-cat" data-cat="hr">👥 RRHH</button>
+        <button class="lib-cat" data-cat="agentes">🤖 Agentes IA</button>
+      </div>
+
+      <p class="lib-count reveal-item" id="lib-count">Mostrando <strong id="lib-count-n">80</strong> prompts</p>
+
+      <div class="lib-grid reveal-item" id="lib-grid"></div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ 08 IA EN CIFRAS ══ -->
+  <section id="cifras" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">08 — IA en Cifras</span>
+      <h2 class="section-title reveal-item">El código ya lo escribe la IA:<br>datos y tendencias reales 2025-2026</h2>
+      <p class="section-lead reveal-item">No es hype. Las mayores empresas tech del mundo llevan más de un año con el 20-46% de su código generado por IA. Estos son los números reales y lo que significan para el equipo de SiMJ.</p>
+
+      <div class="stats-row reveal-item">
+        <div class="stat-box"><div class="stat-box__n">46%</div><div class="stat-box__l">del código en repos con GitHub Copilot es IA</div></div>
+        <div class="stat-box"><div class="stat-box__n">30%</div><div class="stat-box__l">del nuevo código en Google es generado con IA</div></div>
+        <div class="stat-box"><div class="stat-box__n">71.7%</div><div class="stat-box__l">de tareas en SWE-bench resueltas por OpenAI o3</div></div>
+        <div class="stat-box"><div class="stat-box__n">2.5M</div><div class="stat-box__l">suscriptores de pago de GitHub Copilot (2025)</div></div>
+        <div class="stat-box"><div class="stat-box__n">$9B</div><div class="stat-box__l">valoración de Cursor en su última ronda (2024)</div></div>
+        <div class="stat-box"><div class="stat-box__n">&lt;10min</div><div class="stat-box__l">tiempo medio para generar un PR completo con Claude Code</div></div>
+      </div>
+
+      <div class="news-grid reveal-item">
+        <div class="news-card"><span class="news-card__badge news-card__badge--hot">Más impacto</span><div class="news-card__title">GitHub: el 46% del código en repos con Copilot es IA-generado</div><div class="news-card__desc">GitHub Octoverse 2024 confirma que los desarrolladores aceptan casi la mitad de las sugerencias de Copilot. La adopción creció un 35% en un año.</div><div class="news-card__source">GitHub Octoverse · Oct 2024</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--data">Google</span><div class="news-card__title">Sundar Pichai: "Más del 25-30% del nuevo código en Google se genera con IA"</div><div class="news-card__desc">Confirmado en la call de resultados de Q3 2024. Luego revisado al alza en Q4. Los ingenieros de Google usan Gemini Code Assist internamente.</div><div class="news-card__source">Alphabet Earnings Call · Oct 2024</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--tool">OpenAI o3</span><div class="news-card__title">OpenAI o3 resuelve el 71.7% de tareas de programación en SWE-bench Verified</div><div class="news-card__desc">SWE-bench simula bugs reales de GitHub. El benchmark más exigente del sector. GPT-4o llegaba al 46% — o3 supone un salto generacional.</div><div class="news-card__source">OpenAI · Dic 2024</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--trend">Cursor</span><div class="news-card__title">Cursor alcanza 500K+ usuarios activos y valoración de 9.000M$</div><div class="news-card__desc">El editor de código con IA integrada de Anysphere se convirtió en la herramienta de desarrollo de más rápido crecimiento de 2024. Basado en VS Code.</div><div class="news-card__source">Anysphere / Bloomberg · 2024</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--hot">Meta</span><div class="news-card__title">Zuckerberg: "En 2025, la IA escribirá la mayor parte del código de Meta"</div><div class="news-card__desc">En enero 2025, Meta anunció que su IA ya asiste en el 20-30% del código y el objetivo es que la IA sea "un ingeniero mid-level" autónomo.</div><div class="news-card__source">Mark Zuckerberg · Ene 2025</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--tool">Anthropic</span><div class="news-card__title">Claude Code: agentes de desarrollo que abren PRs, corren tests y hacen deploys solos</div><div class="news-card__desc">Anthropic lanzó Claude Code en 2025 para sistemas agentic de desarrollo. Puede navegar repositorios, ejecutar comandos y generar PRs completos de forma autónoma.</div><div class="news-card__source">Anthropic Engineering · 2025</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--data">Amazon</span><div class="news-card__title">Amazon Q Developer: ahorro de $260M en reviews de seguridad con IA</div><div class="news-card__desc">Amazon reportó que Amazon Q (antes CodeWhisperer) ha ahorrado más de 4.500 años de trabajo en migraciones de Java y revisiones de seguridad en código.</div><div class="news-card__source">AWS re:Invent · Dic 2024</div></div>
+        <div class="news-card"><span class="news-card__badge news-card__badge--trend">GitHub</span><div class="news-card__title">GitHub Copilot Workspace: de issue a PR completo sin salir de GitHub</div><div class="news-card__desc">El entorno agentic de GitHub permite describir un bug o feature en texto natural y obtener un PR completo con tests, documentación y código listo para review.</div><div class="news-card__source">GitHub · 2024-2025</div></div>
+      </div>
+
+      <div class="chart-wrap reveal-item">
+        <div class="chart-title">% código generado con IA en grandes empresas tech (2024-2025)</div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="chart-companies"></canvas></div>
+        <div class="chart-source">Fuentes: GitHub Octoverse 2024, Alphabet Q3/Q4 Earnings, Meta Investor Day, estimaciones públicas</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem" class="reveal-item">
+        <div class="chart-wrap">
+          <div class="chart-title">SWE-bench Verified — Mejores modelos (%)</div>
+          <div style="position:relative;width:100%;height:240px"><canvas id="chart-swe"></canvas></div>
+          <div class="chart-source">SWE-bench.com · datos a marzo 2026</div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">GitHub Copilot — suscriptores de pago (millones)</div>
+          <div style="position:relative;width:100%;height:240px"><canvas id="chart-copilot"></canvas></div>
+          <div class="chart-source">GitHub Octoverse, reportes financieros Microsoft</div>
+        </div>
+      </div>
+
+      <div class="callout callout--lime reveal-item" style="margin-top:2rem">
+        <span>💡</span>
+        <div class="callout__body">
+          <strong>Qué significa esto para SiMJ:</strong> No hace falta ser Google para aprovecharlo. Con las herramientas de esta guía, un dev de SiMJ puede generar el 40-60% del código de scaffolding (migrations, factories, tests, docblocks) con IA en cuestión de segundos. El tiempo liberado va a lo que realmente aporta valor: lógica de negocio, revisión de calidad y relación con el cliente.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ 09 ERRORES COMUNES ══ -->
+  <section id="errores" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">09 — Errores Comunes</span>
+      <h2 class="section-title reveal-item">Los 10 errores que<br>arruinan un prompt</h2>
+      <p class="section-lead reveal-item">Los más frecuentes en equipos que empiezan con IA. Haz clic en cada error para ver el fix.</p>
+      <div class="error-grid">
+        <article class="error-card reveal-item" data-delay="0"><div class="error-card__head"><span class="error-card__icon">🎭</span><span class="error-sev error-sev--c">Crítico</span></div><h4 class="error-card__name">El Experto Sin Credenciales</h4><p class="error-card__desc">"Eres un experto en marketing." Sin empresa, sector, años. Respuestas de libro de texto.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Fórmula: <strong>[cargo] + [empresa/sector] + [sub-especialidad]</strong>. Para SiMJ: "Eres responsable de marketing de empresa de software a medida en Córdoba, especializado en captación de PYMES locales."</div></article>
+        <article class="error-card reveal-item" data-delay="80"><div class="error-card__head"><span class="error-card__icon">📐</span><span class="error-sev error-sev--c">Crítico</span></div><h4 class="error-card__name">Sin Formato de Salida</h4><p class="error-card__desc">No especificar qué quieres: email, bullets, tabla, post. El modelo elige y raramente acierta.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Añade siempre: <strong>"Formato: [tipo] · Longitud: [límite] · Termina con: [CTA]"</strong>. Cuanto más específico, más reproducible el resultado.</div></article>
+        <article class="error-card reveal-item" data-delay="160"><div class="error-card__head"><span class="error-card__icon">🌊</span><span class="error-sev error-sev--c">Crítico</span></div><h4 class="error-card__name">El Tsunami de Tareas</h4><p class="error-card__desc">"Analiza, resume, traduce y crea un plan." 4 tareas = resultados mediocres en todas.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden><strong>Máximo 2 tareas por prompt.</strong> Si necesitas más, encadénalas: el output del primero es el input del segundo.</div></article>
+        <article class="error-card reveal-item" data-delay="240"><div class="error-card__head"><span class="error-card__icon">🧢</span><span class="error-sev error-sev--c">Crítico</span></div><h4 class="error-card__name">Sin Permiso de Incertidumbre</h4><p class="error-card__desc">El modelo inventa antes de admitir que necesita más contexto. Peligroso en código.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Añade: <strong>"Si el dato no está disponible, escribe: 'Dato no disponible — necesitaría: [X]'"</strong>. Reduce alucinaciones hasta un 60%.</div></article>
+        <article class="error-card reveal-item" data-delay="0"><div class="error-card__head"><span class="error-card__icon">🤖</span><span class="error-sev error-sev--h">Alto</span></div><h4 class="error-card__name">CoT en o3/o4-mini</h4><p class="error-card__desc">"Piensa paso a paso" con modelos razonadores. Ya razonan internamente — pedírselo empeora el resultado.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Con o3/o4-mini: <strong>prompt directo + contexto completo + tarea clara</strong>. CoT explícito solo con GPT-4o y Claude Sonnet sin extended thinking.</div></article>
+        <article class="error-card reveal-item" data-delay="80"><div class="error-card__head"><span class="error-card__icon">🔐</span><span class="error-sev error-sev--h">Alto</span></div><h4 class="error-card__name">Datos Reales en el Prompt</h4><p class="error-card__desc">Credenciales, nombres de clientes o contratos sin anonimizar. Riesgo legal real.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>30 segundos antes de pegar: <strong>nombres → [CLIENTE], credenciales → [REDACTED], IPs → [IP_PROD]</strong>.</div></article>
+        <article class="error-card reveal-item" data-delay="160"><div class="error-card__head"><span class="error-card__icon">📊</span><span class="error-sev error-sev--h">Alto</span></div><h4 class="error-card__name">Alias de Modelo en Producción</h4><p class="error-card__desc">Usar "claude-sonnet-4-6" en código. Puede cambiar sin aviso y romper el comportamiento esperado.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>En código: snapshot con fecha: <code class="inline-code">claude-sonnet-4-6-20260217</code>. Comportamiento predecible indefinidamente.</div></article>
+        <article class="error-card reveal-item" data-delay="240"><div class="error-card__head"><span class="error-card__icon">🏗️</span><span class="error-sev error-sev--h">Alto</span></div><h4 class="error-card__name">El Prompt Monolito</h4><p class="error-card__desc">Todo en un párrafo. El modelo no diferencia contexto, instrucciones y tarea.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Para Claude: <strong>XML tags</strong>. Para ChatGPT: <strong>saltos de línea y encabezados claros</strong>. Para Gemini: <strong>markdown con ## secciones</strong>. La estructura mejora la fidelidad del output.</div></article>
+        <article class="error-card reveal-item" data-delay="0"><div class="error-card__head"><span class="error-card__icon">🔄</span><span class="error-sev error-sev--m">Medio</span></div><h4 class="error-card__name">Solo Restricciones Negativas</h4><p class="error-card__desc">"No uses jerga" sin decir qué sí usar. Las restricciones solas son ambiguas.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden>Cada "no" necesita su "sí": <strong>"No uses jerga técnica → usa lenguaje que entienda el gerente de una PYME sin conocimientos IT."</strong></div></article>
+        <article class="error-card reveal-item" data-delay="80"><div class="error-card__head"><span class="error-card__icon">🧪</span><span class="error-sev error-sev--m">Medio</span></div><h4 class="error-card__name">El Prompt de 1 Ejemplo</h4><p class="error-card__desc">Probar con un input y asumir que funciona. El 80% de los fallos aparecen con edge-cases.</p><button class="error-card__btn js-error-btn">▶ Ver fix</button><div class="error-card__fix" hidden><strong>Antes de usar en SiGestión: 10 test cases</strong> (3 normales, 3 edge, 2 ambiguos, 2 que rompan el formato). Usa el propio modelo para generarlos.</div></article>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ 10 GLOSARIO ══ -->
+  <section id="glosario" class="section section--alt">
+    <div class="wrap">
+      <span class="section-label reveal-item">10 — Glosario</span>
+      <h2 class="section-title reveal-item">Vocabulario IA esencial</h2>
+      <p class="section-lead reveal-item">Todos los términos que necesitas dominar. Busca o filtra por herramienta.</p>
+      <div class="gloss-search reveal-item">
+        <div class="gloss-search__bar"><span aria-hidden="true">🔍</span><input type="search" id="gloss-input" class="gloss-search__input" placeholder="Buscar: token, RAG, Claude, prompt, MCP..." autocomplete="off" aria-label="Buscar en el glosario"></div>
+        <div class="gloss-cats" role="group" aria-label="Filtrar por categoría">
+          <button class="gcat gcat--active js-gcat" data-cat="all">Todos</button>
+          <button class="gcat js-gcat" data-cat="cl">Claude</button>
+          <button class="gcat js-gcat" data-cat="oa">OpenAI</button>
+          <button class="gcat js-gcat" data-cat="both">Generales</button>
+        </div>
+      </div>
+      <div id="gloss-grid" class="gloss-grid" role="list"></div>
+      <p id="gloss-empty" class="gloss-empty" hidden>Sin resultados. Prueba con: token, prompt, agente, RAG</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ 11 RECURSOS ══ -->
+  <section id="recursos" class="section">
+    <div class="wrap">
+      <span class="section-label reveal-item">11 — Recursos</span>
+      <h2 class="section-title reveal-item">Para seguir aprendiendo</h2>
+      <h3 class="resources-heading resources-heading--cl reveal-item"><span class="dot dot--cl" style="display:inline-block;width:.55rem;height:.55rem"></span> Claude — Documentación Oficial</h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener"><div class="res-card__domain">docs.anthropic.com</div><div class="res-card__title">Claude 4 Best Practices</div><div class="res-card__desc">XML tags, long context, Extended Thinking, agentic systems. La fuente primaria. Actualizada marzo 2026.</div><span class="res-card__tag res-card__tag--cl">Oficial Primario</span></a>
+        <a class="res-card" href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener"><div class="res-card__domain">anthropic.com/engineering</div><div class="res-card__title">Claude Code — Best Practices</div><div class="res-card__desc">CLAUDE.md, context management, supervision checkpoints. Basado en producción interna de Anthropic.</div><span class="res-card__tag res-card__tag--cl">Ingeniería</span></a>
+        <a class="res-card" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener"><div class="res-card__domain">github.com/anthropics</div><div class="res-card__title">Tutorial Interactivo Oficial</div><div class="res-card__desc">9 capítulos con ejercicios prácticos en Jupyter / Google Sheets. El más didáctico de los recursos oficiales.</div><span class="res-card__tag res-card__tag--cl">Tutorial</span></a>
+        <a class="res-card" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener"><div class="res-card__domain">anthropic.com/engineering</div><div class="res-card__title">Context Engineering para Agentes</div><div class="res-card__desc">Compactación de contexto, just-in-time loading, structured note-taking. Basado en Claude Code en producción.</div><span class="res-card__tag res-card__tag--cl">Avanzado</span></a>
+      </div>
+      <h3 class="resources-heading resources-heading--oa reveal-item" style="margin-top:2.5rem"><span class="dot dot--oa" style="display:inline-block;width:.55rem;height:.55rem"></span> OpenAI — Documentación Oficial</h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener"><div class="res-card__domain">platform.openai.com</div><div class="res-card__title">Prompt Engineering Guide</div><div class="res-card__desc">6 estrategias: instrucciones claras, texto de referencia, tareas complejas, tiempo para pensar, herramientas, evals.</div><span class="res-card__tag res-card__tag--oa">Oficial</span></a>
+        <a class="res-card" href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener"><div class="res-card__domain">cookbook.openai.com</div><div class="res-card__title">GPT-5 Prompting Guide</div><div class="res-card__desc">Agentic tasks, TODO tool, planning antes de ejecutar. Por el equipo de OpenAI.</div><span class="res-card__tag res-card__tag--oa">GPT-5</span></a>
+        <a class="res-card" href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener"><div class="res-card__domain">cookbook.openai.com</div><div class="res-card__title">o3/o4-mini Prompting Guide</div><div class="res-card__desc">Por qué NO pedir más razonamiento. Developer messages, function call ordering. Fuente definitiva para modelos o-series.</div><span class="res-card__tag res-card__tag--oa">o-series</span></a>
+        <a class="res-card" href="https://cookbook.openai.com" target="_blank" rel="noopener"><div class="res-card__domain">cookbook.openai.com</div><div class="res-card__title">OpenAI Cookbook Completo</div><div class="res-card__desc">Notebooks prácticos: agents, evals, structured outputs, function calling, vision, audio, RAG, fine-tuning.</div><span class="res-card__tag res-card__tag--oa">Índice</span></a>
+      </div>
+      <h3 class="resources-heading reveal-item" style="margin-top:2.5rem;color:#4285f4"><span class="dot" style="display:inline-block;width:.55rem;height:.55rem;background:#4285f4"></span> Gemini — Documentación Oficial</h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://ai.google.dev/gemini-api/docs/prompting-strategies" target="_blank" rel="noopener"><div class="res-card__domain">ai.google.dev</div><div class="res-card__title">Gemini Prompting Strategies</div><div class="res-card__desc">Guía oficial de Google para aprovechar Gemini 1.5 Pro/Flash: system instructions, few-shot, multimodal prompting.</div><span style="padding:.2rem .55rem;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(66,133,244,.15);color:#4285f4">Oficial</span></a>
+        <a class="res-card" href="https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design" target="_blank" rel="noopener"><div class="res-card__domain">cloud.google.com</div><div class="res-card__title">Vertex AI Prompt Design</div><div class="res-card__desc">Diseño de prompts para producción con Gemini en Google Cloud. Incluye best practices para uso empresarial.</div><span style="padding:.2rem .55rem;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(66,133,244,.15);color:#4285f4">Enterprise</span></a>
+      </div>
+      <h3 class="resources-heading reveal-item" style="margin-top:2.5rem;color:var(--lime)">General — Frameworks y Papers</h3>
+      <div class="resources-grid reveal-item">
+        <a class="res-card" href="https://www.promptingguide.ai" target="_blank" rel="noopener"><div class="res-card__domain">promptingguide.ai</div><div class="res-card__title">Prompt Engineering Guide — DAIR.AI</div><div class="res-card__desc">La guía comunitaria más completa. CoT, ToT, ReAct, RAG. Disponible en español. Actualización continua.</div><span class="res-card__tag res-card__tag--lm">Universal</span></a>
+        <a class="res-card" href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" rel="noopener"><div class="res-card__domain">github.com/f</div><div class="res-card__title">awesome-chatgpt-prompts (107K ⭐)</div><div class="res-card__desc">La colección más grande de prompts de la comunidad. Roles, casos de uso, personajes. Fuente de inspiración de esta biblioteca.</div><span class="res-card__tag res-card__tag--lm">107K ⭐</span></a>
+        <a class="res-card" href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener"><div class="res-card__domain">arxiv.org</div><div class="res-card__title">Chain-of-Thought — Paper Original</div><div class="res-card__desc">Wei et al. (2022). El paper que formalizó el CoT. 10.000+ citas. Base teórica de todas las técnicas de razonamiento.</div><span class="res-card__tag res-card__tag--all">Paper</span></a>
+        <a class="res-card" href="https://ollama.ai" target="_blank" rel="noopener"><div class="res-card__domain">ollama.ai</div><div class="res-card__title">Ollama — IA 100% Local y Gratuita</div><div class="res-card__desc">Para datos sensibles de SiMJ: Llama3, CodeStral, Phi-3. Cero datos enviados. Funciona sin internet.</div><span class="res-card__tag res-card__tag--lm">Privacidad</span></a>
+        <a class="res-card" href="https://learnprompting.org" target="_blank" rel="noopener"><div class="res-card__domain">learnprompting.org</div><div class="res-card__title">Learn Prompting — Curso Gratuito</div><div class="res-card__desc">60+ lecciones de 0 a avanzado con ejercicios prácticos. En español disponible.</div><span class="res-card__tag res-card__tag--lm">Curso</span></a>
+        <a class="res-card" href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" rel="noopener"><div class="res-card__domain">github.com/dair-ai</div><div class="res-card__title">PE Guide — GitHub (47K ⭐)</div><div class="res-card__desc">El repo más completo de la comunidad. Papers, técnicas, modelos, aplicaciones. Actualizado semanalmente.</div><span class="res-card__tag res-card__tag--all">47K ⭐</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand-col">
+        <div class="footer__logo">SiMJ</div>
+        <p class="footer__desc">Guía práctica de IA para el equipo de Soluciones Informáticas MJ. Claude para tareas técnicas. OpenAI para comunicación y negocio. Gemini para entorno Google y multimodal. Actualizada marzo 2026.</p>
+      </div>
+      <div class="footer__col"><h5>Claude</h5><ul><li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">Claude 4 Best Practices</a></li><li><a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">Claude Code</a></li><li><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Tutorial Oficial</a></li><li><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></li></ul></div>
+      <div class="footer__col"><h5>OpenAI</h5><ul><li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt Engineering</a></li><li><a href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener">GPT-5 Guide</a></li><li><a href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener">o3/o4-mini Guide</a></li><li><a href="https://chat.openai.com" target="_blank" rel="noopener">chatgpt.com</a></li></ul></div>
+      <div class="footer__col"><h5>SiMJ</h5><ul><li><a href="https://simj.es" target="_blank" rel="noopener">simj.es</a></li><li><a href="https://simj.es/sigestion-avanzada" target="_blank" rel="noopener">SiGestión ERP</a></li><li><a href="https://simj.es/sigps" target="_blank" rel="noopener">SiGPS Flotas</a></li><li><a href="https://simj.es/contacto" target="_blank" rel="noopener">Contacto</a></li></ul></div>
+    </div>
+    <div class="footer__bottom"><div class="wrap"><span>Soluciones Informáticas MJ SCA · Córdoba, España · simj.es · CIF B19496678</span><span>Formación IA Interna · Curso 2026</span></div></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.3.6/dist/bundles/anime.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+  /* ─── MEGA-PROMPT SELECTOR ─────────────────────── */
+  let _mpTool = 'claude', _mpLevel = '1';
+  function selectMPTool(t){
+    _mpTool = t;
+    document.querySelectorAll('.mp-tool-btn').forEach(b=>b.classList.toggle('active',b.dataset.tool===t));
+    _updateMP();
+  }
+  function selectMPLevel(l){
+    _mpLevel = l;
+    document.querySelectorAll('.mp-level-btn').forEach(b=>b.classList.toggle('active',b.dataset.level===l));
+    _updateMP();
+  }
+  function _updateMP(){
+    document.querySelectorAll('.mp-panel').forEach(p=>p.classList.remove('visible'));
+    const p = document.getElementById('mp-'+_mpTool+'-'+_mpLevel);
+    if(p) p.classList.add('visible');
+  }
+
+  /* ─── MEGA-PROMPT COPY ─────────────────────────── */
+  document.querySelectorAll('.js-copy-mega').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const target = btn.dataset.target;
+      const el = document.getElementById(target);
+      if(!el) return;
+      navigator.clipboard.writeText(el.innerText).then(()=>{
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copiado';
+        setTimeout(()=>btn.textContent=orig,1800);
+      });
+    });
+  });
+
+  /* ─── ERROR CARD TOGGLE ────────────────────────── */
+  document.querySelectorAll('.js-error-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const fix = btn.nextElementSibling;
+      const open = !fix.hidden;
+      fix.hidden = open;
+      btn.textContent = open ? '▶ Ver fix' : '▼ Ocultar fix';
+    });
+  });
+
+  /* ─── GENERIC COPY BTN ─────────────────────────── */
+  document.querySelectorAll('.js-copy').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const body = btn.closest('.prompt-block, .code-block');
+      const text = body ? (body.querySelector('.prompt-block__body, .code-block__body') || body).innerText : '';
+      navigator.clipboard.writeText(text).then(()=>{
+        const orig = btn.textContent;
+        btn.textContent = '✓';
+        setTimeout(()=>btn.textContent=orig,1500);
+      });
+    });
+  });
+
+  /* ─── LIBRARY DATA ─────────────────────────────── */
+  const LIB = [
+    /* DEV */
+    {cat:'dev',title:'Revisar PR: seguridad + rendimiento',tool:'cl',level:'n2',body:`<contexto>
+SiGestión · Laravel 10 · PHP 8.2 · MySQL 8
 PR: [descripción breve del cambio]
 Módulos afectados: [lista]
-<span class="xt">&lt;/contexto&gt;</span>
-
-<span class="xt">&lt;diff&gt;</span>[Pega el diff o archivos modificados]<span class="xt">&lt;/diff&gt;</span>
-
-<span class="xt">&lt;tarea&gt;</span>
+</contexto>
+<diff>[Pega el diff aquí]</diff>
+<tarea>
 Revisa en orden de prioridad:
 1. Seguridad (SQL injection, XSS, auth bypass)
 2. Rendimiento (N+1, índices, queries lentas)
 3. ¿Rompe funcionalidad existente?
-
 Formato: ÁREA | LÍNEA | PROBLEMA | FIX propuesto
-"Sin issues en [X]" si no hay problemas en esa área.
-No comentes estilo ni naming en este análisis.
-<span class="xt">&lt;/tarea&gt;</span></pre>
-        </article>
-
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Escribir tests para función nueva</div>
-              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+"Sin issues en [X]" si no hay problemas.
+</tarea>`},
+    {cat:'dev',title:'Generar tests PHPUnit/Pest para una función',tool:'cl',level:'n2',body:`<contexto>
 SiGestión · Laravel 10 · PHPUnit / Pest
 Tests en español, nombres descriptivos.
-<span class="xt">&lt;/contexto&gt;</span>
-
-<span class="xt">&lt;codigo&gt;</span>[Función o clase a testear]<span class="xt">&lt;/codigo&gt;</span>
-
-<span class="xt">&lt;tarea&gt;</span>
+</contexto>
+<codigo>[Función o clase a testear]</codigo>
+<tarea>
 Escribe tests necesarios:
 - Happy path (caso normal)
 - Edge cases identificados
 - Casos de error esperados
-
 Sin tests redundantes. Indica qué no puedes
 testear sin más contexto del sistema.
-<span class="xt">&lt;/tarea&gt;</span></pre>
-        </article>
+</tarea>`},
+    {cat:'dev',title:'Añadir PHPDoc a función',tool:'cl',level:'n1',body:`Añade docblock PHPDoc a esta función de SiGestión (Laravel 10, PHP 8.2).
+Incluye: @param, @return, @throws si aplica.
+Descripción breve en español. Sin comentarios en el cuerpo. PSR-12.
 
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Plan de migración de base de datos</div>
-              <div class="icard__model icard__model--cl">Claude Opus 4.6 · Nivel 3</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
+[FUNCIÓN AQUÍ]`},
+    {cat:'dev',title:'Debug de error con contexto de stack',tool:'cl',level:'n2',body:`<contexto>
+SiGestión · Laravel 10 · PHP 8.2 · MySQL 8
+Entorno: producción
+</contexto>
+<error>
+Mensaje exacto: [COPIA EL ERROR]
+Stack trace: [PEGA EL STACK TRACE]
+Cuándo ocurre: [siempre / en condición X]
+Desde cuándo: [fecha aproximada]
+</error>
+<tarea>
+1. Diagnóstico más probable (razonado)
+2. Pasos de verificación por probabilidad
+3. Fix temporal para ganar tiempo
+4. Fix definitivo recomendado
+"Para confirmar necesito ver: [X]" si hace falta.
+</tarea>`},
+    {cat:'dev',title:'Generar Laravel Factory + Seeder',tool:'cl',level:'n1',body:`Genera Laravel Factory y Seeder para el modelo [MODELO] de SiGestión.
+Campos: [lista de campos con tipos]
+Faker en español (es_ES). PSR-12.
+Factory en database/factories/[Modelo]Factory.php
+Seeder en database/seeders/[Modelo]Seeder.php
+El Seeder debe insertar 50 registros de prueba.`},
+    {cat:'dev',title:'Detectar y corregir N+1 queries',tool:'cl',level:'n2',body:`<contexto>
+SiGestión · Laravel 10 · Eloquent ORM
+Controlador o servicio con posible N+1.
+</contexto>
+<codigo>[PEGA EL CÓDIGO AQUÍ]</codigo>
+<tarea>
+1. Identifica todas las queries N+1 presentes
+2. Para cada una: LÍNEA | TIPO DE RELACIÓN | FIX con eager loading
+3. Reescribe el método optimizado completo
+Usa with() / load() / select() según corresponda.
+</tarea>`},
+    {cat:'dev',title:'Plan de migración de BD sin downtime',tool:'cl',level:'n3',body:`<contexto>
 SiGestión · MySQL 8 · ~50K registros afectados
 Producción · Cero downtime · 4 devs, sin DBA
-<span class="xt">&lt;/contexto&gt;</span>
-
-<span class="xt">&lt;migracion&gt;</span>[Describe o pega la migración]<span class="xt">&lt;/migracion&gt;</span>
-
-<span class="xt">&lt;tarea&gt;</span>
+</contexto>
+<migracion>[Describe o pega la migración]</migracion>
+<tarea>
 Plan de migración seguro:
 1. Riesgos específicos en producción
 2. Pasos exactos con comandos
-3. Rollback si algo falla (&lt; 15 min)
+3. Rollback si algo falla (< 15 min)
 4. Qué monitorizar durante el proceso
-
 Confianza por recomendación: Alta/Media/Baja
-<span class="xt">&lt;/tarea&gt;</span></pre>
-        </article>
-      </div>
+</tarea>`},
+    {cat:'dev',title:'Diseño de arquitectura de módulo nuevo',tool:'cl',level:'n3',body:`<sistema_actual>
+SiGestión: Laravel 10, MySQL 8, ~50K registros.
+Equipo: 4 devs. Sin DBA ni DevOps dedicados.
+</sistema_actual>
+<restricciones>
+Sin Kubernetes. Mantener MySQL.
+Cero downtime en producción. Rollback < 15 min.
+</restricciones>
+<razonamiento_previo>
+Antes de proponer, analiza:
+1. ¿Cuál es el cuello de botella real?
+2. ¿Qué fallaría primero bajo 5x el tráfico?
+3. ¿Qué riesgo se subestima más?
+</razonamiento_previo>
+<tarea>
+Diseña el módulo de [NOMBRE DEL MÓDULO].
+Para cada decisión: confianza Alta/Media/Baja
+y qué información cambiaría tu recomendación.
+</tarea>`},
 
-      <!-- Comercial -->
-      <div id="ii-comercial" class="ipanel" role="tabpanel">
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Propuesta SiGestión para PYME</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Somos SiMJ, software a medida y IT en Córdoba.
+    /* COMERCIAL */
+    {cat:'comercial',title:'Propuesta SiGestión para PYME',tool:'oa',level:'n2',body:`Somos SiMJ, software a medida y IT en Córdoba.
 Producto: SiGestión, ERP adaptable a cualquier sector.
 
 Cliente: [sector + tamaño + problema detectado]
@@ -1118,89 +1156,75 @@ Propuesta comercial de 1 página:
 4. Próximo paso: demo gratuita 30 min
 
 Tono: cercano, de confianza, sin jerga técnica.
-Sin precio en esta propuesta — solo generamos interés.</pre>
-        </article>
+Sin precio en esta propuesta — solo generamos interés.`},
+    {cat:'comercial',title:'Email de reactivación de lead frío',tool:'oa',level:'n2',body:`Somos SiMJ. Lead ([sector], [N] empleados) pidió
+info sobre [PRODUCTO] hace [N] meses y no volvió.
 
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Email seguimiento post-demo</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Email de seguimiento a [sector del cliente] tras
+Email de reactivación:
+- Máx 90 palabras
+- Sin exclamaciones
+- CTA único: agendar llamada de 15 min
+- No mencionar precio
+- Tono: directo, sin presión, como si retomáramos una conversación`},
+    {cat:'comercial',title:'Seguimiento post-demo',tool:'oa',level:'n1',body:`Email de seguimiento a [sector del cliente] tras
 demo de SiGestión.
 Lo que más le interesó: [módulo o función]
 Su principal duda: [objeción o pregunta]
 
 Máx 100 palabras · Sin exclamaciones
 CTA único: confirmar próxima reunión
-Firma: [Nombre], SiMJ</pre>
-        </article>
-      </div>
+Firma: [Nombre], SiMJ`},
+    {cat:'comercial',title:'Respuesta a objeción de precio',tool:'oa',level:'n2',body:`Somos SiMJ. El cliente ([sector]) dice que
+SiGestión "es caro" comparado con [COMPETIDOR].
 
-      <!-- Soporte IT -->
-      <div id="ii-soporte" class="ipanel" role="tabpanel">
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Diagnóstico de incidencia en SiGestión</div>
-              <div class="icard__model icard__model--cl">Claude Sonnet 4.6 · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body"><span class="xt">&lt;contexto&gt;</span>
-SiMJ · SiGestión ERP · Laravel 10 + MySQL 8
-Entorno: producción
-<span class="xt">&lt;/contexto&gt;</span>
+Su situación: [describe brevemente]
+Precio que menciona: [precio del competidor]
+Nuestro valor diferencial: software propio + soporte local
 
-<span class="xt">&lt;incidencia&gt;</span>
-Descripción del cliente: [qué dice que pasa]
-Error exacto si lo hay: [mensaje o log]
-Cuándo ocurre: [siempre / en condición X]
-Desde cuándo: [fecha aproximada]
-<span class="xt">&lt;/incidencia&gt;</span>
+Redacta respuesta de email:
+- Reconoce la objeción sin defenderse
+- Reencuadra el coste como inversión con ROI concreto
+- Propone siguiente paso (demo personalizada)
+- Máx 120 palabras · Tono seguro, no agresivo`},
+    {cat:'comercial',title:'Propuesta de renovación o upsell',tool:'oa',level:'n2',body:`Somos SiMJ. Cliente actual ([sector], [N] años con nosotros).
+Actualmente tiene: [módulos contratados]
+Oportunidad detectada: [nuevo módulo o servicio]
 
-<span class="xt">&lt;tarea&gt;</span>
-1. Diagnóstico más probable (razonado)
-2. Pasos de verificación por probabilidad
-3. Fix temporal para ganar tiempo
-4. Fix definitivo recomendado
+Email de upsell:
+- Referencia algo específico de su uso actual
+- Presenta el nuevo módulo como evolución natural
+- 1 beneficio concreto para su negocio
+- CTA: "¿Lo vemos en una llamada de 20 min?"
+- Máx 110 palabras · Tono de asesor, no de vendedor`},
+    {cat:'comercial',title:'Script de llamada de prospecting',tool:'oa',level:'n2',body:`Somos SiMJ. Voy a llamar en frío a [tipo de empresa].
+Objetivo: conseguir una demo de SiGestión en 5-7 min.
 
-"Para confirmar necesito ver: [X]" si hace falta.
-<span class="xt">&lt;/tarea&gt;</span></pre>
-        </article>
+Script de llamada con:
+1. Apertura (5-10 seg, no vender todavía)
+2. Calificación rápida (2 preguntas clave)
+3. Propuesta de valor en 30 seg (su problema + nuestra solución)
+4. Manejo de 3 objeciones típicas:
+   - "Ahora no es buen momento"
+   - "Ya tenemos algo"
+   - "Mándame información por email"
+5. Cierre: proponer fecha de demo
 
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Respuesta a ticket de soporte (cliente)</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Respuesta a ticket de soporte de SiMJ.
-El cliente dice: "[problema]"
-Solución técnica: [lo que hay que hacer]
-¿Está resuelto?: [Sí / En gestión]
+Tono natural, sin leer como robot.`},
+    {cat:'comercial',title:'Análisis de competidor IT',tool:'oa',level:'n2',body:`Somos SiMJ: software a medida y IT en Córdoba.
+ERP propio (SiGestión), flotas (SiGPS), ciberseguridad y mantenimiento.
+Diferencial: software propio + soporte local.
 
-Tono: empático, claro, sin tecnicismos.
-Máx 80 palabras · Termina con el próximo paso.</pre>
-        </article>
-      </div>
+Competidor: [nombre o descripción + web]
 
-      <!-- Marketing -->
-      <div id="ii-marketing" class="ipanel" role="tabpanel">
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Post LinkedIn para SiMJ</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Post LinkedIn de SiMJ (software a medida, IT, Córdoba).
+Analiza para nosotros:
+1. FORTALEZAS vs SiMJ (máx 3, con evidencia)
+2. DEBILIDADES vs SiMJ (máx 3)
+3. ÁNGULO de posicionamiento a explotar
+4. ALERTA: algo que deberíamos mejorar
+"No disponible — verificar: [X]" si no tienes datos.`},
+
+    /* MARKETING */
+    {cat:'marketing',title:'Post LinkedIn para SiMJ',tool:'oa',level:'n2',body:`Post LinkedIn de SiMJ (software a medida, IT, Córdoba).
 Audiencia: gerentes de PYMES y autónomos de Andalucía.
 Tema: [insight o noticia a comunicar]
 Objetivo: [awareness / leads / engagement]
@@ -1209,18 +1233,18 @@ Objetivo: [awareness / leads / engagement]
 Primera línea: engancha sin revelar todo
 Sin hashtags genéricos (máx 3 específicos)
 Máx 3 emojis en todo el post
-Termina con pregunta que invite a comentar</pre>
-        </article>
+Termina con pregunta que invite a comentar`},
+    {cat:'marketing',title:'Copy para landing page de SiGestión',tool:'oa',level:'n2',body:`Somos SiMJ. Landing page para SiGestión (ERP para PYMES).
+Audiencia: dueños de PYMES de [sector] en Andalucía.
+Pain point principal: [problema que resolvemos]
 
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Caso de éxito de cliente (anonimizado)</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Caso de éxito para web de SiMJ.
+Escribe el copy de la sección hero:
+- H1 (máx 8 palabras, orientado al beneficio)
+- H2 subheadline (máx 20 palabras, amplía el H1)
+- 3 bullet points de beneficio (no características)
+- CTA principal: texto del botón (máx 4 palabras)
+Tono: directo, confianza, sin jerga técnica.`},
+    {cat:'marketing',title:'Caso de éxito anonimizado',tool:'oa',level:'n2',body:`Caso de éxito para web de SiMJ.
 Cliente: [sector + tamaño — sin nombre si no autorizado]
 Problema antes de SiMJ: [situación inicial]
 Solución implementada: [qué hicimos]
@@ -1228,39 +1252,103 @@ Resultado: [métricas o mejoras concretas]
 
 3 secciones: Reto / Solución / Resultado
 180-250 palabras · Tono narrativo y cercano
-Incluye 1 cita representativa del cliente</pre>
-        </article>
-      </div>
+Incluye 1 cita representativa del cliente (inventada pero creíble)`},
+    {cat:'marketing',title:'Descripción de producto para web',tool:'oa',level:'n2',body:`Somos SiMJ. Descripción de [PRODUCTO/SERVICIO] para la web.
+Audiencia: PYMES andaluzas, [sector si aplica].
+Pain point que resuelve: [describe brevemente]
 
-      <!-- Admin -->
-      <div id="ii-admin" class="ipanel" role="tabpanel">
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Acta de reunión desde notas</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o-mini · Nivel 1</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Convierte estas notas en acta formal de SiMJ.
-Fecha y participantes: [datos]
-Notas en bruto: [pega tus notas]
+Secciones:
+1. Qué es (1 frase, máx 20 palabras)
+2. Para quién es (1-2 frases)
+3. 4 funcionalidades clave (bullets cortos)
+4. Beneficio principal (1 frase potente)
+5. CTA: "Solicitar demo gratuita"
+Máx 200 palabras total. Sin tecnicismos.`},
+    {cat:'marketing',title:'Post Instagram (carrusel) SiMJ',tool:'oa',level:'n2',body:`Carrusel de Instagram para SiMJ.
+Tema: [concepto o tip relacionado con software/IT para PYMES]
+Objetivo: [awareness / engagement / leads]
 
-Formato: Puntos tratados · Decisiones
-Tareas (Tarea | Responsable | Fecha)
-Próxima reunión si la hay.
-Tono: formal · Máx 300 palabras</pre>
-        </article>
+Estructura de 5 diapositivas:
+1. Portada: titular impactante (máx 6 palabras)
+2-4. Contenido: 1 punto clave por diapo (máx 30 palabras cada una)
+5. CTA: dirección a bio o demo
+Tono: directo, cercano, visual. Sin tecnicismos.
+Incluye sugerencia de imagen para cada diapo.`},
+    {cat:'marketing',title:'5 asuntos de email para campaña',tool:'oa',level:'n1',body:`5 asuntos de email para SiMJ.
+Producto: [SiGestión / SiGPS / servicio IT]
+Objetivo: [apertura máxima / clic / respuesta]
+Cada uno: máx 6 palabras, sin exclamaciones.
+Ángulos distintos: urgencia / beneficio / curiosidad / prueba social / ahorro de tiempo.
+Formato: Núm. | Asunto | Ángulo`},
+    {cat:'marketing',title:'Comunicado de prensa para nueva funcionalidad',tool:'oa',level:'n2',body:`Somos SiMJ (Córdoba). Comunicado de prensa para:
+Nueva funcionalidad/producto: [describe brevemente]
+Fecha de lanzamiento: [fecha]
+A quién va dirigido: [tipo de empresa o sector]
 
-        <article class="icard reveal-item">
-          <div class="icard__head">
-            <div>
-              <div class="icard__title">Informe mensual IT para cliente</div>
-              <div class="icard__model icard__model--oa">ChatGPT GPT-4o · Nivel 2</div>
-            </div>
-            <button class="icard__copy js-icard-copy">copiar</button>
-          </div>
-          <pre class="icard__body">Informe mensual de actividad IT para cliente de SiMJ.
+Estructura estándar de nota de prensa:
+- Titular (máx 12 palabras)
+- Subtítulo (máx 20 palabras)
+- Primer párrafo: qué, quién, cuándo, dónde (200 palabras)
+- Segundo párrafo: contexto y beneficios (150 palabras)
+- Cita del responsable (1 persona de SiMJ)
+- Boilerplate de SiMJ
+- Datos de contacto: [NOMBRE], [EMAIL]`},
+
+    /* SOPORTE */
+    {cat:'soporte',title:'Diagnóstico de incidencia SiGestión',tool:'cl',level:'n2',body:`<contexto>
+SiMJ · SiGestión ERP · Laravel 10 + MySQL 8
+Entorno: producción
+</contexto>
+<incidencia>
+Descripción del cliente: [qué dice que pasa]
+Error exacto si lo hay: [mensaje o log]
+Cuándo ocurre: [siempre / en condición X]
+Desde cuándo: [fecha aproximada]
+</incidencia>
+<tarea>
+1. Diagnóstico más probable (razonado)
+2. Pasos de verificación por probabilidad
+3. Fix temporal para ganar tiempo
+4. Fix definitivo recomendado
+"Para confirmar necesito ver: [X]" si hace falta.
+</tarea>`},
+    {cat:'soporte',title:'Respuesta a ticket de soporte (cliente)',tool:'oa',level:'n1',body:`Respuesta a ticket de soporte de SiMJ.
+El cliente dice: "[problema]"
+Solución técnica: [lo que hay que hacer o se ha hecho]
+¿Está resuelto?: [Sí / En gestión / Pendiente de cliente]
+
+Tono: empático, claro, sin tecnicismos.
+Máx 80 palabras · Termina con el próximo paso.`},
+    {cat:'soporte',title:'Email de aviso de mantenimiento programado',tool:'oa',level:'n1',body:`Email a clientes de SiMJ sobre mantenimiento programado.
+Fecha y hora: [cuándo]
+Duración estimada: [tiempo]
+Qué sistemas afecta: [SiGestión / SiGPS / email / etc.]
+Qué puede hacer el cliente durante ese tiempo: [alternativas si las hay]
+
+Tono: tranquilizador, informativo.
+Máx 80 palabras. Sin jerga técnica.`},
+    {cat:'soporte',title:'Escalación de incidencia crítica',tool:'oa',level:'n2',body:`Somos SiMJ. Email interno de escalación de incidencia crítica.
+De: [técnico que escala]
+Para: [responsable técnico / director]
+Resumen del problema: [qué está pasando]
+Cliente afectado: [descriptor genérico — sin nombre real]
+Tiempo de afectación: [desde cuándo]
+Pasos ya tomados: [lo que ya se ha intentado]
+Impacto en el negocio del cliente: [describe brevemente]
+Qué se necesita del receptor: [decisión / recurso / acción]
+Urgencia: CRÍTICA — respuesta necesaria en [N] horas`},
+    {cat:'soporte',title:'Entrada de base de conocimiento (KB)',tool:'oa',level:'n2',body:`Somos SiMJ. Escribe una entrada de base de conocimiento para el equipo de soporte.
+Problema: [título del problema]
+Síntomas: [cómo se manifiesta]
+Causa raíz: [qué lo provoca]
+Solución paso a paso: [describe los pasos]
+Tiempo estimado de resolución: [N minutos]
+Nivel de técnico requerido: [N1 / N2 / Desarrollo]
+Notas adicionales: [precauciones, variantes del problema]
+Formato: markdown, apto para Notion/Confluence.`},
+
+    /* DATOS */
+    {cat:'datos',title:'Informe mensual IT para cliente',tool:'oa',level:'n2',body:`Informe mensual de actividad IT para cliente de SiMJ.
 Cliente: [sector — sin nombre si no autorizado]
 Periodo: [mes y año]
 Actividades: [lista de incidencias/mantenimientos]
@@ -1269,452 +1357,533 @@ Estado sistemas: [OK / pendientes / alertas]
 
 Formato ejecutivo (1 página)
 Secciones: Resumen · Actividades · Estado · Próximo mes
-Sin tecnicismos · Orientado al negocio del cliente</pre>
-        </article>
-      </div>
+Sin tecnicismos · Orientado al negocio del cliente`},
+    {cat:'datos',title:'Análisis de datos de ventas (desde CSV/Excel)',tool:'ge',level:'n2',body:`## Contexto
+SiMJ — Software y IT en Córdoba.
+Adjunto el fichero de datos de ventas [adjunta el archivo].
 
-    </div>
-  </section>
+## Tarea
+Analiza los datos y responde:
+1. ¿Cuál es el producto/servicio con más ingresos?
+2. ¿Qué sector de clientes tiene mayor ticket medio?
+3. ¿Hay estacionalidad visible en los datos?
+4. Top 3 insights accionables para el equipo comercial
 
-  <hr class="divider" />
+## Formato
+- Resumen ejecutivo (máx 150 palabras)
+- Tabla con los 5 datos más relevantes
+- 3 recomendaciones concretas con evidencia en los datos`},
+    {cat:'datos',title:'Interpretación de métricas de soporte',tool:'oa',level:'n2',body:`Somos SiMJ. Analiza estas métricas de soporte del último mes:
+Tickets abiertos: [N]
+Tickets resueltos: [N]
+Tiempo medio de resolución: [N horas]
+Satisfacción cliente (si disponible): [N/10]
+Tickets por categoría: [lista]
 
-  <!-- ══════════════════════════════════════
-       08 — PROMPT DEBUGGER
-  ══════════════════════════════════════ -->
-  <section id="debugger" class="section section--alt">
-    <div class="wrap">
-      <span class="section-label reveal-item">08 — Herramienta</span>
-      <h2 class="section-title reveal-item">Analiza tu prompt<br>en tiempo real</h2>
-      <p class="section-lead reveal-item">
-        Pega cualquier prompt y detecta qué componentes faltan,
-        el riesgo de alucinación y el modelo recomendado.
-      </p>
+Interpreta los datos:
+1. ¿Qué va bien? ¿Qué es preocupante?
+2. ¿Qué categoría de tickets consume más tiempo?
+3. 3 acciones concretas para mejorar en el próximo mes
+Formato: informe ejecutivo, máx 200 palabras.`},
+    {cat:'datos',title:'Resumen ejecutivo de datos para cliente',tool:'oa',level:'n2',body:`Somos SiMJ. Crea un resumen ejecutivo para cliente.
+Tipo de informe: [actividad IT / rendimiento ERP / incidencias]
+Periodo: [N meses]
+Datos disponibles: [lista de métricas]
+Audiencia: gerente o dueño de empresa, no técnico
 
-      <div class="debugger reveal-item" id="debugger-widget">
-        <div class="debugger__bar">
-          <span class="debugger__label">Tu Prompt</span>
-          <div class="debugger__actions">
-            <button class="btn-clear js-db-clear">Limpiar</button>
-            <button class="btn-analyze js-db-run" id="db-run-btn">⚡ Analizar</button>
-          </div>
+Estructura:
+1. Estado general (semáforo: verde/naranja/rojo + 1 frase)
+2. Lo más importante de este periodo (3 bullets)
+3. Próximas acciones recomendadas (2-3 items)
+Máx 1 página · Sin tecnicismos · Positivo pero honesto`},
+
+    /* ESTRATEGIA */
+    {cat:'estrategia',title:'Análisis DAFO de SiMJ',tool:'oa',level:'n3',body:`Eres consultor estratégico con 10 años en empresas de software B2B para PYMES.
+
+SiMJ (Córdoba): software a medida, IT, ERP propio (SiGestión), flotas (SiGPS).
+Diferencial: software propio + soporte presencial local.
+Contexto: [describe la situación actual brevemente]
+
+Antes de responder, analiza:
+1. ¿Cuál es la mayor amenaza real en los próximos 2 años?
+2. ¿Qué fortaleza de SiMJ es más difícil de replicar?
+3. ¿Qué oportunidad se está desaprovechando?
+
+Entrega:
+DAFO completo (4 fortalezas, 4 debilidades, 4 oportunidades, 4 amenazas)
+Con evidencia o razonamiento para cada punto — no genérico.
+Finales: Top 3 prioridades estratégicas para 2026.`},
+    {cat:'estrategia',title:'Plan de acción 90 días',tool:'oa',level:'n3',body:`Eres Director de Operaciones IT B2B con 12 años en empresas de software a medida.
+
+SiMJ quiere: [OBJETIVO ESPECÍFICO EN 90 DÍAS]
+Recursos disponibles: [equipo + presupuesto]
+Restricciones: [lo que NO se puede hacer]
+
+Antes de responder:
+1. ¿Es el objetivo realista en 90 días con estos recursos?
+2. ¿Cuál es el mayor riesgo de no cumplirlo?
+3. ¿Qué harías diferente si tuvieras el doble de presupuesto?
+
+Entrega:
+A) Diagnóstico honesto del punto de partida
+B) Plan semana a semana (12 semanas)
+C) Los 3 KPIs para medir si va bien
+D) Plan B si el objetivo principal no es alcanzable`},
+    {cat:'estrategia',title:'Business case para nueva funcionalidad SiGestión',tool:'oa',level:'n2',body:`Somos SiMJ. Necesito justificar internamente desarrollar [FUNCIONALIDAD].
+Tiempo estimado de desarrollo: [N semanas]
+Coste estimado (horas dev): [N horas x tarifa]
+Clientes que lo han pedido: [N clientes]
+Impacto esperado en retención/ventas: [estimación]
+
+Business case de 1 página:
+1. Problema que resuelve (desde el punto de vista del cliente)
+2. Alternativas evaluadas (y por qué las descartamos)
+3. ROI estimado (cuándo se recupera la inversión)
+4. Riesgos y cómo mitigarlos
+5. Recomendación: GO / NO-GO y por qué`},
+    {cat:'estrategia',title:'Estrategia de expansión sectorial',tool:'oa',level:'n3',body:`Eres Director Comercial IT con 10 años en empresas de ERP para PYMES españolas.
+
+SiMJ quiere expandir SiGestión al sector [SECTOR NUEVO].
+Actualmente: clientes en [sectores actuales], Córdoba y Andalucía.
+Recursos comerciales: [N personas, presupuesto marketing].
+
+Análisis previo:
+1. ¿Es el sector [X] compatible con nuestro ERP actual o requiere personalización?
+2. ¿Cuáles son los 3 competidores más fuertes ya en ese sector?
+3. ¿Cuánto tiempo realista para los primeros 5 clientes?
+
+Entrega:
+A) Evaluación del mercado objetivo
+B) Estrategia de entrada (canales, mensaje, precio)
+C) Los 3 pasos concretos del primer mes
+Sé directo — prefiero un "no hagas esto" con razones que un plan optimista.`},
+
+    /* EMAIL MKT */
+    {cat:'email',title:'Newsletter mensual SiMJ',tool:'oa',level:'n2',body:`Newsletter mensual de SiMJ para clientes actuales.
+Mes: [mes y año]
+Highlights del mes: [lista de novedades/logros/contenido]
+Novedad de producto si la hay: [describe brevemente]
+Tip del mes: [tema de IT/ciberseguridad útil para PYMES]
+
+Estructura:
+- Asunto: [3 opciones]
+- Saludo personalizado (usa [NOMBRE])
+- Sección "Este mes en SiMJ" (100 palabras)
+- Tip del mes (80 palabras)
+- CTA final: [objetivo — visitar web / agendar revisión / etc.]
+Tono: cercano, como carta de un asesor de confianza.`},
+    {cat:'email',title:'Secuencia de bienvenida nuevo cliente (3 emails)',tool:'oa',level:'n3',body:`Somos SiMJ. Crea secuencia de 3 emails para nuevo cliente que acaba de contratar [PRODUCTO].
+
+EMAIL 1 (día 0 — bienvenida):
+- Confirma inicio, presenta al equipo, próximos pasos
+
+EMAIL 2 (día 3 — onboarding):
+- Tip clave para empezar bien con [PRODUCTO]
+- Recurso útil (guía, vídeo, FAQ)
+- Pregunta de check-in
+
+EMAIL 3 (día 14 — seguimiento):
+- Pregunta sobre cómo va
+- Ofrece llamada de revisión
+- Introduce funcionalidad que quizás no conoce
+
+Cada email: máx 120 palabras, asunto incluido, CTA único.
+Tono: cercano, de acompañamiento, no de marketing.`},
+    {cat:'email',title:'Anuncio de nueva funcionalidad a clientes',tool:'oa',level:'n2',body:`Somos SiMJ. Email a clientes actuales de [PRODUCTO] anunciando la nueva funcionalidad [NOMBRE].
+Qué hace: [descripción técnica sencilla]
+Beneficio principal para el cliente: [en su lenguaje]
+Cómo activarla/usarla: [pasos simples o link]
+Disponible desde: [fecha]
+
+Estructura del email:
+- Asunto: que destaque el beneficio, no la feature
+- Apertura: referencia algo que el cliente ya sabe hacer
+- Cuerpo: qué es + por qué le importa + cómo empezar
+- CTA: "Pruébalo ahora" o "¿Quieres que te lo mostremos?"
+Máx 150 palabras. Tono: próximos, no corporativo.`},
+    {cat:'email',title:'Encuesta de satisfacción post-proyecto',tool:'oa',level:'n1',body:`Email de SiMJ solicitando feedback tras completar [PROYECTO/IMPLEMENTACIÓN].
+Cliente: [descriptor genérico]
+Proyecto completado: [breve descripción]
+
+Email de máx 80 palabras:
+- Agradece la confianza
+- Pide 2 minutos para responder 3 preguntas
+- Link a formulario (usa [LINK_FORMULARIO] como placeholder)
+- Menciona que el feedback mejora el servicio para todos
+Tono: genuino, sin parecer automatizado.`},
+
+    /* SEO */
+    {cat:'seo',title:'Meta description + title tag para página de servicio',tool:'oa',level:'n1',body:`Escribe meta description y title tag SEO para:
+Empresa: SiMJ (software a medida, Córdoba)
+Página: [NOMBRE DE LA PÁGINA — ej: "SiGestión ERP para PYMES"]
+Keyword principal: [KEYWORD]
+Keywords secundarias: [lista]
+
+Title tag: máx 60 caracteres, keyword al inicio
+Meta description: 150-160 caracteres, incluye keyword + beneficio + CTA
+Genera 3 variantes de cada uno para A/B test.`},
+    {cat:'seo',title:'FAQ para rich snippets (Schema FAQ)',tool:'oa',level:'n2',body:`Somos SiMJ. Crea FAQ para página de [PRODUCTO/SERVICIO] orientada a SEO y rich snippets.
+
+Audiencia: dueños de PYMES en Andalucía buscando [KEYWORD PRINCIPAL].
+Intención de búsqueda: [informacional / comparativa / transaccional]
+
+Genera 8 preguntas + respuestas:
+- Preguntas como las haría una persona real buscando en Google
+- Respuestas: 40-60 palabras, directas al punto
+- Incluye keyword principal y variantes de forma natural
+- Formato: lista numerada Q&A
+Bonus: señala cuáles tienen más probabilidad de aparecer en "La gente también pregunta"`},
+    {cat:'seo',title:'Contenido para página de servicio (SEO)',tool:'oa',level:'n2',body:`Somos SiMJ. Texto SEO para la página de [SERVICIO].
+Keyword principal: [KW] — volumen estimado: [N] búsquedas/mes
+Keywords relacionadas: [lista de 5-8 KWs]
+Competidores en top 3 de Google: [si los conoces]
+Intención de búsqueda: [describe qué quiere el usuario]
+
+Estructura de la página (800-1000 palabras):
+- H1 con keyword
+- Introducción (100 palabras, responde la intención)
+- H2 "¿Qué es [servicio]?" + contenido
+- H2 "Beneficios para tu empresa"
+- H2 "Por qué elegir SiMJ"
+- CTA final
+Densidad keyword: natural, sin forzar. Tono experto pero accesible.`},
+
+    /* ADMIN */
+    {cat:'admin',title:'Acta de reunión desde notas',tool:'oa',level:'n1',body:`Convierte estas notas en acta formal de SiMJ.
+Fecha y participantes: [datos]
+Notas en bruto: [pega tus notas]
+
+Formato: Puntos tratados · Decisiones
+Tareas (Tarea | Responsable | Fecha límite)
+Próxima reunión si la hay.
+Tono: formal · Máx 300 palabras`},
+    {cat:'admin',title:'Procedimiento estándar (SOP)',tool:'oa',level:'n2',body:`Somos SiMJ. Crea un SOP (procedimiento estándar) para:
+Proceso: [NOMBRE DEL PROCESO]
+Quién lo ejecuta: [rol dentro de SiMJ]
+Cuándo se ejecuta: [trigger o frecuencia]
+Herramientas necesarias: [lista]
+
+Estructura del SOP:
+- Objetivo del procedimiento
+- Pre-requisitos
+- Pasos numerados (máx 15, concretos y verificables)
+- Criterio de éxito (cómo saber que se hizo bien)
+- Qué hacer si algo sale mal
+Formato: markdown, apto para Notion.`},
+    {cat:'admin',title:'Propuesta formal para cliente enterprise',tool:'oa',level:'n3',body:`Somos SiMJ. Propuesta formal para cliente de mayor tamaño.
+Cliente: [sector + tamaño — >50 empleados]
+Proyecto: [descripción del alcance]
+Presupuesto estimado: [rango o cantidad]
+Plazo: [semanas/meses]
+
+Propuesta de [N] páginas:
+1. Resumen ejecutivo (1 página)
+2. Comprensión del problema del cliente
+3. Nuestra solución propuesta (con fases)
+4. Equipo y metodología
+5. Cronograma
+6. Inversión (tabla de precios si aplica)
+7. Próximos pasos
+
+Tono: profesional y sofisticado. Diferencia SiMJ de una consultora grande impersonal.`},
+    {cat:'admin',title:'Checklist de cierre de proyecto',tool:'oa',level:'n1',body:`Checklist de cierre de proyecto para SiMJ.
+Tipo de proyecto: [implementación ERP / desarrollo a medida / servicio IT]
+Cliente: [descriptor genérico]
+Duración del proyecto: [N meses]
+
+Genera checklist exhaustivo con:
+- Items de entrega técnica
+- Items de documentación
+- Items de formación al cliente
+- Items de facturación y contractuales
+- Items de satisfacción y feedback
+- Items de archivado interno
+Formato: markdown con checkboxes [ ]`},
+
+    /* RRHH */
+    {cat:'hr',title:'Oferta de trabajo — desarrollador Laravel',tool:'oa',level:'n2',body:`Somos SiMJ (Córdoba). Oferta de trabajo para:
+Puesto: [NOMBRE DEL PUESTO]
+Equipo: 4 personas, proyectos reales de producción
+Stack: Laravel 10, PHP 8.2, MySQL, Vue.js
+Modalidad: [presencial / híbrido / remoto]
+Rango salarial: [si se va a indicar]
+Lo que diferencia trabajar en SiMJ: [describe 3 aspectos reales]
+
+Redacta oferta de trabajo:
+- Tono: cercano y real, no corporativo
+- Destaca el impacto del trabajo (código que usan miles de empresas)
+- Sé honesto sobre los retos
+- Máx 350 palabras
+- Incluye los requisitos imprescindibles y los deseables por separado`},
+    {cat:'hr',title:'Preguntas de entrevista técnica PHP/Laravel',tool:'cl',level:'n2',body:`<contexto>
+SiMJ · Stack: Laravel 10, PHP 8.2, MySQL 8, Vue.js
+Puesto: [SENIORITY] Developer
+Tiempo de entrevista técnica: 45-60 min
+</contexto>
+<tarea>
+Genera batería de preguntas técnicas:
+- 5 preguntas conceptuales PHP/OOP (con respuesta esperada)
+- 5 preguntas Laravel específicas (con respuesta esperada)
+- 3 preguntas de base de datos/SQL (con respuesta esperada)
+- 2 ejercicios prácticos cortos (15 min cada uno)
+- 3 preguntas situacionales ("¿cómo abordarías...?")
+Para cada pregunta: nivel (básico/medio/avanzado) y lo que evalúa.
+</tarea>`},
+    {cat:'hr',title:'Email de rechazo empático',tool:'oa',level:'n1',body:`Email de rechazo a candidato de SiMJ tras proceso de selección.
+Nombre del candidato: [NOMBRE]
+Puesto al que aplicó: [PUESTO]
+Fase donde llegó: [screening / técnica / final]
+Motivo (interno, no en el email): [razón real]
+
+Email:
+- Agradece el tiempo y el esfuerzo
+- Comunica la decisión de forma directa pero amable
+- Cierra la puerta pero sin cerrarla del todo
+- Máx 80 palabras · Sin fórmulas corporativas vacías`},
+    {cat:'hr',title:'Plan de onboarding para nuevo empleado',tool:'oa',level:'n2',body:`Somos SiMJ. Plan de onboarding para nuevo [PUESTO].
+Duración del onboarding: [N semanas]
+Stack/herramientas que necesita dominar: [lista]
+Persona/s que le acompañarán: [roles]
+Proyectos a los que se incorporará: [describe brevemente]
+
+Plan semana a semana:
+Semana 1: [objetivos + actividades]
+Semana 2: [objetivos + actividades]
+Semana 3-4: [objetivos + actividades]
+Criterio de éxito al final del onboarding: [qué debe saber/poder hacer]
+Checklist de primer día: [lista de items]`},
+
+    /* AGENTES IA */
+    {cat:'agentes',title:'System prompt para agente de soporte SiMJ',tool:'cl',level:'n3',body:`<contexto>
+Eres el agente de soporte de SiMJ, empresa de software a medida en Córdoba.
+Productos: SiGestión (ERP), SiGPS (flotas), servicios de ciberseguridad y mantenimiento IT.
+</contexto>
+<reglas>
+1. Saluda siempre por el nombre si lo tienes
+2. Clasifica internamente cada consulta: URGENTE / NORMAL / CONSULTA
+3. Para problemas técnicos: pide el error exacto + cuándo empezó antes de dar solución
+4. Si no sabes la respuesta: "Voy a escalar esto a nuestro equipo técnico. Te contactarán en [N] horas."
+5. Nunca inventes soluciones técnicas — admite incertidumbre
+6. Tono: empático, directo, profesional
+</reglas>
+<restricciones>
+No prometas fechas de resolución sin confirmación del equipo.
+No des información de precios ni descuentos — deriva al equipo comercial.
+</restricciones>`},
+    {cat:'agentes',title:'Agente clasificador de emails de soporte',tool:'cl',level:'n2',body:`<contexto>
+Eres un clasificador de emails de soporte de SiMJ.
+</contexto>
+<categorias>
+URGENTE: sistema caído, pérdida de datos, acceso bloqueado
+ALTO: funcionalidad crítica degradada, afecta a múltiples usuarios
+NORMAL: problema funcional no crítico, un usuario afectado
+CONSULTA: pregunta sobre uso, solicitud de formación
+COMERCIAL: interés en nuevos productos o servicios
+</categorias>
+<tarea>
+Para el email que se te proporcione:
+1. CATEGORÍA (una de las 5)
+2. RESUMEN (máx 15 palabras)
+3. MÓDULO AFECTADO (SiGestión/SiGPS/Email/Servidores/Otro)
+4. ACCIÓN SUGERIDA (1 frase)
+Formato JSON: {"categoria":"","resumen":"","modulo":"","accion":""}
+</tarea>`},
+    {cat:'agentes',title:'System prompt para chatbot de ventas SiMJ',tool:'oa',level:'n3',body:`Eres el asistente virtual de ventas de SiMJ en la web (simj.es).
+Tu objetivo: calificar visitantes y agendar demos de SiGestión o SiGPS.
+
+SOBRE SiMJ:
+Software a medida y servicios IT en Córdoba. ERP SiGestión para PYMES, SiGPS para flotas.
+Diferencial: software propio + soporte presencial local.
+
+TU PROCESO:
+1. Saluda y pregunta qué tipo de empresa es el visitante
+2. Identifica el problema principal (3 preguntas máximo)
+3. Si encaja con SiGestión/SiGPS: propón demo de 30 min
+4. Si no encaja: recomienda el servicio más adecuado de SiMJ
+5. Cierre: agenda la demo o captura email para seguimiento
+
+RESTRICCIONES:
+- No inventes precios — di "te lo confirma nuestro equipo"
+- No hagas más de 2 preguntas a la vez
+- Si preguntan por un competidor: valida su opción, no la ataca
+- Tono: amigable, consultivo, sin presión`},
+    {cat:'agentes',title:'Prompt para RAG sobre documentación SiGestión',tool:'cl',level:'n3',body:`<contexto>
+Eres el asistente de documentación técnica de SiGestión ERP (SiMJ).
+Tienes acceso a los fragmentos de documentación relevantes en <documentos>.
+</contexto>
+
+<instrucciones>
+1. Responde SOLO basándote en <documentos>
+2. Si la respuesta no está en los documentos: "No tengo esa información en la documentación disponible. Contacta con el equipo técnico de SiMJ."
+3. Cita siempre la sección del documento de donde viene la respuesta
+4. Para procedimientos: usa lista numerada
+5. Para conceptos: responde en 2-3 frases concisas
+</instrucciones>
+
+<documentos>
+{{DOCUMENTOS_RELEVANTES}}
+</documentos>
+
+Pregunta del usuario: {{PREGUNTA}}`},
+  ];
+
+  /* ─── LIBRARY RENDER ───────────────────────────── */
+  const grid = document.getElementById('lib-grid');
+  const countEl = document.getElementById('lib-count-n');
+  let activeLibCat = 'all';
+  let libQuery = '';
+
+  function renderLib(){
+    const filtered = LIB.filter(p=>{
+      const catOk = activeLibCat==='all'||p.cat===activeLibCat;
+      const q = libQuery.toLowerCase();
+      const textOk = !q||(p.title.toLowerCase().includes(q)||p.body.toLowerCase().includes(q));
+      return catOk&&textOk;
+    });
+    countEl.textContent = filtered.length;
+    grid.innerHTML = filtered.map((p,i)=>{
+      const toolLabel = {cl:'Claude',oa:'OpenAI',ge:'Gemini',any:'Cualquiera'}[p.tool]||p.tool;
+      const toolClass = {cl:'lib-card__tag--cl',oa:'lib-card__tag--oa',ge:'lib-card__tag--ge',any:'lib-card__tag--any'}[p.tool]||'';
+      const lvlLabel = {n1:'Nivel 1',n2:'Nivel 2',n3:'Nivel 3'}[p.level]||'';
+      const lvlClass = {n1:'lib-card__tag--n1',n2:'lib-card__tag--n2',n3:'lib-card__tag--n3'}[p.level]||'';
+      return `<div class="lib-card">
+        <div class="lib-card__head"><div class="lib-card__title">${p.title}</div></div>
+        <div class="lib-card__tags"><span class="lib-card__tag ${toolClass}">${toolLabel}</span><span class="lib-card__tag ${lvlClass}">${lvlLabel}</span></div>
+        <div class="lib-card__body" id="lbody-${i}">${escHtml(p.body)}</div>
+        <div class="lib-card__footer">
+          <button class="lib-card__expand" onclick="toggleLibCard(${i})">▼ ver completo</button>
+          <button class="lib-card__copy" onclick="copyLib(${i},this)">Copiar</button>
         </div>
-        <textarea id="db-ta" class="debugger__ta" placeholder="Pega tu prompt aquí para analizarlo...&#10;&#10;Ejemplo: &quot;Resume este informe y dime qué tendencias ves.&quot;" spellcheck="false"></textarea>
-        <div class="debugger__footer">
-          <span><span id="db-chars">0</span> chars · <span id="db-tokens">~0</span> tokens estimados</span>
-        </div>
-        <div class="debugger__results" id="db-results" hidden>
-          <div class="debugger__scores">
-            <div class="debugger__score-box">
-              <div class="debugger__score-val" id="dr-score">—</div>
-              <div class="debugger__score-lbl">Puntuación /10</div>
-            </div>
-            <div class="debugger__score-box">
-              <div class="debugger__score-val debugger__score-val--sm" id="dr-model">—</div>
-              <div class="debugger__score-lbl">Modelo recomendado</div>
-            </div>
-            <div class="debugger__score-box">
-              <div class="debugger__score-val debugger__score-val--sm" id="dr-risk">—</div>
-              <div class="debugger__score-lbl">Riesgo alucinación</div>
-            </div>
-          </div>
-          <div class="debugger__body">
-            <div>
-              <div class="debugger__section-title">Componentes detectados</div>
-              <div id="dr-comps" class="comp-list"></div>
-            </div>
-            <div>
-              <div class="debugger__section-title">Problemas detectados</div>
-              <div id="dr-issues"></div>
-            </div>
-            <div>
-              <div class="debugger__section-title">Sugerencias de mejora</div>
-              <div id="dr-sugs"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      </div>`;
+    }).join('');
+  }
 
-  <hr class="divider" />
+  function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-  <!-- ══════════════════════════════════════
-       09 — ERRORES COMUNES
-  ══════════════════════════════════════ -->
-  <section id="errores" class="section">
-    <div class="wrap">
-      <span class="section-label reveal-item">09 — Errores Comunes</span>
-      <h2 class="section-title reveal-item">Los 10 errores que<br>arruinan un prompt</h2>
-      <p class="section-lead reveal-item">
-        Los más frecuentes en equipos que empiezan con IA.
-        Haz clic en cada error para ver el fix.
-      </p>
+  window.toggleLibCard = function(i){
+    const el = document.getElementById('lbody-'+i);
+    const btn = el.parentElement.querySelector('.lib-card__expand');
+    const open = el.classList.toggle('expanded');
+    btn.textContent = open ? '▲ ocultar' : '▼ ver completo';
+  };
 
-      <div class="error-grid">
-        <article class="error-card reveal-item" data-delay="0">
-          <div class="error-card__head"><span class="error-card__icon">🎭</span><span class="error-sev error-sev--c">Crítico</span></div>
-          <h4 class="error-card__name">El Experto Sin Credenciales</h4>
-          <p class="error-card__desc">"Eres un experto en marketing." Sin empresa, sector, años. Respuestas de libro de texto.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Fórmula: <strong>[cargo] + [empresa/sector] + [sub-especialidad]</strong>. Para SiMJ: "Eres responsable de marketing de empresa de software a medida en Córdoba, especializado en captación de PYMES locales."</div>
-        </article>
+  window.copyLib = function(i,btn){
+    const filtered = getLIBFiltered();
+    navigator.clipboard.writeText(filtered[i]?.body||'').then(()=>{
+      btn.textContent='✓ Copiado';
+      setTimeout(()=>btn.textContent='Copiar',1600);
+    });
+  };
 
-        <article class="error-card reveal-item" data-delay="80">
-          <div class="error-card__head"><span class="error-card__icon">📐</span><span class="error-sev error-sev--c">Crítico</span></div>
-          <h4 class="error-card__name">Sin Formato de Salida</h4>
-          <p class="error-card__desc">No especificar qué quieres: email, bullets, tabla, post. El modelo elige y raramente acierta.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Añade siempre: <strong>"Formato: [tipo] · Longitud: [límite] · Termina con: [CTA]"</strong>. Cuanto más específico, más reproducible el resultado.</div>
-        </article>
+  function getLIBFiltered(){
+    return LIB.filter(p=>{
+      const catOk = activeLibCat==='all'||p.cat===activeLibCat;
+      const q = libQuery.toLowerCase();
+      const textOk = !q||(p.title.toLowerCase().includes(q)||p.body.toLowerCase().includes(q));
+      return catOk&&textOk;
+    });
+  }
 
-        <article class="error-card reveal-item" data-delay="160">
-          <div class="error-card__head"><span class="error-card__icon">🌊</span><span class="error-sev error-sev--c">Crítico</span></div>
-          <h4 class="error-card__name">El Tsunami de Tareas</h4>
-          <p class="error-card__desc">"Analiza, resume, traduce y crea un plan." 4 tareas = resultados mediocres en todas.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden><strong>Máximo 2 tareas por prompt.</strong> Si necesitas más, encadénalas: el output del primero es el input del segundo.</div>
-        </article>
+  document.querySelectorAll('.lib-cat').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.lib-cat').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLibCat = btn.dataset.cat;
+      renderLib();
+    });
+  });
 
-        <article class="error-card reveal-item" data-delay="240">
-          <div class="error-card__head"><span class="error-card__icon">🧢</span><span class="error-sev error-sev--c">Crítico</span></div>
-          <h4 class="error-card__name">Sin Permiso de Incertidumbre</h4>
-          <p class="error-card__desc">El modelo inventa antes de admitir que necesita más contexto. Peligroso en código.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Añade: <strong>"Si el dato no está disponible, escribe: 'Dato no disponible — necesitaría: [X]'"</strong>. Reduce alucinaciones hasta un 60%.</div>
-        </article>
+  document.getElementById('lib-search').addEventListener('input',e=>{
+    libQuery = e.target.value;
+    renderLib();
+  });
 
-        <article class="error-card reveal-item" data-delay="0">
-          <div class="error-card__head"><span class="error-card__icon">🤖</span><span class="error-sev error-sev--h">Alto</span></div>
-          <h4 class="error-card__name">CoT en o3/o4-mini</h4>
-          <p class="error-card__desc">"Piensa paso a paso" con modelos razonadores. Ya razonan internamente — pedírselo empeora el resultado.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Con o3/o4-mini: <strong>prompt directo + contexto completo + tarea clara</strong>. CoT explícito solo con GPT-4o y Claude Sonnet sin extended thinking.</div>
-        </article>
+  renderLib();
 
-        <article class="error-card reveal-item" data-delay="80">
-          <div class="error-card__head"><span class="error-card__icon">🔐</span><span class="error-sev error-sev--h">Alto</span></div>
-          <h4 class="error-card__name">Datos Reales en el Prompt</h4>
-          <p class="error-card__desc">Credenciales, nombres de clientes o contratos sin anonimizar. Riesgo legal real.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>30 segundos antes de pegar: <strong>nombres → [CLIENTE], credenciales → [REDACTED], IPs → [IP_PROD]</strong>.</div>
-        </article>
+  /* ─── CHARTS ─────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded',()=>{
+    if(typeof Chart==='undefined') return;
+    Chart.defaults.color='rgba(255,255,255,0.45)';
+    Chart.defaults.borderColor='rgba(255,255,255,0.07)';
 
-        <article class="error-card reveal-item" data-delay="160">
-          <div class="error-card__head"><span class="error-card__icon">📊</span><span class="error-sev error-sev--h">Alto</span></div>
-          <h4 class="error-card__name">Alias de Modelo en Producción</h4>
-          <p class="error-card__desc">Usar "claude-sonnet-4-6" en código. Puede cambiar sin aviso y romper el comportamiento esperado.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>En código: snapshot con fecha: <code class="inline-code">claude-sonnet-4-6-20260217</code>. Comportamiento predecible indefinidamente.</div>
-        </article>
+    /* Chart 1: companies */
+    new Chart(document.getElementById('chart-companies'),{
+      type:'bar',
+      data:{
+        labels:['Microsoft / GitHub','Google','Meta','Anthropic (est.)','Amazon (est.)'],
+        datasets:[{
+          label:'% código generado con IA',
+          data:[46,30,28,30,25],
+          backgroundColor:['rgba(163,230,80,0.7)','rgba(66,133,244,0.7)','rgba(16,163,127,0.7)','rgba(204,138,255,0.7)','rgba(240,180,60,0.7)'],
+          borderColor:'rgba(255,255,255,0.1)',
+          borderWidth:1,
+          borderRadius:6
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw+'%'}}},
+        scales:{
+          x:{max:60,ticks:{callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.05)'}},
+          y:{grid:{display:false}}
+        }
+      }
+    });
 
-        <article class="error-card reveal-item" data-delay="240">
-          <div class="error-card__head"><span class="error-card__icon">🏗️</span><span class="error-sev error-sev--h">Alto</span></div>
-          <h4 class="error-card__name">El Prompt Monolito</h4>
-          <p class="error-card__desc">Todo en un párrafo. El modelo no diferencia contexto, instrucciones y tarea.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Para Claude: <strong>XML tags</strong>. Para ChatGPT: <strong>saltos de línea y encabezados claros</strong>. La estructura mejora la fidelidad del output.</div>
-        </article>
+    /* Chart 2: SWE-bench */
+    new Chart(document.getElementById('chart-swe'),{
+      type:'bar',
+      data:{
+        labels:['OpenAI o3','Claude 3.7','Gemini 2.0','Claude 3.5','GPT-4o'],
+        datasets:[{
+          label:'SWE-bench Verified %',
+          data:[71.7,70.3,65.0,49.0,46.0],
+          backgroundColor:'rgba(163,230,80,0.65)',
+          borderColor:'rgba(163,230,80,0.3)',
+          borderWidth:1,
+          borderRadius:5
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw+'%'}}},
+        scales:{
+          y:{max:80,ticks:{callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.05)'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
 
-        <article class="error-card reveal-item" data-delay="0">
-          <div class="error-card__head"><span class="error-card__icon">🔄</span><span class="error-sev error-sev--m">Medio</span></div>
-          <h4 class="error-card__name">Solo Restricciones Negativas</h4>
-          <p class="error-card__desc">"No uses jerga" sin decir qué sí usar. Las restricciones solas son ambiguas.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden>Cada "no" necesita su "sí": <strong>"No uses jerga técnica → usa lenguaje que entienda el gerente de una PYME sin conocimientos IT."</strong></div>
-        </article>
-
-        <article class="error-card reveal-item" data-delay="80">
-          <div class="error-card__head"><span class="error-card__icon">🧪</span><span class="error-sev error-sev--m">Medio</span></div>
-          <h4 class="error-card__name">El Prompt de 1 Ejemplo</h4>
-          <p class="error-card__desc">Probar con un input y asumir que funciona. El 80% de los fallos aparecen con edge-cases.</p>
-          <button class="error-card__btn js-error-btn">▶ Ver fix</button>
-          <div class="error-card__fix" hidden><strong>Antes de usar en SiGestión: 10 test cases</strong> (3 normales, 3 edge, 2 ambiguos, 2 que rompan el formato). Usa el propio modelo para generarlos.</div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- ══════════════════════════════════════
-       10 — GLOSARIO
-  ══════════════════════════════════════ -->
-  <section id="glosario" class="section section--alt">
-    <div class="wrap">
-      <span class="section-label reveal-item">10 — Glosario</span>
-      <h2 class="section-title reveal-item">Vocabulario IA esencial</h2>
-      <p class="section-lead reveal-item">
-        Todos los términos que necesitas dominar. Busca o filtra por herramienta.
-      </p>
-
-      <div class="gloss-search reveal-item">
-        <div class="gloss-search__bar">
-          <span aria-hidden="true">🔍</span>
-          <input type="search" id="gloss-input" class="gloss-search__input" placeholder="Buscar: token, RAG, Claude, prompt, MCP..." autocomplete="off" aria-label="Buscar en el glosario">
-        </div>
-        <div class="gloss-cats" role="group" aria-label="Filtrar por categoría">
-          <button class="gcat gcat--active js-gcat" data-cat="all">Todos</button>
-          <button class="gcat js-gcat" data-cat="cl">Claude</button>
-          <button class="gcat js-gcat" data-cat="oa">OpenAI</button>
-          <button class="gcat js-gcat" data-cat="both">Generales</button>
-        </div>
-      </div>
-
-      <div id="gloss-grid" class="gloss-grid" role="list"></div>
-      <p id="gloss-empty" class="gloss-empty" hidden>Sin resultados. Prueba con: token, prompt, agente, RAG</p>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- ══════════════════════════════════════
-       11 — TESTING
-  ══════════════════════════════════════ -->
-  <section id="testing" class="section">
-    <div class="wrap">
-      <span class="section-label reveal-item">11 — Testing</span>
-      <h2 class="section-title reveal-item">Cómo testear un prompt<br>antes de usarlo en serio</h2>
-      <p class="section-lead reveal-item">
-        Antes de integrar un prompt en el flujo de SiMJ o en código de SiGestión,
-        valídalo con estas 4 fases.
-      </p>
-
-      <div class="phase reveal-item" data-delay="0">
-        <div class="phase__num">1</div>
-        <div class="phase__body">
-          <h3 class="phase__title">Genera 10 variaciones del input</h3>
-          <p class="phase__desc">No pruebes solo con el caso ideal. Genera inputs que representen lo que recibirá el prompt en producción real.</p>
-          <div class="phase__code">
-            <div class="phase__code-label">Prompt para generar test cases</div>
-            <div class="phase__code-body">Tengo este prompt de producción:
----
-[TU PROMPT]
----
-Genera 10 inputs de prueba:
-- 3 normales (uso habitual)
-- 3 edge (inputs en el límite)
-- 2 ambiguos (respuesta no obvia)
-- 2 que intenten romper el formato
-Por cada uno: INPUT + RESPUESTA ESPERADA + CRITERIO DE ÉXITO</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase reveal-item" data-delay="100">
-        <div class="phase__num">2</div>
-        <div class="phase__body">
-          <h3 class="phase__title">Define criterios de éxito ANTES de testear</h3>
-          <p class="phase__desc">Sin criterios claros, no puedes saber si el prompt funciona. Defínelos antes de ver ningún output.</p>
-          <ul class="phase__checks">
-            <li><strong>Formato:</strong> ¿Respeta exactamente el esquema de salida pedido?</li>
-            <li><strong>Contenido:</strong> ¿La respuesta es correcta dado el contexto?</li>
-            <li><strong>Completitud:</strong> ¿Responde a TODO lo pedido sin añadir extras?</li>
-            <li><strong>Consistency:</strong> ¿Produce resultados similares al repetirlo 3 veces?</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="phase reveal-item" data-delay="200">
-        <div class="phase__num">3</div>
-        <div class="phase__body">
-          <h3 class="phase__title">Test de consistencia — mínimo 3 repeticiones</h3>
-          <p class="phase__desc">El mismo input ejecutado 3 veces debe producir outputs de calidad equivalente. Alta varianza = prompt frágil.</p>
-          <div class="phase__code">
-            <div class="phase__code-label">Umbral mínimo</div>
-            <div class="phase__code-body">3/3 PASS en casos normales  → Listo para producción
-2/3 PASS                     → Refinar antes de usar
-&lt;2/3 PASS                    → Reescribir el prompt
-
-Para código crítico de SiGestión:
-5/5 PASS en todos los casos  → Requisito mínimo</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase reveal-item" data-delay="300">
-        <div class="phase__num">4</div>
-        <div class="phase__body">
-          <h3 class="phase__title">Al actualizar el modelo, vuelve a testear</h3>
-          <p class="phase__desc">Cuando Anthropic u OpenAI actualicen el modelo, tus prompts pueden comportarse diferente.</p>
-          <ul class="phase__checks">
-            <li>Ejecuta los 10 test cases en el modelo nuevo antes de migrar</li>
-            <li><strong>Claude 4.x:</strong> Es más conciso. Si necesitas más detalle: "proporciona un resumen detallado de cada paso"</li>
-            <li>Si hay regresiones: ajusta el prompt ANTES de promover a producción</li>
-            <li>En código de SiGestión: usa snapshots con fecha, nunca aliases</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- ══════════════════════════════════════
-       12 — RECURSOS
-  ══════════════════════════════════════ -->
-  <section id="recursos" class="section section--alt">
-    <div class="wrap">
-      <span class="section-label reveal-item">12 — Recursos</span>
-      <h2 class="section-title reveal-item">Para seguir aprendiendo</h2>
-
-      <h3 class="resources-heading resources-heading--cl reveal-item">
-        <span class="dot dot--cl" aria-hidden="true" style="display:inline-block;width:.55rem;height:.55rem"></span>
-        Claude — Documentación Oficial
-      </h3>
-      <div class="resources-grid reveal-item">
-        <a class="res-card" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">
-          <div class="res-card__domain">docs.anthropic.com</div>
-          <div class="res-card__title">Claude 4 Best Practices</div>
-          <div class="res-card__desc">XML tags, long context, Extended Thinking, agentic systems. La fuente primaria. Actualizada marzo 2026.</div>
-          <span class="res-card__tag res-card__tag--cl">Oficial Primario</span>
-        </a>
-        <a class="res-card" href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">
-          <div class="res-card__domain">anthropic.com/engineering</div>
-          <div class="res-card__title">Claude Code — Best Practices</div>
-          <div class="res-card__desc">CLAUDE.md, context management, supervision checkpoints. Basado en producción interna de Anthropic.</div>
-          <span class="res-card__tag res-card__tag--cl">Ingeniería</span>
-        </a>
-        <a class="res-card" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">
-          <div class="res-card__domain">github.com/anthropics</div>
-          <div class="res-card__title">Tutorial Interactivo Oficial</div>
-          <div class="res-card__desc">9 capítulos con ejercicios prácticos en Jupyter / Google Sheets. El más didáctico de los recursos oficiales.</div>
-          <span class="res-card__tag res-card__tag--cl">Tutorial</span>
-        </a>
-        <a class="res-card" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">
-          <div class="res-card__domain">anthropic.com/engineering</div>
-          <div class="res-card__title">Context Engineering para Agentes</div>
-          <div class="res-card__desc">Compactación de contexto, just-in-time loading, structured note-taking. Basado en Claude Code en producción.</div>
-          <span class="res-card__tag res-card__tag--cl">Avanzado</span>
-        </a>
-      </div>
-
-      <h3 class="resources-heading resources-heading--oa reveal-item" style="margin-top:2.5rem">
-        <span class="dot dot--oa" aria-hidden="true" style="display:inline-block;width:.55rem;height:.55rem"></span>
-        OpenAI — Documentación Oficial
-      </h3>
-      <div class="resources-grid reveal-item">
-        <a class="res-card" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">
-          <div class="res-card__domain">platform.openai.com</div>
-          <div class="res-card__title">Prompt Engineering Guide</div>
-          <div class="res-card__desc">6 estrategias: instrucciones claras, texto de referencia, tareas complejas, tiempo para pensar, herramientas, evals.</div>
-          <span class="res-card__tag res-card__tag--oa">Oficial</span>
-        </a>
-        <a class="res-card" href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener">
-          <div class="res-card__domain">cookbook.openai.com</div>
-          <div class="res-card__title">GPT-5 Prompting Guide</div>
-          <div class="res-card__desc">Agentic tasks, TODO tool, planning antes de ejecutar. Por el equipo de OpenAI. Agosto 2025.</div>
-          <span class="res-card__tag res-card__tag--oa">GPT-5</span>
-        </a>
-        <a class="res-card" href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener">
-          <div class="res-card__domain">cookbook.openai.com</div>
-          <div class="res-card__title">o3/o4-mini Prompting Guide</div>
-          <div class="res-card__desc">Por qué NO pedir más razonamiento. Developer messages, function call ordering. Fuente definitiva para modelos o-series.</div>
-          <span class="res-card__tag res-card__tag--oa">o-series</span>
-        </a>
-        <a class="res-card" href="https://cookbook.openai.com" target="_blank" rel="noopener">
-          <div class="res-card__domain">cookbook.openai.com</div>
-          <div class="res-card__title">OpenAI Cookbook Completo</div>
-          <div class="res-card__desc">Notebooks prácticos: agents, evals, structured outputs, function calling, vision, audio, RAG, fine-tuning.</div>
-          <span class="res-card__tag res-card__tag--oa">Índice</span>
-        </a>
-      </div>
-
-      <h3 class="resources-heading reveal-item" style="margin-top:2.5rem;color:var(--lime)">
-        General — Frameworks y Papers
-      </h3>
-      <div class="resources-grid reveal-item">
-        <a class="res-card" href="https://www.promptingguide.ai" target="_blank" rel="noopener">
-          <div class="res-card__domain">promptingguide.ai</div>
-          <div class="res-card__title">Prompt Engineering Guide — DAIR.AI</div>
-          <div class="res-card__desc">La guía comunitaria más completa. CoT, ToT, ReAct, RAG. Disponible en español. Actualización continua.</div>
-          <span class="res-card__tag res-card__tag--lm">Universal</span>
-        </a>
-        <a class="res-card" href="https://learnprompting.org" target="_blank" rel="noopener">
-          <div class="res-card__domain">learnprompting.org</div>
-          <div class="res-card__title">Learn Prompting — Curso Gratuito</div>
-          <div class="res-card__desc">60+ lecciones de 0 a avanzado con ejercicios prácticos. En español disponible.</div>
-          <span class="res-card__tag res-card__tag--lm">Curso</span>
-        </a>
-        <a class="res-card" href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">
-          <div class="res-card__domain">arxiv.org</div>
-          <div class="res-card__title">Chain-of-Thought — Paper Original</div>
-          <div class="res-card__desc">Wei et al. (2022). El paper que formalizó el CoT. 10.000+ citas. Base teórica de todas las técnicas de razonamiento.</div>
-          <span class="res-card__tag res-card__tag--all">Paper</span>
-        </a>
-        <a class="res-card" href="https://ollama.ai" target="_blank" rel="noopener">
-          <div class="res-card__domain">ollama.ai</div>
-          <div class="res-card__title">Ollama — IA 100% Local y Gratuita</div>
-          <div class="res-card__desc">Para datos sensibles de SiMJ: Llama3, CodeStral, Phi-3. Cero datos enviados. Funciona sin internet.</div>
-          <span class="res-card__tag res-card__tag--lm">Privacidad</span>
-        </a>
-        <a class="res-card" href="https://arxiv.org/abs/2510.04618" target="_blank" rel="noopener">
-          <div class="res-card__domain">arxiv.org · 2025</div>
-          <div class="res-card__title">Agentic Context Engineering (ACE)</div>
-          <div class="res-card__desc">Framework que reemplaza el "prompt engineering" simple. Contextos como "playbooks evolutivos". Oct 2025 → Ene 2026.</div>
-          <span class="res-card__tag res-card__tag--all">Paper 2025</span>
-        </a>
-        <a class="res-card" href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" rel="noopener">
-          <div class="res-card__domain">github.com/dair-ai</div>
-          <div class="res-card__title">PE Guide — GitHub (47K ⭐)</div>
-          <div class="res-card__desc">El repo más completo de la comunidad. Papers, técnicas, modelos, aplicaciones. Actualizado semanalmente.</div>
-          <span class="res-card__tag res-card__tag--all">47K ⭐</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       FOOTER
-  ══════════════════════════════════════ -->
-  <footer class="footer">
-    <div class="wrap footer__inner">
-      <div class="footer__brand-col">
-        <div class="footer__logo">SiMJ</div>
-        <p class="footer__desc">
-          Guía práctica de IA para el equipo de Soluciones Informáticas MJ.
-          Claude para tareas técnicas. OpenAI para comunicación y negocio.
-          Actualizada marzo 2026.
-        </p>
-      </div>
-      <div class="footer__col">
-        <h5>Claude</h5>
-        <ul>
-          <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">Claude 4 Best Practices</a></li>
-          <li><a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">Claude Code</a></li>
-          <li><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Tutorial Oficial</a></li>
-          <li><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h5>OpenAI</h5>
-        <ul>
-          <li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt Engineering</a></li>
-          <li><a href="https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide" target="_blank" rel="noopener">GPT-5 Guide</a></li>
-          <li><a href="https://cookbook.openai.com/examples/o-series/o3o4-mini_prompting_guide" target="_blank" rel="noopener">o3/o4-mini Guide</a></li>
-          <li><a href="https://chat.openai.com" target="_blank" rel="noopener">chatgpt.com</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h5>SiMJ</h5>
-        <ul>
-          <li><a href="https://simj.es" target="_blank" rel="noopener">simj.es</a></li>
-          <li><a href="https://simj.es/sigestion-avanzada" target="_blank" rel="noopener">SiGestión ERP</a></li>
-          <li><a href="https://simj.es/sigps" target="_blank" rel="noopener">SiGPS Flotas</a></li>
-          <li><a href="https://simj.es/contacto" target="_blank" rel="noopener">Contacto</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <div class="wrap">
-        <span>Soluciones Informáticas MJ SCA · Córdoba, España · simj.es · CIF B19496678</span>
-        <span>Formación IA Interna · Curso 2026</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JS — load after DOM -->
-  <script src="https://cdn.jsdelivr.net/npm/animejs@4.3.6/dist/bundles/anime.umd.min.js"></script>
-  <script src="js/animations.js"></script>
-  <script src="js/app.js"></script>
+    /* Chart 3: Copilot growth */
+    new Chart(document.getElementById('chart-copilot'),{
+      type:'line',
+      data:{
+        labels:['Q2 22','Q4 22','Q2 23','Q4 23','Q2 24','Q4 24','Q1 25'],
+        datasets:[{
+          label:'Suscriptores (M)',
+          data:[0.4,0.8,1.0,1.3,1.8,2.2,2.5],
+          borderColor:'rgba(163,230,80,0.9)',
+          backgroundColor:'rgba(163,230,80,0.08)',
+          fill:true,
+          tension:0.4,
+          pointRadius:4,
+          pointBackgroundColor:'rgba(163,230,80,0.9)'
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          y:{ticks:{callback:v=>v+'M'},grid:{color:'rgba(255,255,255,0.05)'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  });
+  </script>
 </body>
 </html>
